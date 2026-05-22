@@ -212,6 +212,28 @@ body {
   letter-spacing: 2px; color: rgba(255,255,255,0.7);
 }
 .slide-counter .current { color: var(--primary-gold); font-weight: 600; }
+.slide-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 4; width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(14,36,64,0.55); border: 1px solid rgba(212,175,55,0.35);
+  color: rgba(255,255,255,0.9); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.25s, border-color 0.25s, transform 0.25s;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.slide-arrow svg { width: 22px; height: 22px; }
+.slide-arrow:hover {
+  background: var(--primary-gold); color: var(--navy-darkest);
+  border-color: var(--primary-gold);
+}
+.slide-arrow-prev { left: 24px; }
+.slide-arrow-next { right: 24px; }
+@media (max-width: 768px) {
+  .slide-arrow { width: 42px; height: 42px; }
+  .slide-arrow svg { width: 18px; height: 18px; }
+  .slide-arrow-prev { left: 12px; }
+  .slide-arrow-next { right: 12px; }
+}
 .eyebrow {
   display: inline-flex; align-items: center; gap: 10px;
   font-size: 10px; letter-spacing: 4px;
@@ -958,6 +980,12 @@ section { padding: 80px 32px; }
     </div>
   </div>
   <div class="slide-controls" id="slideControls"></div>
+  <button class="slide-arrow slide-arrow-prev" id="slidePrev" aria-label="Previous slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="slide-arrow slide-arrow-next" id="slideNext" aria-label="Next slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
 </section>
 
 <div class="stats">
@@ -1382,6 +1410,9 @@ section { padding: 80px 32px; }
   }
   function reset() { clearInterval(timer); timer = setInterval(() => go(idx + 1), 11000); }
   reset();
+
+  document.getElementById('slidePrev')?.addEventListener('click', () => { go(idx - 1); reset(); });
+  document.getElementById('slideNext')?.addEventListener('click', () => { go(idx + 1); reset(); });
 
   // Drag / swipe gestures
   const hero = document.querySelector('.hero');
