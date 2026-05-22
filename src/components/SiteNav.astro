@@ -1,0 +1,54 @@
+---
+const { lang = 'en', pathInLang = '/' } = Astro.props;
+// pathInLang: e.g. "/blog/" — used to build switcher links
+const langPrefix = lang === 'en' ? '' : `/${lang}`;
+const FLAGS = { en: '🇬🇧', ru: '🇷🇺', hy: '🇦🇲' };
+const NAV_LABELS = {
+  en: { why: 'Why Us', services: 'Services', process: 'Process', blog: 'Blog', contact: 'Contact', cta: 'Find Your Fit' },
+  ru: { why: 'Почему мы', services: 'Услуги', process: 'Процесс', blog: 'Блог', contact: 'Контакт', cta: 'Найти своё место' },
+  hy: { why: 'Ինչու մենք', services: 'Ծառայություններ', process: 'Գործընթաց', blog: 'Բլոգ', contact: 'Կապ', cta: 'Գտի՛ր քո տեղը' },
+};
+const BRAND = {
+  en: { tag: 'Many Eyes. One Purpose.', sub: 'Executive Search & Headhunting' },
+  ru: { tag: 'Много Глаз. Одна Цель.', sub: 'Исполнительный Поиск и Хедхантинг' },
+  hy: { tag: 'Շատ Աչքեր. Մեկ Նպատակ.', sub: 'Ղեկավար Որոնում և Headhunting' },
+};
+const nav = NAV_LABELS[lang];
+const brand = BRAND[lang];
+---
+<nav class="nav">
+  <div class="nav-inner">
+    <a href={langPrefix || '/'} class="brand">
+      <img src="/logo.png" alt="ArgusRecruit">
+      <div class="brand-text">
+        <div class="tag">{brand.tag}</div>
+        <div class="tag-sub">{brand.sub}</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href={`${langPrefix}/#why`}>{nav.why}</a>
+      <a href={`${langPrefix}/#services`}>{nav.services}</a>
+      <a href={`${langPrefix}/#process`}>{nav.process}</a>
+      <a href={`${langPrefix}/blog/`}>{nav.blog}</a>
+      <a href={`${langPrefix}/#contact`}>{nav.contact}</a>
+      <a href={`${langPrefix}/#contact`} class="nav-cta">{nav.cta}</a>
+      <div class="lang-switcher" id="langSwitcher">
+        <button class="lang-current" id="langCurrent">{FLAGS[lang]}</button>
+        <div class="lang-menu">
+          <a href={pathInLang.replace(/^\/(ru|hy)/, '') || '/'} data-lang="en" class:list={[lang==='en'&&'active']}>🇬🇧 English</a>
+          <a href={'/ru' + (pathInLang.replace(/^\/(ru|hy)/, '') || '/')} data-lang="ru" class:list={[lang==='ru'&&'active']}>🇷🇺 Русский</a>
+          <a href={'/hy' + (pathInLang.replace(/^\/(ru|hy)/, '') || '/')} data-lang="hy" class:list={[lang==='hy'&&'active']}>🇦🇲 Հայերեն</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<script>
+  (function(){
+    var sw = document.getElementById('langSwitcher');
+    if (!sw) return;
+    var cur = document.getElementById('langCurrent');
+    cur.addEventListener('click', function(e){ e.stopPropagation(); sw.classList.toggle('open'); });
+    document.addEventListener('click', function(){ sw.classList.remove('open'); });
+  })();
+</script>

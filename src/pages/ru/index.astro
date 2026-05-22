@@ -1,0 +1,1527 @@
+---
+// Auto-generated from legacy HTML — do not edit by hand for content; edit components instead.
+---
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArgusRecruit — Исполнительный Поиск & Headhunting</title>
+<meta name="description" content="ArgusRecruit — Curated headhunting and executive search. Many eyes. One purpose. Based in Армения, working globally.">
+<meta property="og:title" content="ArgusRecruit — Исполнительный Поиск & Headhunting">
+<meta property="og:description" content="Where ambitious careers meet exceptional employers. Curated headhunting. Trusted outcomes.">
+<meta property="og:image" content="cover.png">
+<link rel="icon" type="image/png" href="/logo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --primary-gold: #D4AF37;
+  --dark-gold: #B8860B;
+  --white: #FFFFFF;
+  --navy: #1E4170;          /* main navy (lighter) */
+  --navy-deep: #16345A;     /* slightly deeper */
+  --navy-soft: #2A5589;     /* lighter accent */
+  --navy-darkest: #0E2440;  /* only for accents */
+  --charcoal: #1A1A1A;
+  --black: #000000;
+  --gold-glow: rgba(212, 175, 55, 0.18);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Manrope', system-ui, sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Uppercase headings throughout (nexer-style) */
+.hero-caption h1,
+.section-header h2,
+.services-text h2,
+.global-text h2,
+.contact-info h2,
+.clients-headline,
+.why-card h3,
+.process-step h4 {
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+.hero-caption h1 { letter-spacing: -0.5px !important; }
+.hero-caption h1 .accent,
+.section-header h2 .accent,
+.services-text h2 .accent,
+.global-text h2 .accent,
+.contact-info h2 .accent,
+.clients-headline .accent {
+  font-style: normal !important;
+}
+
+/* Navigation */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: #081E3E;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+  transition: background 0.3s;
+}
+.nav.transparent { background: rgba(8, 30, 62, 0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom-color: transparent; }
+.nav-inner {
+  max-width: 1440px; margin: 0 auto; padding: 8px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 32px;
+}
+.brand { display: flex; align-items: center; gap: 14px; text-decoration: none; flex: 0 0 auto; }
+.brand img { height: 64px; width: auto; display: block; }
+.brand-text {
+  display: flex; flex-direction: column; justify-content: center; line-height: 1.1;
+  padding-left: 14px; border-left: 1px solid rgba(212,175,55,0.3);
+  align-self: center; min-height: 44px;
+}
+.brand-text .tag {
+  font-size: 11px; letter-spacing: 2.5px; color: var(--primary-gold);
+  text-transform: uppercase; font-weight: 600; line-height: 1.3;
+}
+.brand-text .tag-sub {
+  font-size: 8.5px; letter-spacing: 2px; color: rgba(255,255,255,0.7);
+  text-transform: uppercase; font-weight: 500; margin-top: 4px; line-height: 1.3;
+}
+.nav-links {
+  display: flex; gap: 36px; align-items: center;
+  flex: 1; justify-content: flex-end;
+}
+.nav-links a {
+  color: var(--white); text-decoration: none; font-size: 14px; font-weight: 500;
+  letter-spacing: 0.2px; transition: color 0.2s; opacity: 0.9;
+  position: relative; padding: 6px 0;
+}
+.nav-links a:not(.nav-cta)::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0;
+  height: 1px; background: var(--primary-gold); transform: scaleX(0); transform-origin: left;
+  transition: transform 0.25s;
+}
+.nav-links a:not(.nav-cta):hover { color: var(--primary-gold); opacity: 1; }
+.nav-links a:not(.nav-cta):hover::after { transform: scaleX(1); }
+.nav-cta {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--primary-gold);
+  color: var(--navy-darkest) !important;
+  padding: 14px 44px; border-radius: 4px;
+  font-weight: 600; opacity: 1 !important;
+  font-size: 14px; letter-spacing: 0.3px;
+  white-space: nowrap; line-height: 1;
+  border: 1px solid var(--primary-gold);
+  transition: all 0.2s;
+  min-width: 160px;
+}
+.nav-cta:hover { background: var(--white); border-color: var(--white); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(212,175,55,0.3); }
+.menu-toggle { display: none; background: none; border: 0; color: var(--white); font-size: 28px; cursor: pointer; padding: 6px; }
+
+/* Language switcher */
+.lang-switcher { position: relative; display: inline-flex; align-items: center; }
+.lang-current {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: transparent; border: 1px solid rgba(212,175,55,0.35);
+  color: var(--white); padding: 8px 12px; border-radius: 4px;
+  font-size: 18px; font-weight: 600; letter-spacing: 0; text-transform: uppercase;
+  cursor: pointer; transition: all 0.2s;
+}
+.lang-current:hover { border-color: var(--primary-gold); color: var(--primary-gold); }
+.lang-current::after { content: '▾'; font-size: 10px; opacity: 0.7; }
+.lang-menu {
+  position: absolute; top: calc(100% + 6px); right: 0;
+  background: #081E3E; border: 1px solid rgba(212,175,55,0.25);
+  border-radius: 4px; min-width: 130px; padding: 4px 0;
+  opacity: 0; pointer-events: none; transform: translateY(-4px);
+  transition: all 0.2s; z-index: 20;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.lang-switcher.open .lang-menu { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.lang-menu button, .lang-menu a {
+  display: block; width: 100%; text-align: left;
+  background: none; border: 0; color: var(--white);
+  padding: 10px 14px; font-size: 12px; font-weight: 500; letter-spacing: 0.5px;
+  cursor: pointer; font-family: inherit; transition: all 0.15s;
+}
+.lang-menu button:hover, .lang-menu a:hover { background: rgba(212,175,55,0.1); color: var(--primary-gold); }
+.lang-menu button.active, .lang-menu a.active { color: var(--primary-gold); font-weight: 700; }
+.lang-menu button.active, .lang-menu a.active::before { content: '✓ '; }
+
+/* Hero Slideshow */
+.hero {
+  position: relative; min-height: 100vh; padding: 0;
+  background: var(--navy-deep); overflow: hidden;
+  display: flex; align-items: flex-end;
+}
+.hero-slides { position: absolute; inset: 0; z-index: 0; }
+.hero-slide {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0; transition: opacity 1.2s ease-in-out;
+  transform: scale(1.05);
+}
+.hero-slide.active { opacity: 1; transform: scale(1); transition: opacity 1.2s ease-in-out, transform 8s ease-out; }
+.hero::before {
+  content: ''; position: absolute; inset: 0; z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(14,36,64,0.45) 0%, rgba(14,36,64,0.65) 50%, rgba(14,36,64,0.95) 100%),
+    linear-gradient(90deg, rgba(14,36,64,0.7) 0%, transparent 60%);
+}
+.hero-inner {
+  position: relative; z-index: 2;
+  max-width: 1240px; width: 100%; margin: 0 auto;
+  padding: 0 40px 120px;
+}
+.hero-captions { position: relative; min-height: 320px; }
+.hero-caption {
+  position: absolute; inset: 0;
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  pointer-events: none;
+}
+.hero-caption.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.hero-caption .industry-tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 11px; letter-spacing: 4px;
+  color: var(--primary-gold); text-transform: uppercase; font-weight: 600;
+  margin-bottom: 18px;
+}
+.hero-caption .industry-tag::before {
+  content: ''; width: 32px; height: 1px; background: var(--primary-gold);
+}
+.hero-cta-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 28px; }
+
+.slide-controls {
+  position: absolute; bottom: 30px; right: 40px; z-index: 3;
+  display: flex; align-items: center; gap: 10px;
+}
+.slide-dot {
+  width: 36px; height: 3px; border-radius: 2px; cursor: pointer;
+  background: rgba(255,255,255,0.25); transition: background 0.3s;
+  border: 0; padding: 0;
+}
+.slide-dot.active { background: var(--primary-gold); }
+.slide-counter {
+  position: absolute; bottom: 30px; left: 40px; z-index: 3;
+  font-family: 'Space Grotesk', monospace; font-size: 13px;
+  letter-spacing: 2px; color: rgba(255,255,255,0.7);
+}
+.slide-counter .current { color: var(--primary-gold); font-weight: 600; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 10px; letter-spacing: 4px;
+  color: var(--primary-gold); text-transform: uppercase; font-weight: 600;
+  padding: 7px 18px; border: 1px solid rgba(212,175,55,0.35); border-radius: 999px;
+  margin-bottom: 24px;
+  background: rgba(212,175,55,0.04);
+  backdrop-filter: blur(8px);
+}
+.eyebrow::before, .eyebrow::after {
+  content: ''; width: 4px; height: 4px; border-radius: 50%;
+  background: var(--primary-gold); flex: 0 0 4px;
+}
+.hero-caption h1 {
+  font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  font-size: clamp(28px, 4.4vw, 56px); font-weight: 500;
+  line-height: 1.1; letter-spacing: -1.4px; color: var(--white);
+  text-shadow: 0 4px 40px rgba(0,0,0,0.5);
+  max-width: 880px;
+}
+.hero-caption h1 .accent {
+  color: var(--primary-gold); font-weight: 600;
+}
+.hero-caption .lede {
+  margin-top: 20px; font-size: clamp(15px, 1.4vw, 18px);
+  color: rgba(255,255,255,0.85); max-width: 640px;
+  font-weight: 300; line-height: 1.6;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 16px 32px; font-size: 14px; font-weight: 600;
+  border-radius: 6px; text-decoration: none; transition: all 0.2s;
+  border: 1px solid transparent; cursor: pointer;
+  letter-spacing: 0.5px;
+}
+.btn-primary {
+  background: var(--primary-gold);
+  color: var(--navy-darkest);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+.btn-primary:hover { background: var(--white); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(212,175,55,0.4); }
+.btn-secondary {
+  background: rgba(14,36,64,0.5); color: var(--white);
+  border-color: rgba(255,255,255,0.4);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.btn-secondary:hover { background: var(--white); color: var(--navy-darkest); border-color: var(--white); }
+/* Light section variant of secondary */
+.section-light .btn-secondary {
+  background: transparent; color: var(--navy-darkest);
+  border-color: rgba(14,36,64,0.3);
+}
+.section-light .btn-secondary:hover { background: var(--navy-darkest); color: var(--white); }
+
+/* Sections */
+section { padding: 80px 32px; }
+.container { max-width: 1240px; margin: 0 auto; }
+
+/* Light section variant */
+.section-light { background: #F7F4ED; color: var(--navy-darkest); }
+.section-light h2, .section-light h3, .section-light h4 { color: var(--navy-darkest); }
+.section-light p { color: rgba(14,36,64,0.7); }
+.section-light .section-header p { color: rgba(14,36,64,0.65); }
+.section-light .eyebrow {
+  color: var(--dark-gold); border-color: rgba(184,134,11,0.35); background: rgba(212,175,55,0.06);
+}
+.section-light .eyebrow::before, .section-light .eyebrow::after { background: var(--dark-gold); }
+.section-light .why-card {
+  background: var(--white);
+  border-color: rgba(14,36,64,0.08);
+  box-shadow: 0 4px 16px rgba(14,36,64,0.06);
+}
+.section-light .why-card:hover {
+  border-color: rgba(212,175,55,0.4);
+  box-shadow: 0 20px 40px rgba(14,36,64,0.1);
+}
+.section-light .why-card p { color: rgba(14,36,64,0.65); }
+.section-light .why-card .icon {
+  background: linear-gradient(135deg, rgba(212,175,55,0.18), rgba(184,134,11,0.08));
+}
+.section-light .process-step {
+  background: var(--white);
+  border-color: rgba(14,36,64,0.08);
+  box-shadow: 0 4px 16px rgba(14,36,64,0.05);
+}
+.section-light .process-step h4 { color: var(--navy-darkest); }
+.section-light .process-step p { color: rgba(14,36,64,0.65); }
+.section-light .process-step .num { opacity: 0.6; }
+.section-light .why-banner-overlay {
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(247,244,237,0.15) 50%, rgba(14,36,64,0.65) 100%);
+}
+
+.section-header { text-align: center; margin-bottom: 50px; }
+.section-header .eyebrow { margin-bottom: 16px; }
+.section-header h2 {
+  font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  font-size: clamp(26px, 3.4vw, 38px); font-weight: 500;
+  letter-spacing: -0.4px; color: var(--white); line-height: 1.2;
+}
+.heading-caps {
+  text-transform: uppercase !important;
+  letter-spacing: 2px !important;
+  font-weight: 600 !important;
+  font-size: clamp(22px, 2.6vw, 30px) !important;
+}
+.heading-caps .accent { font-style: normal !important; }
+.label-caps { text-transform: uppercase; letter-spacing: 3px; font-weight: 600; font-size: 11px; }
+.section-header h2 .accent { color: var(--primary-gold); font-style: italic; }
+.section-header p { color: rgba(255,255,255,0.65); margin-top: 14px; font-size: 15px; max-width: 680px; margin-left: auto; margin-right: auto; }
+
+/* Stats */
+.stats {
+  background: var(--navy-deep); padding: 60px 32px;
+  border-top: 1px solid rgba(212,175,55,0.15);
+  border-bottom: 1px solid rgba(212,175,55,0.15);
+}
+.stats-grid {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; text-align: center;
+}
+.stat .number {
+  font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  font-size: clamp(32px, 3.6vw, 44px); font-weight: 600;
+  color: var(--primary-gold); display: block; line-height: 1;
+}
+.stat .label { font-size: 13px; color: rgba(255,255,255,0.6); letter-spacing: 1px; text-transform: uppercase; margin-top: 12px; }
+
+/* Why */
+.why-banner {
+  position: relative; border-radius: 16px; overflow: hidden;
+  margin-bottom: 40px; aspect-ratio: 16/6;
+  border: 1px solid rgba(212,175,55,0.2);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+}
+.why-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.why-banner-overlay {
+  position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: flex-start;
+  background: linear-gradient(135deg, rgba(14,36,64,0.4) 0%, rgba(14,36,64,0.15) 50%, rgba(14,36,64,0.7) 100%);
+  padding: 32px 40px;
+}
+.why-banner-content {
+  max-width: 560px;
+  background: rgba(14, 36, 64, 0.88);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212,175,55,0.25);
+  border-radius: 12px; padding: 22px 26px;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.4);
+}
+.banner-label {
+  display: inline-block; font-size: 10px; letter-spacing: 4px;
+  color: var(--primary-gold); text-transform: uppercase; font-weight: 600;
+  margin-bottom: 8px;
+}
+.banner-text {
+  font-family: 'Space Grotesk', 'Manrope', sans-serif; font-size: clamp(15px, 1.7vw, 19px);
+  font-weight: 500; line-height: 1.5; color: var(--white);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+.why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.why-card p strong { color: var(--primary-gold); font-weight: 600; }
+
+/* Global Reach Section */
+.global-section {
+  background: var(--navy-deep);
+  padding: 110px 32px;
+  border-top: 1px solid rgba(212,175,55,0.12);
+  border-bottom: 1px solid rgba(212,175,55,0.12);
+}
+.global-grid {
+  max-width: 1240px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end;
+}
+.global-text h2 {
+  font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  font-size: clamp(28px, 3.6vw, 44px); font-weight: 500;
+  line-height: 1.15; letter-spacing: -0.5px; color: var(--white);
+}
+.global-text h2 .accent { color: var(--primary-gold); font-style: italic; }
+.global-text p {
+  margin-top: 18px; color: rgba(255,255,255,0.7); font-size: 16px; line-height: 1.7;
+}
+.country-list { display: grid; gap: 12px; margin-top: 28px; }
+.country-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px; background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(212,175,55,0.15); border-radius: 10px;
+}
+.country-item .flag { font-size: 22px; line-height: 1; }
+.country-item .info { flex: 1; }
+.country-item .info strong {
+  display: block; font-size: 14px; font-weight: 600; color: var(--white);
+  letter-spacing: 0.3px;
+}
+.country-item .info span {
+  font-size: 12px; color: rgba(255,255,255,0.55); letter-spacing: 0.5px;
+}
+.country-item .pulse {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--primary-gold);
+  box-shadow: 0 0 0 0 rgba(212,175,55,0.7);
+  animation: pulse 2.5s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(212,175,55,0.7); }
+  70% { box-shadow: 0 0 0 12px rgba(212,175,55,0); }
+  100% { box-shadow: 0 0 0 0 rgba(212,175,55,0); }
+}
+.map-wrap {
+  position: relative; border-radius: 14px; overflow: hidden;
+  background: linear-gradient(135deg, rgba(212,175,55,0.05) 0%, rgba(14,36,64,0.3) 70%);
+  padding: 24px; border: 1px solid rgba(212,175,55,0.18);
+  width: 100%;
+}
+.map-wrap object, .map-wrap img { width: 100%; height: auto; display: block; min-height: 360px; }
+.map-legend {
+  display: flex; gap: 16px; align-items: center;
+  margin-top: 16px; font-size: 11px; letter-spacing: 1.5px;
+  color: rgba(255,255,255,0.6); text-transform: uppercase;
+}
+.map-legend .dot {
+  width: 10px; height: 10px; border-radius: 2px;
+  background: var(--primary-gold); display: inline-block; margin-right: 6px;
+  vertical-align: middle;
+}
+.map-legend .dot.dim { background: #1B3B6F; }
+.why-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005));
+  border: 1px solid rgba(212,175,55,0.12); border-radius: 14px;
+  padding: 38px 32px; transition: all 0.3s; position: relative; overflow: hidden;
+}
+.why-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.why-card:hover {
+  border-color: rgba(212,175,55,0.35); transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+.why-card:hover::before { opacity: 1; }
+.why-card .icon {
+  width: 56px; height: 56px; border-radius: 12px;
+  background: linear-gradient(135deg, rgba(212,175,55,0.18), rgba(184,134,11,0.08));
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 24px; color: var(--primary-gold);
+}
+.why-card .icon svg { width: 28px; height: 28px; }
+.why-card h3 { font-family: 'Space Grotesk', 'Manrope', sans-serif; font-size: 22px; font-weight: 600; margin-bottom: 10px; }
+.why-card p { color: rgba(255,255,255,0.65); font-size: 14px; }
+
+/* Services */
+.services { background: var(--navy); }
+.services-grid {
+  display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px; align-items: center;
+}
+.services-photo {
+  position: relative; border-radius: 16px; overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+  border: 1px solid rgba(212,175,55,0.2);
+  aspect-ratio: 4/5;
+}
+.services-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.services-photo::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(22,52,90,0.25) 0%, transparent 50%, rgba(212,175,55,0.12) 100%);
+}
+.services-photo .badge {
+  position: absolute; bottom: 24px; left: 24px; right: 24px;
+  background: rgba(14,36,64,0.85); backdrop-filter: blur(10px);
+  border: 1px solid rgba(212,175,55,0.3); border-radius: 10px;
+  padding: 14px 18px; display: flex; align-items: center; gap: 12px;
+  z-index: 2;
+}
+.services-photo .badge .dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--primary-gold);
+  box-shadow: 0 0 12px var(--primary-gold);
+}
+.services-photo .badge .text {
+  color: var(--white); font-size: 13px; font-weight: 500;
+}
+.services-photo .badge .text span { color: var(--primary-gold); font-weight: 600; }
+.services-text h2 {
+  font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  font-size: clamp(26px, 3.2vw, 38px); font-weight: 500;
+  line-height: 1.15; letter-spacing: -0.5px;
+}
+.services-text h2 .accent { color: var(--primary-gold); font-style: italic; }
+.services-text p { color: rgba(255,255,255,0.65); margin-top: 16px; font-size: 14px; line-height: 1.7; }
+.services-cta { margin-top: 32px; display: flex; gap: 14px; flex-wrap: wrap; }
+
+/* Services: photo left + all content right */
+.services-layout {
+  display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 50px; align-items: start;
+}
+.services-layout .services-photo {
+  position: sticky; top: 110px;
+  aspect-ratio: 4/5;
+}
+.services-content { min-width: 0; }
+.services-content .eyebrow { margin-bottom: 18px; }
+.services-content h2 {
+  font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  font-size: clamp(24px, 2.8vw, 32px); font-weight: 500;
+  letter-spacing: -0.3px; color: var(--white); line-height: 1.2;
+}
+.services-lede {
+  margin-top: 14px; color: rgba(255,255,255,0.7);
+  font-size: 15px; line-height: 1.7;
+}
+
+/* Tier rows (stacked inside right column) */
+.services-tiers {
+  display: flex; flex-direction: column; gap: 14px;
+  margin-top: 32px;
+}
+.service-tier {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(212,175,55,0.18);
+  border-radius: 12px;
+  padding: 20px 22px;
+  display: flex; gap: 16px; align-items: flex-start;
+  transition: all 0.25s;
+  position: relative;
+}
+.service-tier:hover { border-color: rgba(212,175,55,0.4); background: rgba(255,255,255,0.06); }
+.tier-icon {
+  flex: 0 0 44px; width: 44px; height: 44px; border-radius: 10px;
+  background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(184,134,11,0.08));
+  display: flex; align-items: center; justify-content: center;
+  color: var(--primary-gold);
+}
+.tier-icon svg { width: 22px; height: 22px; }
+.service-tier h3 {
+  font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  font-size: 15px; font-weight: 600; color: var(--white);
+  text-transform: uppercase; letter-spacing: 1.2px;
+  margin-bottom: 6px;
+}
+.service-tier p {
+  font-size: 13px; color: rgba(255,255,255,0.65);
+  line-height: 1.55; margin: 0;
+}
+
+/* Features (Common) */
+.services-features {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  margin-top: 24px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(212,175,55,0.12);
+}
+
+@media (max-width: 960px) {
+  .services-layout { grid-template-columns: 1fr; gap: 32px; }
+  .services-layout .services-photo { position: static; aspect-ratio: 16/9; max-height: 380px; }
+  .services-features { grid-template-columns: 1fr; }
+}
+.feature {
+  background: rgba(255,255,255,0.025); border: 1px solid rgba(212,175,55,0.12);
+  border-radius: 10px; padding: 22px 26px;
+  display: flex; align-items: center; gap: 16px;
+}
+.feature-icon {
+  flex: 0 0 38px; height: 38px; border-radius: 8px;
+  background: rgba(212,175,55,0.12); color: var(--primary-gold);
+  display: flex; align-items: center; justify-content: center;
+}
+.feature-icon svg { width: 18px; height: 18px; }
+.feature-text strong { display: block; font-size: 15px; color: var(--white); }
+.feature-text span { font-size: 13px; color: rgba(255,255,255,0.6); }
+
+/* Clients */
+.clients {
+  background: var(--navy-deep);
+  padding: 60px 32px;
+  border-top: 1px solid rgba(212,175,55,0.1);
+  border-bottom: 1px solid rgba(212,175,55,0.1);
+}
+.clients-title {
+  text-align: center; margin-bottom: 10px;
+  font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--primary-gold); font-weight: 600;
+}
+.clients-headline {
+  text-align: center; font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  font-size: clamp(22px, 2.6vw, 28px); font-weight: 500;
+  color: var(--white); line-height: 1.25; margin-bottom: 10px;
+}
+.clients-headline .accent { color: var(--primary-gold); font-style: italic; }
+.clients-sub {
+  text-align: center; color: rgba(255,255,255,0.65);
+  font-size: 13px; margin-bottom: 28px; max-width: 580px; margin-left: auto; margin-right: auto;
+}
+.clients-grid {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+  align-items: center;
+}
+.client-logo {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(212,175,55,0.15);
+  border-radius: 14px; padding: 26px 18px 38px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; min-height: 170px; transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+.client-logo::after {
+  content: 'CONFIDENTIAL'; position: absolute;
+  bottom: 12px; left: 0; right: 0; text-align: center;
+  font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  font-weight: 700; font-size: 11px; color: var(--primary-gold);
+  letter-spacing: 2.5px; pointer-events: none;
+}
+.client-logo:hover { border-color: rgba(212,175,55,0.3); }
+.client-logo-img {
+  width: 90px; height: 90px; display: flex; align-items: center; justify-content: center;
+  background: var(--white); border-radius: 50%; padding: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+.client-logo-img img {
+  max-width: 100%; max-height: 100%; object-fit: contain; display: block;
+  filter: blur(9px) saturate(0.6);
+  opacity: 0.9;
+  transform: scale(0.92);
+}
+.client-logo .name { display: none; }
+.clients-footer {
+  text-align: center; margin-top: 36px;
+  font-size: 17px; color: rgba(255,255,255,0.75); font-style: italic;
+  font-weight: 400; letter-spacing: 0.2px;
+}
+
+/* Human / Quote */
+.human-section {
+  position: relative; padding: 100px 32px;
+  text-align: center; overflow: hidden;
+  background: var(--navy-darkest);
+}
+.human-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0.5;
+}
+.human-section::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, transparent 0%, var(--navy-darkest) 90%),
+    linear-gradient(180deg, var(--navy-darkest) 0%, transparent 30%, transparent 70%, var(--navy-darkest) 100%);
+  z-index: 1;
+}
+.human-inner { position: relative; z-index: 2; max-width: 880px; }
+.quote-mark {
+  font-family: 'Space Grotesk', 'Manrope', sans-serif; font-size: 90px;
+  color: var(--primary-gold); line-height: 0.5; height: 36px;
+  margin-bottom: 16px; font-style: italic;
+}
+.human-quote {
+  font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  font-size: clamp(20px, 2.6vw, 28px); font-weight: 500;
+  font-style: italic; line-height: 1.45; color: var(--white);
+  letter-spacing: -0.3px;
+}
+.quote-attrib {
+  margin-top: 40px; display: flex; align-items: center; gap: 16px;
+  justify-content: center;
+  font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--primary-gold); font-weight: 600;
+}
+.quote-attrib .line { width: 40px; height: 1px; background: var(--primary-gold); }
+
+/* Process */
+.process-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; position: relative;
+}
+.process-step {
+  background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005));
+  border: 1px solid rgba(212,175,55,0.12); border-radius: 14px;
+  padding: 32px 26px; position: relative;
+}
+.process-step .num {
+  font-family: 'Space Grotesk', 'Manrope', sans-serif; font-size: 38px; font-weight: 600;
+  color: var(--primary-gold); line-height: 1; opacity: 0.4;
+}
+.process-step h4 { font-size: 16px; font-weight: 600; margin-top: 10px; margin-bottom: 8px; }
+.process-step p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.6; }
+
+/* Contact */
+.contact {
+  background: linear-gradient(180deg, var(--navy-soft), var(--navy));
+  border-top: 1px solid rgba(212,175,55,0.15);
+}
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start;
+}
+.contact-info h2 {
+  font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  font-size: clamp(26px, 3.2vw, 38px); font-weight: 500; line-height: 1.15;
+}
+.contact-info h2 .accent { color: var(--primary-gold); font-style: italic; }
+.contact-info p { color: rgba(255,255,255,0.65); margin: 16px 0 28px; font-size: 14px; line-height: 1.7; }
+.contact-list { display: grid; gap: 16px; }
+.contact-item {
+  display: flex; align-items: center; gap: 18px;
+  padding: 16px 20px; border: 1px solid rgba(212,175,55,0.15);
+  border-radius: 10px; background: rgba(255,255,255,0.02);
+  text-decoration: none; color: var(--white); transition: all 0.2s;
+}
+.contact-item:hover { border-color: rgba(212,175,55,0.45); background: rgba(212,175,55,0.06); }
+.contact-item .icon {
+  flex: 0 0 40px; height: 40px; border-radius: 8px; background: rgba(212,175,55,0.12);
+  color: var(--primary-gold); display: flex; align-items: center; justify-content: center;
+}
+.contact-item .icon svg { width: 18px; height: 18px; }
+.contact-item .label { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+.contact-item .value { font-size: 15px; font-weight: 500; }
+
+.contact-form {
+  background: rgba(255,255,255,0.025); border: 1px solid rgba(212,175,55,0.12);
+  border-radius: 14px; padding: 38px;
+}
+.contact-form h3 { font-family: 'Space Grotesk', 'Manrope', sans-serif; font-size: 26px; font-weight: 500; margin-bottom: 8px; }
+.contact-form .subtitle { color: rgba(255,255,255,0.6); font-size: 14px; margin-bottom: 24px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 12px; letter-spacing: 1px; color: rgba(255,255,255,0.55); text-transform: uppercase; margin-bottom: 8px; }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 14px 16px; font-family: inherit; font-size: 14px;
+  background: rgba(14,36,64,0.5); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px; color: var(--white); transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  outline: none; border-color: var(--primary-gold);
+}
+.form-group textarea { resize: vertical; min-height: 100px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.contact-form .btn { width: 100%; justify-content: center; margin-top: 8px; }
+.contact-form .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+.form-success {
+  background: rgba(212,175,55,0.1); border: 1px solid var(--primary-gold);
+  border-radius: 8px; padding: 18px 22px; margin-bottom: 18px;
+  color: var(--primary-gold); font-size: 14px; line-height: 1.6;
+}
+.form-error {
+  background: rgba(220,38,38,0.1); border: 1px solid #DC2626;
+  border-radius: 8px; padding: 18px 22px; margin-bottom: 18px;
+  color: #FCA5A5; font-size: 14px; line-height: 1.6;
+}
+.form-group .optional { color: rgba(255,255,255,0.4); text-transform: none; letter-spacing: 0; font-size: 11px; margin-left: 6px; }
+.file-input {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; border: 1px dashed rgba(212,175,55,0.35);
+  border-radius: 8px; background: rgba(14,36,64,0.4);
+  cursor: pointer; transition: all 0.2s;
+}
+.file-input:hover { border-color: var(--primary-gold); background: rgba(212,175,55,0.06); }
+.file-input input[type="file"] { display: none; }
+.file-icon {
+  flex: 0 0 36px; height: 36px; border-radius: 8px;
+  background: rgba(212,175,55,0.12); color: var(--primary-gold);
+  display: flex; align-items: center; justify-content: center;
+}
+.file-icon svg { width: 18px; height: 18px; }
+.file-text { font-size: 13px; color: rgba(255,255,255,0.65); }
+.file-text.has-file { color: var(--primary-gold); font-weight: 500; }
+
+/* Footer */
+.footer {
+  background: var(--navy-deep); border-top: 1px solid rgba(212,175,55,0.2);
+  padding: 60px 32px 32px;
+}
+.footer-inner { max-width: 1280px; margin: 0 auto; }
+.footer-grid {
+  display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 50px;
+  padding-bottom: 40px;
+}
+.footer-brand { display: flex; align-items: center; gap: 18px; margin-bottom: 22px; }
+.footer-brand img { height: 96px; width: auto; display: block; }
+.footer-brand-text {
+  display: flex; flex-direction: column; justify-content: center; line-height: 1.1;
+  padding-left: 18px; border-left: 1px solid rgba(212,175,55,0.3);
+  align-self: center; min-height: 60px;
+}
+.footer-brand-text .tag {
+  font-size: 13px; letter-spacing: 3px; color: var(--primary-gold);
+  text-transform: uppercase; font-weight: 600; line-height: 1.3;
+}
+.footer-brand-text .tag-sub {
+  font-size: 9px; letter-spacing: 2.5px; color: rgba(255,255,255,0.7);
+  text-transform: uppercase; font-weight: 500; margin-top: 6px; line-height: 1.3;
+}
+.footer-about { color: rgba(255,255,255,0.55); font-size: 14px; max-width: 320px; }
+.footer-col h5 {
+  font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--primary-gold); margin-bottom: 18px;
+}
+.footer-col a {
+  display: block; color: rgba(255,255,255,0.7); text-decoration: none;
+  font-size: 14px; padding: 6px 0; transition: color 0.2s;
+}
+.footer-col a:hover { color: var(--primary-gold); }
+.footer-col a .icon { display: inline-block; margin-right: 8px; opacity: 0.8; vertical-align: middle; }
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.06);
+  font-size: 13px; color: rgba(255,255,255,0.45);
+}
+.footer-social { display: flex; gap: 12px; }
+.footer-social a {
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 1px solid rgba(212,175,55,0.2); color: rgba(255,255,255,0.7);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.footer-social a:hover { background: var(--primary-gold); color: var(--black); border-color: var(--primary-gold); }
+.footer-social svg { width: 16px; height: 16px; }
+
+/* Responsive */
+@media (max-width: 960px) {
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex; flex-direction: column; position: absolute; top: 92px;
+    left: 0; right: 0; background: rgba(14,36,64,0.97); padding: 24px; gap: 18px;
+    border-bottom: 1px solid rgba(212,175,55,0.15);
+  }
+  .menu-toggle { display: block; }
+  .nav-inner { padding: 6px 20px; }
+  .brand img { height: 52px; }
+  .brand-text { display: none; }
+  .why-grid, .process-grid { grid-template-columns: 1fr 1fr; }
+  .services-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  .services-photo { aspect-ratio: 16/9; max-height: 360px; }
+  .stats-grid { grid-template-columns: 1fr; gap: 28px; }
+  .why-banner { aspect-ratio: 16/8; }
+  .human-section { padding: 100px 32px; }
+  .clients-grid { grid-template-columns: repeat(2, 1fr); }
+  .global-grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero-inner { padding: 0 28px 100px; }
+  .hero-captions { min-height: 280px; }
+  .slide-counter, .slide-controls { left: 28px; right: auto; bottom: 24px; }
+  .slide-controls { left: auto; right: 28px; }
+}
+@media (max-width: 560px) {
+  .nav-inner { padding: 12px 18px; }
+  .brand img { height: 42px; }
+  section { padding: 60px 20px; }
+  .hero { min-height: 88vh; }
+  .hero-inner { padding: 0 20px 90px; }
+  .why-grid, .process-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+  .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+  .contact-form { padding: 26px; }
+  .why-banner { aspect-ratio: 4/3; }
+  .why-banner-overlay { padding: 20px 22px; }
+}
+
+/* Reveal animation */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="brand">
+      <img src="/logo.png" alt="ArgusRecruit">
+      <div class="brand-text">
+        <div class="tag" data-i18n="brand.tag">Много Глаз. Одна Цель.</div>
+        <div class="tag-sub" data-i18n="brand.sub">Исполнительный Поиск и Хедхантинг</div>
+      </div>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="#why" data-i18n="nav.why">Почему мы</a>
+      <a href="#services" data-i18n="nav.services">Услуги</a>
+      <a href="#process" data-i18n="nav.process">Процесс</a>
+      <a href="/ru/blog/" data-i18n="nav.blog">Блог</a>
+      <a href="#contact" data-i18n="nav.contact">Контакт</a>
+      <a href="#contact" class="nav-cta" data-i18n="nav.cta">Найти своё место</a>
+      <div class="lang-switcher" id="langSwitcher">
+        <button class="lang-current" id="langCurrent">🇷🇺</button>
+        <div class="lang-menu">
+          <a href="/" data-lang="en">🇬🇧 English</a>
+          <a href="/ru/" data-lang="ru" class="active">🇷🇺 Русский</a>
+          <a href="/hy/" data-lang="hy">🇦🇲 Հայերեն</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-slides" id="heroSlides">
+    <div class="hero-slide active" style="background-image: url('/slide-1.jpg');"></div>
+    <div class="hero-slide" style="background-image: url('/slide-2.jpg');"></div>
+    <div class="hero-slide" style="background-image: url('/slide-3.jpg');"></div>
+    <div class="hero-slide" style="background-image: url('/slide-4.jpg');"></div>
+    <div class="hero-slide" style="background-image: url('/slide-5.jpg');"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-captions" id="heroCaptions">
+      <div class="hero-caption active">
+        <div class="industry-tag" data-i18n="hero.s1.tag">Исполнительный Поиск</div>
+        <h1>Правильный <span class="accent">лидер</span> меняет всё.</h1>
+        <p class="lede">Бутиковая компания исполнительного поиска, созданная для назначений, определяющих следующее десятилетие вашей компании — CEO, C-уровень, VP и руководители функций. Конфиденциально, под руководством старших специалистов, ориентировано на результат.</p>
+        <div class="hero-cta-row">
+          <a href="#contact" class="btn btn-primary">Начать конфиденциальный поиск →</a>
+          <a href="#services" class="btn btn-secondary">Как мы работаем</a>
+        </div>
+      </div>
+      <div class="hero-caption">
+        <div class="industry-tag" data-i18n="hero.s2.tag">Технологии и Инжиниринг</div>
+        <h1>Строим <span class="accent">инженерные команды</span>, которые поставляют.</h1>
+        <p class="lede">От старших разработчиков до CTO — мы находим людей, которые превращают продуктовые планы в реализованную реальность.</p>
+        <div class="hero-cta-row">
+          <a href="#contact" class="btn btn-primary">Нанять технических специалистов →</a>
+        </div>
+      </div>
+      <div class="hero-caption">
+        <div class="industry-tag" data-i18n="hero.s3.tag">Маркетинг и Рост</div>
+        <h1>Маркетологи, которые <span class="accent">двигают стрелки</span> — не только метрики.</h1>
+        <p class="lede">CMO, performance-маркетологи, директора по брендам и руководители роста — для бизнесов, которым нужны результаты, а не показные цифры.</p>
+        <div class="hero-cta-row">
+          <a href="#contact" class="btn btn-primary">Нанять руководителей маркетинга →</a>
+        </div>
+      </div>
+      <div class="hero-caption">
+        <div class="industry-tag" data-i18n="hero.s4.tag">Финансы и FinTech</div>
+        <h1>Лидерство для <span class="accent">финансов и FinTech</span>.</h1>
+        <p class="lede">От CFO до риск-менеджеров и FinTech-инженеров — мы знаем, где работают лучшие финансовые специалисты, и как тихо до них достучаться.</p>
+        <div class="hero-cta-row">
+          <a href="#contact" class="btn btn-primary">Найти финансовых лидеров →</a>
+        </div>
+      </div>
+      <div class="hero-caption">
+        <div class="industry-tag" data-i18n="hero.s5.tag">Здравоохранение и Науки о Жизни</div>
+        <h1>Люди, которые <span class="accent">развивают здравоохранение</span>.</h1>
+        <p class="lede">Клиническое лидерство, специалисты по наукам о жизни и операционные менеджеры для медицинских организаций региона.</p>
+        <div class="hero-cta-row">
+          <a href="#contact" class="btn btn-primary">Найти медицинских специалистов →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-controls" id="slideControls"></div>
+</section>
+
+<div class="stats">
+  <div class="stats-grid">
+    <div class="stat">
+      <span class="number">15+</span>
+      <div class="label" data-i18n="stats.years">Лет совокупного опыта</div>
+    </div>
+    <div class="stat">
+      <span class="number">100%</span>
+      <div class="label" data-i18n="stats.confidential">Конфиденциально по умолчанию</div>
+    </div>
+    <div class="stat">
+      <span class="number">7 дней</span>
+      <div class="label" data-i18n="stats.shortlist">Средняя доставка шорт-листа</div>
+    </div>
+  </div>
+</div>
+
+<section class="clients">
+  <div class="container" style="text-align: center;">
+    <span class="eyebrow" data-i18n="clients.eyebrow">Наши клиенты</span>
+    <h2 class="clients-headline" data-i18n-html="clients.headline">Компании, которые <span class="accent">доверяют нам</span> свои самые сложные назначения</h2>
+    <p class="clients-sub" data-i18n="clients.sub">Подборка команд, с которыми мы работали — и небольшой взгляд на тех, кого мы консультируем.</p>
+    <div class="clients-grid">
+      <div class="client-logo">
+        <div class="client-logo-img"><img src="/client-huma.png" alt="Huma"></div>
+        <div class="name">Huma</div>
+      </div>
+      <div class="client-logo">
+        <div class="client-logo-img"><img src="/client-qoostudio.jpg" alt="QOO Studio"></div>
+        <div class="name">QOO Studio</div>
+      </div>
+      <div class="client-logo">
+        <div class="client-logo-img" style="background: #1a1a2e;"><img src="/client-alien.jpg" alt="Alien Intellect"></div>
+        <div class="name">Alien Intellect</div>
+      </div>
+      <div class="client-logo">
+        <div class="client-logo-img"><img src="/client-ovou.png" alt="OVOU"></div>
+        <div class="name">OVOU</div>
+      </div>
+    </div>
+    <div class="clients-footer" data-i18n="clients.footer">— и растущий список компаний, имена которых мы пока не можем называть публично —</div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow" data-i18n="why.eyebrow">Почему ArgusRecruit</span>
+      <h2 data-i18n-html="why.headline">Партнёр по поиску, который относится к вашему <span class="accent">следующему шагу</span> серьёзно.</h2>
+      <p data-i18n="why.intro">Мы сочетаем человеческую экспертизу с тщательно отобранным пайплайном, чтобы представить вам проверенных кандидатов — а не бесконечный шум. Дискретно, быстро и нацелено на результат.</p>
+    </div>
+    <div class="why-banner">
+      <img src="/photo-meeting.jpg" alt="ArgusRecruit team consultation">
+      <div class="why-banner-overlay">
+        <div class="why-banner-content">
+          <div class="banner-label" data-i18n="why.promise.label">Наше обещание</div>
+          <div class="banner-text" data-i18n="why.promise.text">Каждый поиск ведёт старший рекрутер, понимающий вашу отрасль, культуру и то, что «правильный найм» действительно для вас означает.</div>
+        </div>
+      </div>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/></svg>
+        </div>
+        <h3 data-i18n="why.card1.title">Много глаз</h3>
+        <p data-i18n="why.card1.text">Несколько старших рекрутеров на каждом поиске. Мы покрываем рынок так, как это сделала бы корпоративная команда — без бюрократии.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L4 7v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V7l-8-5z"/></svg>
+        </div>
+        <h3 data-i18n="why.card2.title">Полная конфиденциальность</h3>
+        <p data-i18n="why.card2.text">Конфиденциальность не обсуждается. Ваш поиск, ваши кандидаты, ваш график — защищены от начала до конца.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <h3 data-i18n="why.card3.title">Точное соответствие</h3>
+        <p data-i18n="why.card3.text">Мы не отправляем резюме. Мы отправляем правильных людей, проинформированных и совпадающих с вашей ролью, культурой и темпом.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="global-section" id="global">
+  <div class="global-grid">
+    <div class="global-text">
+      <span class="eyebrow" data-i18n="global.eyebrow">Глобальный охват</span>
+      <h2 data-i18n-html="global.headline">Базируемся в Армении. Работаем по <span class="accent">всему миру.</span></h2>
+      <p data-i18n="global.intro">Хотя Ереван — наш дом, наша поисковая работа глобальна. Наши клиенты сегодня работают из Великобритании, Канады и ОАЭ — и мы идём туда, где живёт нужный кандидат, и говорим на том языке, на котором нужно вести разговор.</p>
+      <div class="country-list">
+        <div class="country-item">
+          <span class="flag">🇬🇧</span>
+          <div class="info"><strong>Великобритания</strong><span>Лондон · Активные проекты с клиентами</span></div>
+          <span class="pulse"></span>
+        </div>
+        <div class="country-item">
+          <span class="flag">🇨🇦</span>
+          <div class="info"><strong>Канада</strong><span>Торонто · Активные проекты с клиентами</span></div>
+          <span class="pulse"></span>
+        </div>
+        <div class="country-item">
+          <span class="flag">🇦🇪</span>
+          <div class="info"><strong>ОАЭ</strong><span>Дубай · Активные проекты с клиентами</span></div>
+          <span class="pulse"></span>
+        </div>
+        <div class="country-item">
+          <span class="flag">🇦🇲</span>
+          <div class="info"><strong>Армения</strong><span>Ереван · Главный офис</span></div>
+          <span class="pulse"></span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="map-wrap">
+        <object type="image/svg+xml" data="/world-map.svg" aria-label="World map highlighting countries we serve"></object>
+      </div>
+      <div class="map-legend">
+        <span><span class="dot"></span> Активные проекты</span>
+        <span><span class="dot dim"></span> Доступная территория</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services" class="services">
+  <div class="container">
+    <div class="services-layout">
+      <div class="services-photo">
+        <img src="/photo-handshake.jpg" alt="ArgusRecruit consultation">
+        <div class="badge">
+          <span class="dot"></span>
+          <div class="text"><span>Доверяют лидеры</span> по всему миру</div>
+        </div>
+      </div>
+
+      <div class="services-content">
+        <span class="eyebrow">Услуги</span>
+        <h2 class="heading-caps">Много глаз, одно обещание — <span class="accent">правильный найм.</span></h2>
+        <p class="services-lede">Правильный найм не находится в стопке резюме. К нему приходят через нетворк, через разговор и через острый взгляд на того, кто действительно подходит для роли.</p>
+
+        <div class="services-tiers">
+          <div class="service-tier">
+            <div class="tier-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+            </div>
+            <div>
+              <h3>Исполнительный поиск</h3>
+              <p>Для C-уровня, VP и руководителей функций, где конфиденциальность и опыт старших партнёров важнее всего.</p>
+            </div>
+          </div>
+          <div class="service-tier">
+            <div class="tier-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+            </div>
+            <div>
+              <h3>Хедхантинг</h3>
+              <p>Для труднодоступных специалистов — даже когда они не на исполнительном уровне.</p>
+            </div>
+          </div>
+          <div class="service-tier">
+            <div class="tier-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <h3>Recruitment Услуги</h3>
+              <p>Структурированный найм «от и до» для ролей среднего и старшего уровня в различных функциях.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="services-features">
+          <div class="feature">
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L4 7v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V7l-8-5z"/></svg></div>
+            <div class="feature-text"><strong>Полная конфиденциальность</strong><span>Каждый поиск ведётся с осторожностью. Ваше имя, ваши кандидаты, ваш график — защищены от начала до конца.</span></div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 5l2 5h5l-4 3 1.5 5L12 15l-4.5 3L9 13l-4-3h5z"/></svg></div>
+            <div class="feature-text"><strong>Качество, а не количество</strong><span>Большинство наших размещений происходит в течение трёх–пяти разговоров — каждый кандидат, которого мы отправляем, тщательно проверен, проинструктирован и подобран под вашу роль.</span></div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="feature-text"><strong>Гарантия замены</strong><span>Если размещение не сработало в течение гарантийного периода, мы повторяем поиск без дополнительной оплаты.</span></div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>
+            <div class="feature-text"><strong>Старший рекрутер — единая точка контакта</strong><span>Ваш поиск ведёт лично старший рекрутер — без передач, без младших аккаунт-менеджеров.</span></div>
+          </div>
+        </div>
+
+        <div class="services-cta">
+          <a href="#contact" class="btn btn-primary">Запросить консультацию</a>
+          <a href="#process" class="btn btn-secondary">Как мы работаем</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Human / Quote Section -->
+<section class="human-section">
+  <div class="human-bg" style="background-image: url('/cover.png');"></div>
+  <div class="container human-inner">
+    <div class="quote-mark">"</div>
+    <blockquote class="human-quote">
+      За каждым великим наймом стоит разговор, в котором нашли время понять обе стороны. Мы сидим по обе стороны стола — и никогда не упускаем из виду ни одну из них.
+    </blockquote>
+    <div class="quote-attrib">
+      <div class="line"></div>
+      <div>Команда ArgusRecruit</div>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow" data-i18n="process.eyebrow">Как мы работаем</span>
+      <h2 data-i18n-html="process.headline">От брифа до <span class="accent">офера.</span></h2>
+      <p data-i18n="process.intro">Чёткий, повторяемый процесс, уважающий ваше время и время кандидата.</p>
+    </div>
+    <div class="process-grid">
+      <div class="process-step reveal">
+        <div class="num">01</div>
+        <h4 data-i18n="process.s1.title">Знакомство</h4>
+        <p>Глубокое погружение в роль, компанию и обязательные требования. Согласование того, как выглядит успех.</p>
+      </div>
+      <div class="process-step reveal">
+        <div class="num">02</div>
+        <h4 data-i18n="process.s2.title">Картирование</h4>
+        <p>Исследование целевого рынка, разработка лонг-листа и дискретный outreach к пассивным кандидатам.</p>
+      </div>
+      <div class="process-step reveal">
+        <div class="num">03</div>
+        <h4 data-i18n="process.s3.title">Шорт-лист</h4>
+        <p>3–5 vetted candidates with structured assessment notes — within 7 дней.</p>
+      </div>
+      <div class="process-step reveal">
+        <div class="num">04</div>
+        <h4 data-i18n="process.s4.title">Закрытие</h4>
+        <p>Координация интервью, поддержка офера и сопровождение онбординга.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="container contact-grid">
+    <div class="contact-info">
+      <span class="eyebrow" data-i18n="contact.eyebrow">Свяжитесь с нами</span>
+      <h2 data-i18n-html="contact.headline">Давайте найдём <span class="accent">того самого.</span></h2>
+      <p data-i18n="contact.intro">Нанимаете ли вы ключевого специалиста или думаете о следующем шаге в карьере — мы будем рады услышать вас. Все разговоры конфиденциальны.</p>
+      <div class="contact-list">
+        <a href="mailto:contact@argusrecruit.com" class="contact-item">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><div class="label">Email</div><div class="value">contact@argusrecruit.com</div></div>
+        </a>
+        <a href="tel:+37477026948" class="contact-item">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div><div class="label">Телефон</div><div class="value">+374 77 026 948</div></div>
+        </a>
+        <a href="https://www.linkedin.com/company/argusrecruit/about" target="_blank" rel="noopener" class="contact-item">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg></div>
+          <div><div class="label">LinkedIn</div><div class="value">linkedin.com/company/argusrecruit</div></div>
+        </a>
+        <div class="contact-item" style="cursor: default;">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><div class="label">Местоположение</div><div class="value">Yerevan, Армения</div></div>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" id="contactForm" action="https://api.web3forms.com/submit" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="access_key" value="e1db4f32-ef5e-4398-8106-13979f8c622f">
+      <input type="hidden" name="subject" value="New ArgusRecruit Inquiry">
+      <input type="hidden" name="from_name" value="ArgusRecruit Website">
+      <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+      <h3 data-i18n="form.title">Начать разговор</h3>
+      <p class="subtitle" data-i18n="form.subtitle">Расскажите, что вы ищете. Ответим в течение одного рабочего дня.</p>
+      <div id="formSuccess" class="form-success" style="display:none;">
+        <strong>✓ Сообщение отправлено.</strong><br>Свяжемся в течение одного рабочего дня.
+      </div>
+      <div id="formError" class="form-error" style="display:none;">
+        <strong>Что-то пошло не так.</strong><br>Пожалуйста, напишите нам напрямую на contact@argusrecruit.com
+      </div>
+      <div class="form-fields">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name" data-i18n="form.name">Полное имя</label>
+            <input id="name" name="name" type="text" required>
+          </div>
+          <div class="form-group">
+            <label for="email" data-i18n="form.email">Email</label>
+            <input id="email" name="email" type="email" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="company" data-i18n="form.company">Компания</label>
+            <input id="company" name="company" type="text">
+          </div>
+          <div class="form-group">
+            <label for="intent" data-i18n="form.intent">Я — ...</label>
+            <select id="intent" name="intent">
+              <option value="Работодатель, нанимающий специалистов">Работодатель, нанимающий специалистов</option>
+              <option value="Кандидат, изучающий вакансии">Кандидат, изучающий вакансии</option>
+              <option value="Другое">Другое</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="message" data-i18n="form.message">Чем мы можем помочь?</label>
+          <textarea id="message" name="message" placeholder="Кратко расскажите о роли или ваших целях..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="attachment">Вложение <span class="optional">(необязательно — резюме, описание роли и т.д.)</span></label>
+          <label class="file-input">
+            <input id="attachment" name="attachment" type="file" accept=".pdf,.doc,.docx,.txt,.rtf,.png,.jpg,.jpeg">
+            <span class="file-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            </span>
+            <span class="file-text" id="fileText">Нажмите, чтобы прикрепить файл (макс. 10 МБ)</span>
+          </label>
+        </div>
+        <button class="btn btn-primary" type="submit" id="submitBtn">Отправить сообщение →</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <img src="/logo.png" alt="ArgusRecruit">
+          <div class="footer-brand-text">
+            <div class="tag">Много Глаз. Одна Цель.</div>
+            <div class="tag-sub">Исполнительный Поиск и Хедхантинг</div>
+          </div>
+        </div>
+        <p class="footer-about">Бутиковый исполнительный поиск и хедхантинг. Где амбициозные карьеры встречают исключительных работодателей.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Услуги</h5>
+        <a href="#services">Исполнительный Поиск</a>
+        <a href="#services">Конфиденциальный найм</a>
+        <a href="#services">Партнёрство по рекрутингу</a>
+        <a href="#process">Как мы работаем</a>
+      </div>
+      <div class="footer-col">
+        <h5>Компания</h5>
+        <a href="#why">Почему мы</a>
+        <a href="#contact">Найти своё место</a>
+        <a href="https://www.linkedin.com/company/argusrecruit/about" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      <div class="footer-col">
+        <h5>Контакт</h5>
+        <a href="mailto:contact@argusrecruit.com">contact@argusrecruit.com</a>
+        <a href="tel:+37477026948">+374 77 026 948</a>
+        <a>Yerevan, Армения</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 ArgusRecruit. Все права защищены.</div>
+      <div class="footer-social">
+        <a href="https://www.linkedin.com/company/argusrecruit/about" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg>
+        </a>
+        <a href="mailto:contact@argusrecruit.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// === Language switcher (dropdown only — actual language is determined by URL) ===
+(function(){
+  const sw = document.getElementById('langSwitcher');
+  if (!sw) return;
+  const cur = document.getElementById('langCurrent');
+  // Detect current language from path
+  const path = location.pathname;
+  let lang = 'en';
+  if (path.startsWith('/ru')) lang = 'ru';
+  else if (path.startsWith('/hy')) lang = 'hy';
+  if (cur) cur.textContent = {en:'🇬🇧', ru:'🇷🇺', hy:'🇦🇲'}[lang] || lang.toUpperCase();
+  sw.querySelectorAll('.lang-menu a').forEach(a => a.classList.toggle('active', a.dataset.lang === lang));
+  cur.addEventListener('click', (e) => { e.stopPropagation(); sw.classList.toggle('open'); });
+  document.addEventListener('click', () => sw.classList.remove('open'));
+})();
+
+// Hero slideshow
+(function(){
+  const slides = document.querySelectorAll('.hero-slide');
+  const captions = document.querySelectorAll('.hero-caption');
+  const controls = document.getElementById('slideControls');
+  if (!slides.length) return;
+  let idx = 0; let timer;
+  const dots = [];
+  slides.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.className = 'slide-dot' + (i === 0 ? ' active' : '');
+    b.setAttribute('aria-label', 'Go to slide ' + (i+1));
+    b.addEventListener('click', () => { go(i); reset(); });
+    controls.appendChild(b);
+    dots.push(b);
+  });
+  function go(n) {
+    slides[idx].classList.remove('active');
+    captions[idx].classList.remove('active');
+    dots[idx].classList.remove('active');
+    idx = (n + slides.length) % slides.length;
+    slides[idx].classList.add('active');
+    captions[idx].classList.add('active');
+    dots[idx].classList.add('active');
+  }
+  function reset() { clearInterval(timer); timer = setInterval(() => go(idx + 1), 11000); }
+  reset();
+
+  // Drag / swipe gestures
+  const hero = document.querySelector('.hero');
+  let startX = 0, startY = 0, dragging = false, moved = false;
+  const THRESHOLD = 60;
+  function onStart(e) {
+    const t = e.touches ? e.touches[0] : e;
+    startX = t.clientX; startY = t.clientY;
+    dragging = true; moved = false;
+    hero.style.cursor = 'grabbing';
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    const t = e.touches ? e.touches[0] : e;
+    const dx = t.clientX - startX;
+    const dy = t.clientY - startY;
+    if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+      moved = true;
+      if (e.cancelable) e.preventDefault();
+    }
+  }
+  function onEnd(e) {
+    if (!dragging) return;
+    dragging = false;
+    hero.style.cursor = '';
+    if (!moved) return;
+    const t = e.changedTouches ? e.changedTouches[0] : e;
+    const dx = t.clientX - startX;
+    if (Math.abs(dx) > THRESHOLD) {
+      if (dx < 0) go(idx + 1);
+      else go(idx - 1);
+      reset();
+    }
+  }
+  hero.addEventListener('mousedown', onStart);
+  hero.addEventListener('mousemove', onMove);
+  hero.addEventListener('mouseup', onEnd);
+  hero.addEventListener('mouseleave', onEnd);
+  hero.addEventListener('touchstart', onStart, { passive: true });
+  hero.addEventListener('touchmove', onMove, { passive: false });
+  hero.addEventListener('touchend', onEnd, { passive: true });
+  hero.style.cursor = 'grab';
+  hero.style.touchAction = 'pan-y';
+
+  // Keyboard support
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') { go(idx - 1); reset(); }
+    if (e.key === 'ArrowRight') { go(idx + 1); reset(); }
+  });
+})();
+
+// Nav transparent on top
+(function(){
+  const nav = document.querySelector('.nav');
+  const hero = document.querySelector('.hero');
+  if (!nav || !hero) return;
+  const onScroll = () => {
+    if (window.scrollY < 60) nav.classList.add('transparent');
+    else nav.classList.remove('transparent');
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
+// Mobile menu toggle
+document.getElementById('menuToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('#navLinks a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// File input filename display
+const fileInput = document.getElementById('attachment');
+const fileText = document.getElementById('fileText');
+if (fileInput) {
+  fileInput.addEventListener('change', () => {
+    const f = fileInput.files[0];
+    if (f) {
+      const mb = (f.size / (1024*1024)).toFixed(2);
+      if (f.size > 10 * 1024 * 1024) {
+        fileText.textContent = `⚠ ${f.name} (${mb} MB) — exceeds 10 MB limit`;
+        fileText.classList.remove('has-file');
+        fileInput.value = '';
+      } else {
+        fileText.textContent = `✓ ${f.name} (${mb} MB)`;
+        fileText.classList.add('has-file');
+      }
+    } else {
+      fileText.textContent = 'Нажмите, чтобы прикрепить файл (макс. 10 МБ)';
+      fileText.classList.remove('has-file');
+    }
+  });
+}
+
+// AJAX form submit via FormSubmit
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    const success = document.getElementById('formSuccess');
+    const error = document.getElementById('formError');
+    success.style.display = 'none'; error.style.display = 'none';
+    btn.disabled = true; btn.textContent = 'Отправка...';
+    try {
+      const fd = new FormData(contactForm);
+      const res = await fetch(contactForm.action, { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
+      if (res.ok) {
+        success.style.display = 'block';
+        contactForm.querySelector('.form-fields').style.display = 'none';
+      } else {
+        error.style.display = 'block';
+        btn.disabled = false; btn.textContent = 'Отправить сообщение →';
+      }
+    } catch (err) {
+      error.style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Отправить сообщение →';
+    }
+  });
+}
+// Show success banner if redirected back with ?sent=1
+if (new URLSearchParams(location.search).get('sent') === '1') {
+  const s = document.getElementById('formSuccess');
+  if (s) {
+    s.style.display = 'block';
+    const ff = document.querySelector('.form-fields');
+    if (ff) ff.style.display = 'none';
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+</script>
+
+</body>
+</html>

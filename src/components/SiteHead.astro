@@ -1,0 +1,42 @@
+---
+const { title = 'ArgusRecruit — Executive Search & Headhunting', description = 'Boutique executive search and headhunting. Many eyes. One purpose.', lang = 'en' } = Astro.props;
+---
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title}</title>
+<meta name="description" content={description}>
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:image" content="/cover.png">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="/logo.png">
+
+<link rel="alternate" hreflang="en" href={Astro.site + (Astro.url.pathname.replace(/^\/(ru|hy)\//, '/'))}>
+<link rel="alternate" hreflang="ru" href={Astro.site + '/ru' + (Astro.url.pathname.replace(/^\/(ru|hy)/, '') || '/')}>
+<link rel="alternate" hreflang="hy" href={Astro.site + '/hy' + (Astro.url.pathname.replace(/^\/(ru|hy)/, '') || '/')}>
+<link rel="alternate" hreflang="x-default" href={Astro.site + (Astro.url.pathname.replace(/^\/(ru|hy)\//, '/'))}>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "ArgusRecruit",
+  "url": "https://argusrecruit.com",
+  "logo": "https://argusrecruit.com/logo.png",
+  "description": "Boutique executive search and headhunting. Many eyes. One purpose.",
+  "email": "contact@argusrecruit.com",
+  "telephone": "+374-77-026948",
+  "address": { "@type": "PostalAddress", "addressLocality": "Yerevan", "addressCountry": "AM" },
+  "sameAs": ["https://www.linkedin.com/company/argusrecruit/"]
+})}></script>
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": "Executive Search & Headhunting",
+  "provider": { "@type": "Organization", "name": "ArgusRecruit" },
+  "areaServed": ["United Kingdom", "Canada", "United Arab Emirates", "Armenia"]
+})}></script>
+
