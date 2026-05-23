@@ -173,7 +173,7 @@ const jobLd = {
         {salaryText && <><dt>Salary</dt><dd>{salaryText}</dd></>}
         {job.publishedAt && <><dt>Posted</dt><dd>{new Date(job.publishedAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</dd></>}
       </dl>
-      {!isInactive && <a href="#apply" class="btn-apply">Apply for this role →</a>}
+      {!isInactive && <a href="#apply" class="btn-apply">Apply for this role</a>}
       <div class="share-row">
         <a class="share-btn" target="_blank" rel="noopener" href={`https://www.linkedin.com/sharing/share-offsite/?url=https://argusrecruit.com/jobs/${job.slug}/`}>Share on LinkedIn</a>
         <button class="share-btn" type="button" id="copyLink">Copy Link</button>
@@ -222,7 +222,7 @@ const jobLd = {
             <label>Cover Note (optional)</label>
             <textarea name="coverNote" placeholder="A few lines on why you are interested in this role…"></textarea>
           </div>
-          <button class="btn-submit" type="submit" id="applyBtn">Send Application →</button>
+          <button class="btn-submit" type="submit" id="applyBtn">Send Application</button>
           <div class="apply-msg" id="applyMsg"></div>
         </div>
       </form>
