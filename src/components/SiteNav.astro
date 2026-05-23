@@ -4,9 +4,9 @@ const { lang = 'en', pathInLang = '/' } = Astro.props;
 const langPrefix = lang === 'en' ? '' : `/${lang}`;
 const FLAGS = { en: '🇬🇧', ru: '🇷🇺', hy: '🇦🇲' };
 const NAV_LABELS = {
-  en: { home: 'Home', jobs: 'Jobs', blog: 'Blog', contact: 'Contact', cta: 'Find Your Fit' },
-  ru: { home: 'Главная', jobs: 'Вакансии', blog: 'Блог', contact: 'Контакт', cta: 'Найти своё место' },
-  hy: { home: 'Գլխավոր', jobs: 'Աշխատանք', blog: 'Բլոգ', contact: 'Կապ', cta: 'Գտի՛ր քո տեղը' },
+  en: { home: 'Home', jobs: 'Find a Job', blog: 'Blog', contact: 'Contact', cta: 'Find Your Fit' },
+  ru: { home: 'Главная', jobs: 'Найти работу', blog: 'Блог', contact: 'Контакт', cta: 'Найти своё место' },
+  hy: { home: 'Գլխավոր', jobs: 'Գտնել աշխատանք', blog: 'Բլոգ', contact: 'Կապ', cta: 'Գտի՛ր քո տեղը' },
 };
 const BRAND = {
   en: { tag: 'Many Eyes. One Purpose.', sub: 'Executive Search & Headhunting' },
