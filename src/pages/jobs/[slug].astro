@@ -1,5 +1,6 @@
 ---
 import { getJobs, getJob } from '../../lib/sanity.js';
+import { fmtEmploymentType, fmtWorkplaceType } from '../../lib/format.js';
 import { toHTML } from '@portabletext/to-html';
 import SiteHead from '../../components/SiteHead.astro';
 import SharedCSS from '../../components/SharedCSS.astro';
@@ -132,8 +133,8 @@ const jobLd = {
       <div class="eyebrow">{job.department || 'Open Role'}</div>
       <h1>{job.title}</h1>
       <div class="job-meta">
-        {job.employmentType && <span><strong class="gold">Type:</strong> {job.employmentType.replace('_',' ').toLowerCase()}</span>}
-        {job.workplaceType && <span><strong class="gold">Mode:</strong> {job.workplaceType}</span>}
+        {job.employmentType && <span><strong class="gold">Type:</strong> {fmtEmploymentType(job.employmentType)}</span>}
+        {job.workplaceType && <span><strong class="gold">Mode:</strong> {fmtWorkplaceType(job.workplaceType)}</span>}
         {location && <span><strong class="gold">Location:</strong> {location}</span>}
         {salaryText && <span><strong class="gold">Salary:</strong> {salaryText}</span>}
       </div>
@@ -174,9 +175,9 @@ const jobLd = {
       <h4>Role at a Glance</h4>
       <dl>
         {job.department && <><dt>Department</dt><dd>{job.department}</dd></>}
-        {job.employmentType && <><dt>Employment</dt><dd>{job.employmentType.replace('_',' ').toLowerCase()}</dd></>}
+        {job.employmentType && <><dt>Employment</dt><dd>{fmtEmploymentType(job.employmentType)}</dd></>}
         {job.languagesRequired && job.languagesRequired.length > 0 && <><dt>Languages</dt><dd>{job.languagesRequired.join(', ')}</dd></>}
-        {job.workplaceType && <><dt>Workplace</dt><dd>{job.workplaceType}</dd></>}
+        {job.workplaceType && <><dt>Workplace</dt><dd>{fmtWorkplaceType(job.workplaceType)}</dd></>}
         {location && <><dt>Location</dt><dd>{location}</dd></>}
         {salaryText && <><dt>Salary</dt><dd>{salaryText}</dd></>}
         {job.relocationPackage && <><dt>Relocation</dt><dd>Visa + Moving Support</dd></>}
