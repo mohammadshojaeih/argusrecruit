@@ -16,7 +16,7 @@ if (!job) return Astro.redirect('/jobs/');
 
 const descHtml = Array.isArray(job.description) ? toHTML(job.description) : (job.description || '');
 const location = [job.locationCity, job.locationCountry].filter(Boolean).join(', ');
-const salaryText = job.salaryMin && job.salaryMax ? `${job.salaryCurrency} ${(job.salaryMin/1000).toFixed(0)}k–${(job.salaryMax/1000).toFixed(0)}k` : null;
+const salaryText = job.salaryNegotiable ? 'Բանակցելի' : (job.salaryMin && job.salaryMax ? `${job.salaryCurrency} ${(job.salaryMin/1000).toFixed(0)}k–${(job.salaryMax/1000).toFixed(0)}k` : null);
 
 // JSON-LD JobPosting for Google Jobs
 const jobLd = {

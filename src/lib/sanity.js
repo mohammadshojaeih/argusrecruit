@@ -197,7 +197,7 @@ export async function getJobs(lang = 'en', { includeClosed = false } = {}) {
     const statusFilter = includeClosed ? `&& status != "hidden"` : `&& status == "active"`;
     const query = `*[_type=="job" ${statusFilter} && (language=="${lang}" || !defined(language)) && (!defined(expiresAt) || expiresAt > now())] | order(featured desc, publishedAt desc) {
       _id, title, slug, status, featured, department, employmentType, workplaceType,
-      locationCity, locationCountry, salaryMin, salaryMax, salaryCurrency,
+      locationCity, locationCountry, salaryMin, salaryMax, salaryCurrency, salaryNegotiable,
       excerpt, description, responsibilities, requirements, niceToHave, tags,
       publishedAt, expiresAt
     }`;

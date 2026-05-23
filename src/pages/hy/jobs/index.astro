@@ -97,7 +97,7 @@ const workplaceTypes = [...new Set(jobs.map(j => j.workplaceType).filter(Boolean
                 {j.employmentType && <span>· {j.employmentType.replace('_',' ').toLowerCase()}</span>}
                 {j.workplaceType && <span>· {j.workplaceType}</span>}
                 {(j.locationCity || j.locationCountry) && <span>· {[j.locationCity, j.locationCountry].filter(Boolean).join(', ')}</span>}
-                {j.salaryMin && j.salaryMax && <span>· {j.salaryCurrency} {(j.salaryMin/1000).toFixed(0)}k–{(j.salaryMax/1000).toFixed(0)}k</span>}
+                {j.salaryNegotiable ? <span>· Բանակցելի</span> : (j.salaryMin && j.salaryMax && <span>· {j.salaryCurrency} {(j.salaryMin/1000).toFixed(0)}k–{(j.salaryMax/1000).toFixed(0)}k</span>)}
               </div>
             </div>
             <span class="job-cta">Տեսնել</span>
