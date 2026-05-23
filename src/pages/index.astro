@@ -23,6 +23,24 @@ const latestJobs = (await getJobs('en')).slice(0, 3);
 
 <style is:global>
 
+.home-services { padding: 90px 32px; background: var(--navy); }
+.home-services-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
+.home-services h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(26px, 3.4vw, 40px); font-weight: 600; line-height: 1.2; letter-spacing: 1.2px; text-transform: uppercase; margin-top: 14px; }
+.home-services h2 .accent { color: var(--primary-gold); font-style: italic; }
+.home-services p.home-services-intro { color: rgba(255,255,255,0.7); margin-top: 14px; font-size: 15px; max-width: 640px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+.home-services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 50px; }
+.home-svc-card { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); border: 1px solid rgba(212,175,55,0.18); border-radius: 16px; padding: 36px 28px; text-align: left; transition: all 0.3s; position: relative; overflow: hidden; }
+.home-svc-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--primary-gold), transparent); opacity: 0; transition: opacity 0.3s; }
+.home-svc-card:hover { border-color: rgba(212,175,55,0.45); transform: translateY(-4px); }
+.home-svc-card:hover::before { opacity: 1; }
+.home-svc-card-icon { width: 52px; height: 52px; border-radius: 12px; background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(184,134,11,0.08)); display: flex; align-items: center; justify-content: center; color: var(--primary-gold); margin-bottom: 22px; }
+.home-svc-card-icon svg { width: 26px; height: 26px; }
+.home-svc-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600; color: var(--white); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px; }
+.home-svc-card p { color: rgba(255,255,255,0.65); font-size: 14px; line-height: 1.65; }
+.home-services-cta { margin-top: 44px; }
+@media (max-width: 900px) { .home-services-grid { grid-template-columns: 1fr; } }
+
+
 .home-clients { background: var(--navy-deep); padding: 70px 32px; border-top: 1px solid rgba(212,175,55,0.12); border-bottom: 1px solid rgba(212,175,55,0.12); }
 .home-clients-inner { max-width: 1240px; margin: 0 auto; text-align: center; }
 .home-clients h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(24px, 3vw, 36px); font-weight: 600; line-height: 1.2; letter-spacing: 1.2px; margin-top: 14px; text-transform: uppercase; }
@@ -1165,56 +1183,30 @@ section { padding: 80px 32px; }
   </div>
 </section>
 
-<section id="services" class="services">
-  <div class="container">
-    <div class="services-layout">
-      <div class="services-photo">
-        <img src="photo-handshake.jpg" alt="ArgusRecruit consultation">
-        <div class="badge">
-          <span class="dot"></span>
-          <div class="text"><span>Trusted by leaders</span> across the world</div>
-        </div>
+<section id="services" class="home-services">
+  <div class="home-services-inner">
+    <span class="eyebrow">What We Do</span>
+    <h2>Three engagements. <span class="accent">One standard.</span></h2>
+    <p class="home-services-intro">From confidential C-suite searches to structured mid-senior hiring — every engagement is led personally by a senior recruiter.</p>
+    <div class="home-services-grid">
+      <div class="home-svc-card">
+        <div class="home-svc-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg></div>
+        <h3>Executive Search</h3>
+        <p>For C-suite, VP, and Head-of-Function roles where confidentiality and senior judgment matter most.</p>
       </div>
-
-      <div class="services-content">
-        <span class="eyebrow">Services</span>
-        <h2 class="heading-caps">Many eyes, one promise — <span class="accent">the right hire.</span></h2>
-        <p class="services-lede"><span class="accent">The right hire</span> isn't found in a stack of CVs. It's reached through a network, a conversation, and a sharp eye for who truly belongs in the role.</p>
-
-        <div class="services-tiers">
-          <div class="service-tier">
-            <div class="tier-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
-            </div>
-            <div>
-              <h3>Executive Search</h3>
-              <p>For C-suite, VP, and Head-of-Function roles where confidentiality and senior judgment matter most.</p>
-            </div>
-          </div>
-          <div class="service-tier">
-            <div class="tier-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
-            </div>
-            <div>
-              <h3>Headhunting</h3>
-              <p>For hard-to-source specialists — even when they aren't at the executive level.</p>
-            </div>
-          </div>
-          <div class="service-tier">
-            <div class="tier-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </div>
-            <div>
-              <h3>Recruitment Services</h3>
-              <p>Structured, end-to-end hiring for mid-to-senior roles across functions.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="services-cta">
-          <a href="/services/" class="btn btn-primary">Learn More About Our Services</a>
-        </div>
+      <div class="home-svc-card">
+        <div class="home-svc-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></div>
+        <h3>Headhunting</h3>
+        <p>For hard-to-source specialists — even when they aren't at the executive level.</p>
       </div>
+      <div class="home-svc-card">
+        <div class="home-svc-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>Recruitment Services</h3>
+        <p>Structured, end-to-end hiring for mid-to-senior roles across functions.</p>
+      </div>
+    </div>
+    <div class="home-services-cta">
+      <a href="/services/" class="btn btn-primary">Learn More About Our Services</a>
     </div>
   </div>
 </section>
