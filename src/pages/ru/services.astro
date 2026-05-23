@@ -126,6 +126,31 @@ const faqs = [
     .final-cta h2 .accent { color: var(--primary-gold); font-style: italic; }
     .final-cta p { color: rgba(255,255,255,0.75); font-size: 16px; max-width: 580px; margin: 0 auto 30px; line-height: 1.7; }
 
+    
+    .svc-quote-section { padding: 80px 32px; }
+    .svc-quote { max-width: 880px; margin: 0 auto; text-align: center; position: relative; }
+    .svc-quote .quote-mark { font-family: 'Space Grotesk', serif; font-size: 120px; color: var(--primary-gold); opacity: 0.4; line-height: 1; margin-bottom: -30px; }
+    .svc-quote blockquote { font-family: 'Space Grotesk', sans-serif; font-size: clamp(22px, 2.8vw, 32px); font-weight: 400; line-height: 1.4; color: var(--white); font-style: italic; margin-bottom: 24px; }
+    .svc-quote .quote-attrib { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--primary-gold); font-weight: 600; }
+
+    .svc-contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: start; }
+    .svc-contact-info { display: flex; flex-direction: column; gap: 14px; }
+    .svc-contact-item { display: flex; gap: 16px; align-items: center; padding: 16px 20px; background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.18); border-radius: 12px; color: var(--white); transition: all 0.2s; text-decoration: none; }
+    .svc-contact-item:hover { border-color: rgba(212,175,55,0.4); background: rgba(255,255,255,0.06); }
+    .svc-cicon { width: 40px; height: 40px; border-radius: 10px; background: rgba(212,175,55,0.12); display: flex; align-items: center; justify-content: center; color: var(--primary-gold); flex: 0 0 40px; }
+    .svc-cicon svg { width: 20px; height: 20px; }
+    .svc-clabel { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
+    .svc-form { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.25); border-radius: 16px; padding: 32px; }
+    .svc-form h3 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; margin-bottom: 6px; }
+    .svc-form-subtitle { color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 22px; }
+    .svc-form-fields { display: grid; gap: 14px; }
+    .svc-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .svc-form-group label { display: block; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 6px; font-weight: 600; }
+    .svc-form-group input, .svc-form-group select, .svc-form-group textarea { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.25); color: var(--white); padding: 11px 14px; border-radius: 8px; font-size: 14px; font-family: inherit; }
+    .svc-form-group textarea { min-height: 110px; resize: vertical; }
+    .svc-form-group input:focus, .svc-form-group select:focus, .svc-form-group textarea:focus { outline: none; border-color: var(--primary-gold); }
+    @media (max-width: 880px) { .svc-contact-grid { grid-template-columns: 1fr; } .svc-form-row { grid-template-columns: 1fr; } }
+
     @media (max-width: 960px) {
       .tiers-grid, .industries-grid, .why-cards-row, .process-row, .stats-svc, .guarantees { grid-template-columns: repeat(2, 1fr); }
     }
@@ -256,6 +281,17 @@ const faqs = [
     </div>
   </section>
 
+  <!-- Quote -->
+  <section class="svc-section svc-quote-section">
+    <div class="svc-section-inner">
+      <div class="svc-quote">
+        <div class="quote-mark">"</div>
+        <blockquote>Правильный найм не просто закрывает позицию — он перестраивает команду вокруг себя. Наша задача — найти того, чьё присутствие поднимает планку для всех в комнате.</blockquote>
+        <div class="quote-attrib">— Команда ArgusRecruit</div>
+      </div>
+    </div>
+  </section>
+
   <!-- Process -->
   <section class="svc-section alt">
     <div class="svc-section-inner">
@@ -284,25 +320,6 @@ const faqs = [
           <div class="num">04</div>
           <h4>Закрытие</h4>
           <p>Координация интервью, поддержка офера и онбординга.</p>
-        </div>
-      </div>
-
-      <div class="stats-svc">
-        <div class="stat-item">
-          <div class="stat-num">15+</div>
-          <div class="stat-label">Лет суммарно</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">100%</div>
-          <div class="stat-label">Конфиденциально по умолчанию</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">7 days</div>
-          <div class="stat-label">Средний шорт-лист</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">4</div>
-          <div class="stat-label">Страны охвата</div>
         </div>
       </div>
     </div>
@@ -341,33 +358,6 @@ const faqs = [
     </div>
   </section>
 
-  <!-- Guarantees -->
-  <section class="svc-section alt">
-    <div class="svc-section-inner">
-      <div class="svc-section-header">
-        <span class="eyebrow">Наше обязательство</span>
-        <h2>Гарантии, которые <span class="accent">защищают</span> ваш поиск.</h2>
-      </div>
-      <div class="guarantees">
-        <div class="guarantee-card">
-          <div class="gicon">✓</div>
-          <h4>Гарантия замены</h4>
-          <p>Если размещение не сработает, мы заново проводим поиск бесплатно.</p>
-        </div>
-        <div class="guarantee-card">
-          <div class="gicon">⌀</div>
-          <h4>Полная конфиденциальность</h4>
-          <p>Your name, your candidates, and your timeline — защищаютed by NDA, controlled outreach, and discrete reporting.</p>
-        </div>
-        <div class="guarantee-card">
-          <div class="gicon">★</div>
-          <h4>Старший, единственная точка контакта</h4>
-          <p>Ведётся лично старшим рекрутером — без передач.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- FAQ -->
   <section class="svc-section">
     <div class="svc-section-inner">
@@ -386,15 +376,69 @@ const faqs = [
     </div>
   </section>
 
-  <!-- Final CTA -->
+  <!-- Get in Touch -->
   <section class="svc-section alt" id="contact">
     <div class="svc-section-inner">
-      <div class="final-cta">
-        <h2>Готовы начать <span class="accent">конфиденциальный поиск?</span></h2>
-        <p>Расскажите о роли. Мы ответим в течение одного рабочего дня.</p>
-        <div class="svc-cta-row" style="justify-content: center;">
-          <a href="/#contact" class="btn btn-primary">Связаться с нашим консультантом</a>
+      <div class="svc-section-header">
+        <span class="eyebrow">Связаться с нами</span>
+        <h2>Найдём <span class="accent">того самого.</span></h2>
+        <p>Нанимаете ключевую роль или думаете о следующем карьерном шаге — мы будем рады услышать вас. Все разговоры конфиденциальны.</p>
+      </div>
+      <div class="svc-contact-grid">
+        <div class="svc-contact-info">
+          <a href="mailto:contact@argusrecruit.com" class="svc-contact-item">
+            <div class="svc-cicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+            <div><div class="svc-clabel">Email</div><div>contact@argusrecruit.com</div></div>
+          </a>
+          <a href="tel:+37477026948" class="svc-contact-item">
+            <div class="svc-cicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+            <div><div class="svc-clabel">Телефон</div><div>+374 77 026 948</div></div>
+          </a>
+          <a href="https://www.linkedin.com/company/argusrecruit/about" target="_blank" rel="noopener" class="svc-contact-item">
+            <div class="svc-cicon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg></div>
+            <div><div class="svc-clabel">LinkedIn</div><div>linkedin.com/company/argusrecruit</div></div>
+          </a>
+          <div class="svc-contact-item" style="cursor:default;">
+            <div class="svc-cicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div><div class="svc-clabel">Локация</div><div>Ереван, Армения</div></div>
+          </div>
         </div>
+        <form class="svc-form" action="/api/contact" method="POST" enctype="multipart/form-data">
+          <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+          <h3>Начнём разговор</h3>
+          <p class="svc-form-subtitle">Расскажите, что вы ищете. Мы ответим в течение одного рабочего дня.</p>
+          <div class="svc-form-fields">
+            <div class="svc-form-row">
+              <div class="svc-form-group">
+                <label>Полное имя</label>
+                <input name="name" type="text" required>
+              </div>
+              <div class="svc-form-group">
+                <label>Email</label>
+                <input name="email" type="email" required>
+              </div>
+            </div>
+            <div class="svc-form-row">
+              <div class="svc-form-group">
+                <label>Компания</label>
+                <input name="company" type="text">
+              </div>
+              <div class="svc-form-group">
+                <label>Я...</label>
+                <select name="intent">
+                  <option value="Employer hiring talent">Работодатель, ищущий таланты</option>
+                  <option value="Candidate exploring roles">Кандидат, рассматривающий вакансии</option>
+                  <option value="Other">Другое</option>
+                </select>
+              </div>
+            </div>
+            <div class="svc-form-group">
+              <label>Как мы можем помочь?</label>
+              <textarea name="message" placeholder="Расскажите кратко о роли или своих целях..." required></textarea>
+            </div>
+            <button class="btn btn-primary" type="submit">Отправить сообщение →</button>
+          </div>
+        </form>
       </div>
     </div>
   </section>
