@@ -259,7 +259,7 @@ const jobLd = {
         const r = await fetch('/api/apply', { method: 'POST', body: fd });
         if (r.ok) {
           msg.className = 'apply-msg success';
-          msg.textContent = '✓ Դիմումը ուղարկվեց. Մենք կկապվենք ձեզ հետ մեկ աշխատանքային օրվա ընթացքում:';
+          msg.textContent = '✓ Ձեր դիմումը հաջողությամբ ուղարկվել է: Սպասեք մեր պատասխանին:';
           form.querySelector('.apply-fields').style.display = 'none';
         } else {
           const j = await r.json().catch(() => ({}));

@@ -259,7 +259,7 @@ const jobLd = {
         const r = await fetch('/api/apply', { method: 'POST', body: fd });
         if (r.ok) {
           msg.className = 'apply-msg success';
-          msg.textContent = '✓ Application sent. We will be in touch within one business day.';
+          msg.textContent = '✓ Your application has been submitted successfully. Watch your inbox — we will be in touch.';
           form.querySelector('.apply-fields').style.display = 'none';
         } else {
           const j = await r.json().catch(() => ({}));
