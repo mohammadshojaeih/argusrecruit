@@ -52,5 +52,18 @@ a { color: inherit; text-decoration: none; }
 footer { background: var(--navy-darkest); padding: 40px 32px; text-align: center; font-size: 13px; color: rgba(255,255,255,0.45); border-top: 1px solid rgba(212,175,55,0.15); }
 footer a { color: var(--primary-gold); }
 
-@media (max-width: 960px) { .nav-inner { padding: 6px 20px; } .brand img { height: 52px; } .brand-text { display: none; } .nav-links a:not(.nav-cta) { display: none; } }
+@media (max-width: 960px) {
+  .nav-inner { padding: 6px 16px; gap: 12px; }
+  .brand img { height: 56px; }
+  .brand-text { padding-left: 10px; min-height: 50px; }
+  .brand-text .tag { font-size: 9.5px; letter-spacing: 1.8px; }
+  .brand-text .tag-sub { font-size: 7.5px; letter-spacing: 1.4px; margin-top: 3px; }
+  .nav-links a:not(.nav-cta):not(.nav-jobs) { display: none; }
+  .nav-links { gap: 8px; }
+  .nav-jobs, .nav-cta { padding: 6px 12px !important; font-size: 11.5px !important; min-width: 0 !important; }
+}
+@media (max-width: 480px) {
+  .brand-text { display: none; }
+  .nav-jobs span.dot { display: none; }
+}
 </style>
