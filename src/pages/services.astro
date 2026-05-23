@@ -182,6 +182,16 @@ const faqs = [
     .map-legend .dot.dim { background: #1B3B6F; }
     @media (max-width: 880px) { .global-grid { grid-template-columns: 1fr; gap: 40px; } }
 
+    
+    #process { padding: 90px 32px; }
+    .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; position: relative; }
+    .process-step { background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005)); border: 1px solid rgba(212,175,55,0.12); border-radius: 14px; padding: 32px 26px; position: relative; }
+    .process-step .num { font-family: 'Space Grotesk', 'Manrope', sans-serif; font-size: 38px; font-weight: 600; color: var(--primary-gold); line-height: 1; opacity: 0.4; }
+    .process-step h4 { font-size: 16px; font-weight: 600; margin-top: 10px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1.5px; }
+    .process-step p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.6; }
+    @media (max-width: 880px) { .process-grid { grid-template-columns: 1fr 1fr; gap: 18px; } }
+    @media (max-width: 560px) { .process-grid { grid-template-columns: 1fr; } }
+
     @media (max-width: 960px) { .svc-metrics-inner { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 560px) { .svc-metrics-inner { grid-template-columns: 1fr; gap: 14px; } }
 
     @media (max-width: 960px) {
@@ -534,30 +544,30 @@ const faqs = [
   </section>
 
   <!-- Process -->
-  <section class="svc-section alt">
-    <div class="svc-section-inner">
-      <div class="svc-section-header">
+  <section id="process">
+    <div class="container">
+      <div class="section-header">
         <span class="eyebrow">How We Work</span>
         <h2>From brief to <span class="accent">offer.</span></h2>
         <p>A clear, repeatable process that respects your time and the candidate's.</p>
       </div>
-      <div class="process-row">
-        <div class="svc-process-step">
+      <div class="process-grid">
+        <div class="process-step">
           <div class="num">01</div>
           <h4>Discovery</h4>
           <p>Deep dive into the role, company, and the must-haves. Aligned on what success looks like.</p>
         </div>
-        <div class="svc-process-step">
+        <div class="process-step">
           <div class="num">02</div>
           <h4>Mapping</h4>
           <p>Target market research, longlist development, and discreet outreach to passive talent.</p>
         </div>
-        <div class="svc-process-step">
+        <div class="process-step">
           <div class="num">03</div>
           <h4>Shortlist</h4>
           <p>3–5 vetted candidates with structured assessment notes — within 7 days.</p>
         </div>
-        <div class="svc-process-step">
+        <div class="process-step">
           <div class="num">04</div>
           <h4>Close</h4>
           <p>Interview coordination, offer support, and onboarding follow-through.</p>
