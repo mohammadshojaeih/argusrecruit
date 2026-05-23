@@ -136,10 +136,9 @@ const jobLd = {
         {location && <span><strong class="gold">Location:</strong> {location}</span>}
         {salaryText && <span><strong class="gold">Salary:</strong> {salaryText}</span>}
       </div>
-      {(job.visaSponsorship || job.relocationAssistance) && (
+      {job.relocationPackage && (
         <div class="perk-row">
-          {job.visaSponsorship && <span class="perk-badge">🌍 Վիզայի հովանավորում</span>}
-          {job.relocationAssistance && <span class="perk-badge">✈️ Տեղափոխման աջակցություն</span>}
+          <span class="perk-badge">🌍 Տեղափոխման փաթեթ · վիզա + աջակցություն</span>
         </div>
       )}
       {isInactive && <div class="closed-banner">{inactiveBanner}</div>}
@@ -179,8 +178,7 @@ const jobLd = {
         {job.workplaceType && <><dt>Ձև</dt><dd>{job.workplaceType}</dd></>}
         {location && <><dt>Տեղակայություն</dt><dd>{location}</dd></>}
         {salaryText && <><dt>Աշխատավարձ</dt><dd>{salaryText}</dd></>}
-        {job.visaSponsorship && <><dt>Վիզա</dt><dd>Հովանավորում</dd></>}
-        {job.relocationAssistance && <><dt>Տեղափոխում</dt><dd>Աջակցություն</dd></>}
+        {job.relocationPackage && <><dt>Տեղափոխում</dt><dd>Վիզա + աջակցություն</dd></>}
         {job.publishedAt && <><dt>Հրապարակված</dt><dd>{new Date(job.publishedAt).toLocaleDateString('hy-AM',{day:'numeric',month:'short',year:'numeric'})}</dd></>}
       </dl>
       {!isInactive && <a href="#apply" class="btn-apply">Դիմել</a>}

@@ -136,10 +136,9 @@ const jobLd = {
         {location && <span><strong class="gold">Location:</strong> {location}</span>}
         {salaryText && <span><strong class="gold">Salary:</strong> {salaryText}</span>}
       </div>
-      {(job.visaSponsorship || job.relocationAssistance) && (
+      {job.relocationPackage && (
         <div class="perk-row">
-          {job.visaSponsorship && <span class="perk-badge">🌍 Виза — спонсорство</span>}
-          {job.relocationAssistance && <span class="perk-badge">✈️ Помощь с релокацией</span>}
+          <span class="perk-badge">🌍 Релокационный пакет · виза + переезд</span>
         </div>
       )}
       {isInactive && <div class="closed-banner">{inactiveBanner}</div>}
@@ -179,8 +178,7 @@ const jobLd = {
         {job.workplaceType && <><dt>Формат</dt><dd>{job.workplaceType}</dd></>}
         {location && <><dt>Локация</dt><dd>{location}</dd></>}
         {salaryText && <><dt>Зарплата</dt><dd>{salaryText}</dd></>}
-        {job.visaSponsorship && <><dt>Виза</dt><dd>Спонсорство</dd></>}
-        {job.relocationAssistance && <><dt>Релокация</dt><dd>Поддержка</dd></>}
+        {job.relocationPackage && <><dt>Релокация</dt><dd>Виза + переезд</dd></>}
         {job.publishedAt && <><dt>Опубликовано</dt><dd>{new Date(job.publishedAt).toLocaleDateString('ru-RU',{day:'numeric',month:'short',year:'numeric'})}</dd></>}
       </dl>
       {!isInactive && <a href="#apply" class="btn-apply">Подать заявку</a>}
