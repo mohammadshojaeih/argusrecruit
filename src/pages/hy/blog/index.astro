@@ -9,7 +9,7 @@ const posts = await getPosts('hy');
 <!DOCTYPE html>
 <html lang="hy">
 <head>
-  <SiteHead title="Blog — ArgusRecruit" description="Practical perspectives on executive search and leadership hiring." lang="hy" />
+  <SiteHead title="Բլոգ — ArgusRecruit" description="Գործնական տեսակետներ executive search-ի և ղեկավարության վարձման մասին:" lang="hy" />
   <SharedCSS />
   <style>
     .blog-hero { padding: 160px 32px 70px; background: linear-gradient(180deg, var(--navy-darkest), var(--navy)); text-align: center; border-bottom: 1px solid rgba(212,175,55,0.12); }
@@ -38,23 +38,23 @@ const posts = await getPosts('hy');
   <SiteNav lang="hy" pathInLang="/hy/blog/" />
 
   <section class="blog-hero">
-    <span class="eyebrow">Insights</span>
-    <h1>From the <span class="accent">ArgusRecruit</span> Journal</h1>
-    <p>Practical perspectives on executive search, leadership hiring, and the modern workplace.</p>
+    <span class="eyebrow">Կարծիքներ</span>
+    <h1>ArgusRecruit-ի <span class="accent">ամսագրից</span></h1>
+    <p>Գործնական տեսակետներ executive search-ի, ղեկավարության վարձման և ժամանակակից աշխատավայրի մասին:</p>
   </section>
 
   <section class="posts">
     {posts.map(p => (
       <article class="post-card">
-        <a href={`/blog/${p.slug}/`}>
+        <a href={`/hy/blog/${p.slug}/`}>
           <div class="post-img"><img src={p.cover} alt="" /></div>
           <div class="post-body">
             <div class="post-tag">{p.tag}</div>
             <h3>{p.title}</h3>
             <p class="post-excerpt">{p.excerpt}</p>
             <div class="post-meta">
-              <span>{new Date(p.publishedAt).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'})}</span>
-              <span class="read-more">Read</span>
+              <span>{new Date(p.publishedAt).toLocaleDateString('hy-AM', {day:'numeric',month:'short',year:'numeric'})}</span>
+              <span class="read-more">Կարդալ</span>
             </div>
           </div>
         </a>
@@ -62,6 +62,6 @@ const posts = await getPosts('hy');
     ))}
   </section>
 
-  <footer>© 2026 ArgusRecruit · <a href="/hy/">Back to home</a></footer>
+  <footer>© 2026 ArgusRecruit · <a href="/hy/">Գլխավոր էջ</a></footer>
 </body>
 </html>
