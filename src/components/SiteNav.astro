@@ -25,7 +25,8 @@ const brand = BRAND[lang];
         <div class="tag-sub">{brand.sub}</div>
       </div>
     </a>
-    <div class="nav-links">
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+    <div class="nav-links" id="navLinks">
       <a href={langPrefix || '/'}>{nav.home}</a>
       <a href={`${langPrefix}/blog/`}>{nav.blog}</a>
       <a href={`${langPrefix}/#contact`}>{nav.contact}</a>
@@ -49,5 +50,11 @@ const brand = BRAND[lang];
     var cur = document.getElementById('langCurrent');
     cur.addEventListener('click', function(e){ e.stopPropagation(); sw.classList.toggle('open'); });
     document.addEventListener('click', function(){ sw.classList.remove('open'); });
+    var mt = document.getElementById('menuToggle');
+    var nl = document.getElementById('navLinks');
+    if (mt && nl) {
+      mt.addEventListener('click', function(){ nl.classList.toggle('open'); });
+      nl.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ nl.classList.remove('open'); }); });
+    }
   })();
 </script>
