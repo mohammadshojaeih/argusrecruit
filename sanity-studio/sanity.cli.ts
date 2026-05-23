@@ -4,5 +4,6 @@ export default defineCliConfig({
   api: {
     projectId: '832bmk23',
     dataset: 'production'
-  }
+  },
+  studioHost: 'argusrecruit'
 })
