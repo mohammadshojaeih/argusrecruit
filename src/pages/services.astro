@@ -160,6 +160,27 @@ const faqs = [
     .why-card p { color: rgba(255,255,255,0.65); font-size: 14px; }
     @media (max-width: 880px) { .why-grid { grid-template-columns: 1fr; } #why { padding: 100px 32px; } .why-banner { aspect-ratio: 16/9; } .why-banner-overlay { padding: 20px; } }
 
+    
+    .global-section { background: var(--navy-deep); padding: 70px 32px; border-top: 1px solid rgba(212,175,55,0.12); border-bottom: 1px solid rgba(212,175,55,0.12); }
+    .global-grid { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end; }
+    .global-text h2 { font-family: 'Space Grotesk', 'Manrope', sans-serif; font-size: clamp(28px, 3.6vw, 44px); font-weight: 500; line-height: 1.15; letter-spacing: -0.5px; color: var(--white); text-transform: uppercase; }
+    .global-text h2 .accent { color: var(--primary-gold); font-style: italic; }
+    .global-text p { margin-top: 18px; color: rgba(255,255,255,0.7); font-size: 16px; line-height: 1.7; }
+    .country-list { display: grid; gap: 12px; margin-top: 28px; }
+    .country-item { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.15); border-radius: 10px; }
+    .country-item .flag { font-size: 22px; line-height: 1; }
+    .country-item .info { flex: 1; }
+    .country-item .info strong { display: block; font-size: 14px; font-weight: 600; color: var(--white); letter-spacing: 0.3px; }
+    .country-item .info span { font-size: 12px; color: rgba(255,255,255,0.55); letter-spacing: 0.5px; }
+    .country-item .pulse { width: 10px; height: 10px; border-radius: 50%; background: var(--primary-gold); box-shadow: 0 0 0 0 rgba(212,175,55,0.7); animation: pulse 2.5s infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(212,175,55,0.7); } 70% { box-shadow: 0 0 0 12px rgba(212,175,55,0); } 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0); } }
+    .map-wrap { position: relative; border-radius: 14px; overflow: hidden; background: linear-gradient(135deg, rgba(212,175,55,0.05) 0%, rgba(14,36,64,0.3) 70%); padding: 24px; border: 1px solid rgba(212,175,55,0.18); width: 100%; }
+    .map-wrap object, .map-wrap img { width: 100%; height: auto; display: block; min-height: 360px; }
+    .map-legend { display: flex; gap: 16px; align-items: center; margin-top: 16px; font-size: 11px; letter-spacing: 1.5px; color: rgba(255,255,255,0.6); text-transform: uppercase; }
+    .map-legend .dot { width: 10px; height: 10px; border-radius: 2px; background: var(--primary-gold); display: inline-block; margin-right: 6px; vertical-align: middle; }
+    .map-legend .dot.dim { background: #1B3B6F; }
+    @media (max-width: 880px) { .global-grid { grid-template-columns: 1fr; gap: 40px; } }
+
     @media (max-width: 960px) { .svc-metrics-inner { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 560px) { .svc-metrics-inner { grid-template-columns: 1fr; gap: 14px; } }
 
     @media (max-width: 960px) {
@@ -459,33 +480,42 @@ const faqs = [
   </section>
 
   <!-- Global Reach -->
-  <section class="svc-section">
-    <div class="svc-section-inner">
-      <div class="svc-section-header">
+  <section class="global-section" id="global">
+    <div class="global-grid">
+      <div class="global-text">
         <span class="eyebrow">Global Reach</span>
-        <h2>Based in Armenia. <span class="accent">Working worldwide.</span></h2>
-        <p>While Yerevan is home, our search work is global. We go wherever the right candidate lives — in whichever language the conversation needs to happen.</p>
+        <h2>Based in Armenia. Working <span class="accent">worldwide.</span></h2>
+        <p>While Yerevan is home, our search work is global. Our clients today operate from the UK, Canada, and the UAE — and we go wherever the right candidate lives, in whichever language the conversation needs to happen.</p>
+        <div class="country-list">
+          <div class="country-item">
+            <span class="flag">🇬🇧</span>
+            <div class="info"><strong>United Kingdom</strong><span>London · Active client engagements</span></div>
+            <span class="pulse"></span>
+          </div>
+          <div class="country-item">
+            <span class="flag">🇨🇦</span>
+            <div class="info"><strong>Canada</strong><span>Toronto · Active client engagements</span></div>
+            <span class="pulse"></span>
+          </div>
+          <div class="country-item">
+            <span class="flag">🇦🇪</span>
+            <div class="info"><strong>United Arab Emirates</strong><span>Dubai · Active client engagements</span></div>
+            <span class="pulse"></span>
+          </div>
+          <div class="country-item">
+            <span class="flag">🇦🇲</span>
+            <div class="info"><strong>Armenia</strong><span>Yerevan · Home base</span></div>
+            <span class="pulse"></span>
+          </div>
+        </div>
       </div>
-      <div class="industries-grid">
-        <div class="industry-card">
-          <div class="industry-icon">🇬🇧</div>
-          <h4>United Kingdom</h4>
-          <p>London · Active engagements</p>
+      <div>
+        <div class="map-wrap">
+          <object type="image/svg+xml" data="/world-map.svg" aria-label="World map highlighting countries we serve"></object>
         </div>
-        <div class="industry-card">
-          <div class="industry-icon">🇨🇦</div>
-          <h4>Canada</h4>
-          <p>Toronto · Active engagements</p>
-        </div>
-        <div class="industry-card">
-          <div class="industry-icon">🇦🇪</div>
-          <h4>UAE</h4>
-          <p>Dubai · Active engagements</p>
-        </div>
-        <div class="industry-card">
-          <div class="industry-icon">🇦🇲</div>
-          <h4>Armenia</h4>
-          <p>Yerevan · Home base</p>
+        <div class="map-legend">
+          <span><span class="dot"></span> Active engagements</span>
+          <span><span class="dot dim"></span> Available territory</span>
         </div>
       </div>
     </div>
