@@ -696,6 +696,7 @@ section { padding: 80px 32px; }
   border-top: 1px solid rgba(212,175,55,0.12);
 }
 
+@media (max-width: 720px) { .global-grid { grid-template-columns: 1fr !important; gap: 30px !important; } .map-wrap { padding: 12px !important; } .map-wrap object { min-height: 220px !important; } }
 @media (max-width: 960px) {
   .services-layout { grid-template-columns: 1fr; gap: 32px; }
   .services-layout .services-photo { position: static; aspect-ratio: 16/9; max-height: 380px; }
@@ -1220,7 +1221,7 @@ section { padding: 80px 32px; }
     </div>
     <div>
       <div class="map-wrap">
-        <object type="image/svg+xml" data="world-map.svg" aria-label="World map highlighting countries we serve"></object>
+        <object type="image/svg+xml" data="/world-map.svg" aria-label="World map highlighting countries we serve"></object>
       </div>
       <div class="map-legend">
         <span><span class="dot"></span> Active engagements</span>
