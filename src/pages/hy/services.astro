@@ -281,11 +281,7 @@ const faqs = [
     @media (max-width: 880px) { .svc-contact-grid { grid-template-columns: 1fr; } .svc-form-row { grid-template-columns: 1fr; } }
 
     
-    .svc-metrics { background: var(--navy-deep); padding: 60px 32px; border-bottom: 1px solid rgba(212,175,55,0.12); }
-    .svc-metrics-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-    .svc-metric .num { font-family: 'Space Grotesk', sans-serif; font-size: clamp(38px, 5vw, 58px); font-weight: 600; color: var(--primary-gold); line-height: 1; margin-bottom: 8px; }
-    .svc-metric .label { color: rgba(255,255,255,0.85); font-size: 15px; }
-    @media (max-width: 720px) { .svc-metrics-inner { grid-template-columns: 1fr; gap: 24px; } }
+    
 
     @media (max-width: 960px) {
       .tiers-grid, .industries-grid, .why-cards-row, .process-row, .stats-svc, .guarantees { grid-template-columns: repeat(2, 1fr); }
@@ -309,6 +305,16 @@ const faqs = [
       <div class="svc-cta-row">
         <a href="#contact" class="btn btn-primary">Կապվել մեր խորհրդատուի հետ</a>
       </div>
+    </div>
+  </section>
+
+
+  <!-- Stats Metrics -->
+  <section class="svc-metrics">
+    <div class="svc-metrics-inner">
+      <div class="svc-metric"><div class="num">98%</div><div class="label">Նշանակումների պահպանում 12 ամսում</div></div>
+      <div class="svc-metric"><div class="num">21 օր</div><div class="label">Միջին shortlist-ի ժամկետ</div></div>
+      <div class="svc-metric"><div class="num">450+</div><div class="label">Ընկերություն վարձել ենք 2018-ից</div></div>
     </div>
   </section>
 
