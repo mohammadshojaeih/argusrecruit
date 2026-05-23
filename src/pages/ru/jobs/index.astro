@@ -1,0 +1,184 @@
+---
+import { getJobs } from '../../../lib/sanity.js';
+import SiteHead from '../../../components/SiteHead.astro';
+import SharedCSS from '../../../components/SharedCSS.astro';
+import SiteNav from '../../../components/SiteNav.astro';
+
+const jobs = await getJobs('ru');
+const departments = [...new Set(jobs.map(j => j.department).filter(Boolean))];
+const workplaceTypes = [...new Set(jobs.map(j => j.workplaceType).filter(Boolean))];
+---
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <SiteHead title="Вакансии — ArgusRecruit" description="Открытые позиции от ArgusRecruit. Исполнительный поиск и хедхантинг." lang="ru" />
+  <SharedCSS />
+  <style is:global>
+    .jobs-hero { padding: 160px 32px 60px; background: linear-gradient(180deg, var(--navy-darkest), var(--navy)); text-align: center; border-bottom: 1px solid rgba(212,175,55,0.12); }
+    .jobs-hero .eyebrow { display: inline-block; font-size: 11px; letter-spacing: 4px; color: var(--primary-gold); text-transform: uppercase; font-weight: 600; padding: 7px 18px; border: 1px solid rgba(212,175,55,0.35); border-radius: 999px; margin-bottom: 22px; }
+    .jobs-hero h1 { font-family: 'Space Grotesk',sans-serif; font-size: clamp(36px,5vw,56px); font-weight: 500; letter-spacing: -1px; text-transform: uppercase; line-height: 1.1; }
+    .jobs-hero h1 .accent { color: var(--primary-gold); font-style: italic; }
+    .jobs-hero p { color: rgba(255,255,255,0.7); margin-top: 22px; font-size: 16px; max-width: 620px; margin-inline: auto; }
+    .jobs-container { max-width: 1240px; margin: 0 auto; padding: 50px 32px 90px; }
+    .jobs-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; align-items: center; }
+    .filter-label { color: rgba(255,255,255,0.55); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; margin-right: 6px; }
+    .filter-chip { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.18); color: rgba(255,255,255,0.85); padding: 8px 16px; border-radius: 999px; font-size: 13px; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+    .filter-chip:hover { border-color: rgba(212,175,55,0.45); }
+    .filter-chip.active { background: var(--primary-gold); color: var(--navy-darkest); border-color: var(--primary-gold); font-weight: 600; }
+    .jobs-search { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.18); color: var(--white); padding: 10px 16px; border-radius: 999px; font-size: 13px; min-width: 240px; font-family: inherit; }
+    .jobs-search:focus { outline: none; border-color: rgba(212,175,55,0.5); }
+    .jobs-list { display: grid; gap: 14px; }
+    .job-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.15); border-radius: 14px; padding: 24px 28px; transition: all 0.25s; display: block; color: inherit; text-decoration: none; }
+    .job-card:hover { border-color: rgba(212,175,55,0.4); transform: translateY(-2px); background: rgba(255,255,255,0.06); }
+    .job-card.featured { border-color: rgba(212,175,55,0.5); position: relative; }
+    .job-card.featured::before { content: '★ Featured'; position: absolute; top: -10px; left: 24px; background: var(--primary-gold); color: var(--navy-darkest); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; padding: 4px 10px; border-radius: 4px; }
+    .job-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+    .job-card h3 { font-family: 'Space Grotesk',sans-serif; font-size: 22px; font-weight: 500; letter-spacing: 0.3px; line-height: 1.25; color: var(--white); margin-bottom: 6px; }
+    .job-meta-row { display: flex; flex-wrap: wrap; gap: 10px 18px; color: rgba(255,255,255,0.65); font-size: 13px; margin-top: 4px; }
+    .job-meta-row span { display: inline-flex; align-items: center; gap: 6px; }
+    .job-meta-row .gold { color: var(--primary-gold); }
+    .job-card .excerpt { color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.6; margin-top: 14px; max-width: 720px; }
+    .job-tags { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .job-tag { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: rgba(212,175,55,0.85); border: 1px solid rgba(212,175,55,0.25); padding: 4px 10px; border-radius: 4px; }
+    .job-cta { color: var(--primary-gold); font-weight: 600; font-size: 13px; white-space: nowrap; padding-top: 4px; }
+    .job-cta::after { content: ' →'; }
+    .no-jobs { text-align: center; color: rgba(255,255,255,0.6); padding: 60px 20px; border: 1px dashed rgba(212,175,55,0.2); border-radius: 14px; }
+
+    .alerts-section { max-width: 720px; margin: 80px auto 30px; padding: 36px 32px; background: linear-gradient(135deg, rgba(212,175,55,0.06), rgba(30,65,112,0.3)); border: 1px solid rgba(212,175,55,0.25); border-radius: 16px; text-align: center; }
+    .alerts-section h3 { font-family: 'Space Grotesk',sans-serif; font-size: 22px; font-weight: 500; margin-bottom: 8px; }
+    .alerts-section p { color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 22px; }
+    .alerts-form { display: flex; gap: 10px; max-width: 480px; margin: 0 auto; }
+    .alerts-form input { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.3); color: var(--white); padding: 12px 16px; border-radius: 8px; font-size: 14px; font-family: inherit; }
+    .alerts-form input:focus { outline: none; border-color: var(--primary-gold); }
+    .alerts-form button { background: var(--primary-gold); color: var(--navy-darkest); border: 0; padding: 12px 22px; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .alerts-form button:hover { background: var(--dark-gold); }
+    .alerts-msg { margin-top: 14px; font-size: 13px; color: var(--primary-gold); min-height: 18px; }
+
+    @media (max-width: 640px) {
+      .jobs-hero { padding: 130px 20px 50px; }
+      .jobs-container { padding: 40px 20px 70px; }
+      .job-top { flex-direction: column; gap: 8px; }
+      .alerts-form { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <SiteNav lang="ru" pathInLang="/ru/jobs/" />
+
+  <section class="jobs-hero">
+    <span class="eyebrow">Открытые позиции</span>
+    <h1>Найдите свою <span class="accent">следующую роль.</span></h1>
+    <p>Кураторская подборка старших и руководящих позиций из нашей сети. Все заявки конфиденциальны.</p>
+  </section>
+
+  <section class="jobs-container">
+    <div class="jobs-filters" id="filters">
+      <span class="filter-label">Отдел:</span>
+      <button class="filter-chip active" data-filter="department" data-value="">Все</button>
+      {departments.map(d => <button class="filter-chip" data-filter="department" data-value={d}>{d}</button>)}
+      <span class="filter-label" style="margin-left:14px">Формат:</span>
+      <button class="filter-chip active" data-filter="workplace" data-value="">Любой</button>
+      {workplaceTypes.map(w => <button class="filter-chip" data-filter="workplace" data-value={w}>{w}</button>)}
+      <input class="jobs-search" id="searchInput" type="search" placeholder="Поиск по названию, тегу…" style="margin-left:auto" />
+    </div>
+
+    <div class="jobs-list" id="jobsList">
+      {jobs.map(j => (
+        <a class={`job-card${j.featured ? ' featured' : ''}`}
+           href={`/ru/jobs/${j.slug}/`}
+           data-department={j.department || ''}
+           data-workplace={j.workplaceType || ''}
+           data-search={[j.title, ...(j.tags||[]), j.department, j.locationCity, j.locationCountry].filter(Boolean).join(' ').toLowerCase()}>
+          <div class="job-top">
+            <div>
+              <h3>{j.title}</h3>
+              <div class="job-meta-row">
+                {j.department && <span class="gold">{j.department}</span>}
+                {j.employmentType && <span>· {j.employmentType.replace('_',' ').toLowerCase()}</span>}
+                {j.workplaceType && <span>· {j.workplaceType}</span>}
+                {(j.locationCity || j.locationCountry) && <span>· {[j.locationCity, j.locationCountry].filter(Boolean).join(', ')}</span>}
+                {j.salaryMin && j.salaryMax && <span>· {j.salaryCurrency} {(j.salaryMin/1000).toFixed(0)}k–{(j.salaryMax/1000).toFixed(0)}k</span>}
+              </div>
+            </div>
+            <span class="job-cta">Смотреть</span>
+          </div>
+          <p class="excerpt">{j.excerpt}</p>
+          {j.tags && j.tags.length > 0 && (
+            <div class="job-tags">
+              {j.tags.map(t => <span class="job-tag">{t}</span>)}
+            </div>
+          )}
+        </a>
+      ))}
+    </div>
+    <div class="no-jobs" id="noJobs" style="display:none;">Сейчас нет подходящих ролей. Подпишитесь ниже, чтобы первым узнавать о новых вакансиях.</div>
+  </section>
+
+  <section class="alerts-section">
+    <h3>Оповещения о вакансиях</h3>
+    <p>Узнавайте первым, когда мы открываем новые старшие роли. Без спама, отписаться можно в любой момент.</p>
+    <form class="alerts-form" id="alertsForm">
+      <input type="email" name="email" placeholder="your@email.com" required />
+      <button type="submit">Подписаться</button>
+    </form>
+    <div class="alerts-msg" id="alertsMsg"></div>
+  </section>
+
+  <footer style="text-align:center; padding: 40px 20px; color: rgba(255,255,255,0.5); font-size: 13px;">© 2026 ArgusRecruit · <a style="color:var(--primary-gold)" href="/">Back to home</a></footer>
+
+  <script is:inline>
+    (function(){
+      const state = { department: '', workplace: '', q: '' };
+      const cards = Array.from(document.querySelectorAll('.job-card'));
+      const noJobs = document.getElementById('noJobs');
+      function apply() {
+        let visible = 0;
+        cards.forEach(c => {
+          const d = c.dataset.department || '';
+          const w = c.dataset.workplace || '';
+          const s = c.dataset.search || '';
+          const ok = (!state.department || d === state.department)
+            && (!state.workplace || w === state.workplace)
+            && (!state.q || s.includes(state.q.toLowerCase()));
+          c.style.display = ok ? '' : 'none';
+          if (ok) visible++;
+        });
+        noJobs.style.display = visible === 0 ? '' : 'none';
+      }
+      document.querySelectorAll('.filter-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const filter = btn.dataset.filter;
+          document.querySelectorAll(`[data-filter="${filter}"]`).forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          state[filter] = btn.dataset.value;
+          apply();
+        });
+      });
+      const search = document.getElementById('searchInput');
+      search.addEventListener('input', e => { state.q = e.target.value; apply(); });
+
+      const alertsForm = document.getElementById('alertsForm');
+      const alertsMsg = document.getElementById('alertsMsg');
+      alertsForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const email = alertsForm.email.value.trim();
+        alertsMsg.textContent = 'Подписываем…';
+        try {
+          const r = await fetch('/api/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, lang: 'ru' })
+          });
+          if (r.ok) {
+            alertsMsg.textContent = '✓ Подписка оформлена. Мы напишем вам, когда появятся новые роли.';
+            alertsForm.reset();
+          } else {
+            const j = await r.json().catch(() => ({}));
+            alertsMsg.textContent = '⚠ ' + (j.error || 'Could not subscribe. Try again.');
+          }
+        } catch (err) { alertsMsg.textContent = '⚠ Network error. Try again.'; }
+      });
+    })();
+  </script>
+</body>
+</html>

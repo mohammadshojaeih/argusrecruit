@@ -1,2 +1,3 @@
 import post from './post'
-export const schemaTypes = [post]
+import job from './job'
+export const schemaTypes = [post, job]

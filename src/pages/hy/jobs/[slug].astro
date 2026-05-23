@@ -1,0 +1,271 @@
+---
+import { getJobs, getJob } from '../../../lib/sanity.js';
+import { toHTML } from '@portabletext/to-html';
+import SiteHead from '../../../components/SiteHead.astro';
+import SharedCSS from '../../../components/SharedCSS.astro';
+import SiteNav from '../../../components/SiteNav.astro';
+
+export async function getStaticPaths() {
+  const jobs = await getJobs('hy', { includeClosed: true });
+  return jobs.map(j => ({ params: { slug: j.slug } }));
+}
+
+const { slug } = Astro.params;
+const job = await getJob(slug, 'hy');
+if (!job) return Astro.redirect('/jobs/');
+
+const descHtml = Array.isArray(job.description) ? toHTML(job.description) : (job.description || '');
+const location = [job.locationCity, job.locationCountry].filter(Boolean).join(', ');
+const salaryText = job.salaryMin && job.salaryMax ? `${job.salaryCurrency} ${(job.salaryMin/1000).toFixed(0)}k–${(job.salaryMax/1000).toFixed(0)}k` : null;
+
+// JSON-LD JobPosting for Google Jobs
+const jobLd = {
+  "@context": "https://schema.org",
+  "@type": "JobPosting",
+  "title": job.title,
+  "description": descHtml || job.excerpt,
+  "datePosted": job.publishedAt,
+  ...(job.expiresAt && { "validThrough": job.expiresAt }),
+  "employmentType": job.employmentType || 'FULL_TIME',
+  "hiringOrganization": {
+    "@type": "Organization",
+    "name": "ArgusRecruit",
+    "sameAs": "https://argusrecruit.com",
+    "logo": "https://argusrecruit.com/logo.png"
+  },
+  "jobLocation": (job.workplaceType === 'remote') ? undefined : {
+    "@type": "Place",
+    "address": {
+      "@type": "PostalAddress",
+      ...(job.locationCity && { "addressLocality": job.locationCity }),
+      ...(job.locationCountry && { "addressCountry": job.locationCountry })
+    }
+  },
+  ...(job.workplaceType === 'remote' && { "jobLocationType": "TELECOMMUTE" }),
+  ...(salaryText && job.salaryMin && job.salaryMax && {
+    "baseSalary": {
+      "@type": "MonetaryAmount",
+      "currency": job.salaryCurrency || 'USD',
+      "value": {
+        "@type": "QuantitativeValue",
+        "minValue": job.salaryMin,
+        "maxValue": job.salaryMax,
+        "unitText": "YEAR"
+      }
+    }
+  })
+};
+---
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+  <SiteHead title={`${job.title} — ArgusRecruit`} description={job.excerpt || `Apply for ${job.title} via ArgusRecruit.`} lang="hy" />
+  <SharedCSS />
+  <script type="application/ld+json" set:html={JSON.stringify(jobLd)}></script>
+  <style is:global>
+    .job-hero { padding: 150px 32px 50px; background: linear-gradient(180deg, var(--navy-darkest), var(--navy)); border-bottom: 1px solid rgba(212,175,55,0.12); }
+    .job-hero-inner { max-width: 980px; margin: 0 auto; }
+    .job-hero .eyebrow { font-size: 11px; letter-spacing: 4px; color: var(--primary-gold); text-transform: uppercase; font-weight: 600; }
+    .job-hero h1 { font-family: 'Space Grotesk',sans-serif; font-size: clamp(28px,4vw,46px); font-weight: 500; letter-spacing: -0.5px; line-height: 1.15; margin: 14px 0 18px; }
+    .job-meta { display: flex; flex-wrap: wrap; gap: 10px 18px; color: rgba(255,255,255,0.75); font-size: 14px; margin-bottom: 10px; }
+    .job-meta .gold { color: var(--primary-gold); font-weight: 600; }
+    .closed-banner { display: inline-block; background: rgba(255,80,80,0.15); border: 1px solid rgba(255,80,80,0.4); color: #ff7a7a; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 12px; }
+
+    .job-body-wrap { max-width: 980px; margin: 0 auto; padding: 50px 32px 80px; display: grid; grid-template-columns: 1fr 320px; gap: 50px; align-items: start; }
+    .job-content { color: rgba(255,255,255,0.85); font-size: 15.5px; line-height: 1.75; }
+    .job-content h2 { font-family: 'Space Grotesk',sans-serif; font-size: 22px; font-weight: 500; color: var(--white); margin: 32px 0 14px; letter-spacing: 0.3px; }
+    .job-content p { margin-bottom: 16px; }
+    .job-content ul { padding-left: 20px; margin-bottom: 18px; }
+    .job-content li { margin-bottom: 8px; color: rgba(255,255,255,0.8); }
+
+    .job-aside { position: sticky; top: 100px; background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.25); border-radius: 14px; padding: 26px 24px; }
+    .job-aside h4 { font-family: 'Space Grotesk',sans-serif; font-size: 16px; margin-bottom: 18px; letter-spacing: 0.5px; color: var(--primary-gold); }
+    .job-aside dl { font-size: 13.5px; }
+    .job-aside dt { color: rgba(255,255,255,0.55); margin-top: 12px; letter-spacing: 0.5px; }
+    .job-aside dd { color: var(--white); margin: 4px 0 0; font-weight: 500; }
+    .job-aside .btn-apply { display: block; text-align: center; background: var(--primary-gold); color: var(--navy-darkest); padding: 14px; border-radius: 8px; font-weight: 700; margin-top: 22px; text-decoration: none; letter-spacing: 0.5px; }
+    .job-aside .btn-apply:hover { background: var(--dark-gold); }
+    .share-row { display: flex; gap: 8px; margin-top: 18px; }
+    .share-btn { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(212,175,55,0.2); color: rgba(255,255,255,0.85); padding: 9px; border-radius: 6px; cursor: pointer; font-size: 12px; font-family: inherit; text-decoration: none; text-align: center; }
+    .share-btn:hover { border-color: var(--primary-gold); color: var(--primary-gold); }
+
+    .apply-section { max-width: 720px; margin: 30px auto 80px; padding: 40px 36px; background: linear-gradient(135deg, rgba(212,175,55,0.06), rgba(30,65,112,0.3)); border: 1px solid rgba(212,175,55,0.25); border-radius: 16px; }
+    .apply-section h2 { font-family: 'Space Grotesk',sans-serif; font-size: 26px; font-weight: 500; margin-bottom: 6px; }
+    .apply-section .sub { color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 28px; }
+    .apply-fields { display: grid; gap: 16px; }
+    .apply-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .apply-fields label { display: block; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 6px; font-weight: 600; }
+    .apply-fields input, .apply-fields textarea { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.25); color: var(--white); padding: 11px 14px; border-radius: 8px; font-size: 14px; font-family: inherit; }
+    .apply-fields textarea { min-height: 110px; resize: vertical; }
+    .apply-fields input:focus, .apply-fields textarea:focus { outline: none; border-color: var(--primary-gold); }
+    .file-input-wrap { background: rgba(0,0,0,0.3); border: 1px dashed rgba(212,175,55,0.4); border-radius: 8px; padding: 16px; text-align: center; cursor: pointer; display: block; }
+    .file-input-wrap input { display: none; }
+    .file-input-wrap span { color: rgba(255,255,255,0.7); font-size: 13px; }
+    .btn-submit { background: var(--primary-gold); color: var(--navy-darkest); border: 0; padding: 14px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 15px; font-family: inherit; margin-top: 8px; letter-spacing: 0.5px; }
+    .btn-submit:hover { background: var(--dark-gold); }
+    .apply-msg { padding: 14px; margin-top: 18px; border-radius: 8px; font-size: 14px; display: none; }
+    .apply-msg.success { display: block; background: rgba(60,180,90,0.15); border: 1px solid rgba(60,180,90,0.4); color: #8feca8; }
+    .apply-msg.error { display: block; background: rgba(255,80,80,0.15); border: 1px solid rgba(255,80,80,0.4); color: #ff8a8a; }
+
+    @media (max-width: 880px) {
+      .job-body-wrap { grid-template-columns: 1fr; gap: 30px; padding: 40px 20px 60px; }
+      .job-aside { position: static; }
+      .apply-section { padding: 32px 22px; }
+      .apply-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <SiteNav lang="hy" pathInLang={`/hy/jobs/${job.slug}/`} />
+
+  <section class="job-hero">
+    <div class="job-hero-inner">
+      <div class="eyebrow">{job.department || 'Open Role'}</div>
+      <h1>{job.title}</h1>
+      <div class="job-meta">
+        {job.employmentType && <span><strong class="gold">Type:</strong> {job.employmentType.replace('_',' ').toLowerCase()}</span>}
+        {job.workplaceType && <span><strong class="gold">Mode:</strong> {job.workplaceType}</span>}
+        {location && <span><strong class="gold">Location:</strong> {location}</span>}
+        {salaryText && <span><strong class="gold">Salary:</strong> {salaryText}</span>}
+      </div>
+      {job.status === 'closed' && <div class="closed-banner">Այս դերը փակ է</div>}
+    </div>
+  </section>
+
+  <div class="job-body-wrap">
+    <article class="job-content">
+      {job.excerpt && <p style="font-size: 17px; color: rgba(255,255,255,0.9);"><strong>{job.excerpt}</strong></p>}
+      {descHtml && <div set:html={descHtml} />}
+      {job.responsibilities && job.responsibilities.length > 0 && (
+        <>
+          <h2>Պարտականություններ</h2>
+          <ul>{job.responsibilities.map(r => <li>{r}</li>)}</ul>
+        </>
+      )}
+      {job.requirements && job.requirements.length > 0 && (
+        <>
+          <h2>Պահանջներ</h2>
+          <ul>{job.requirements.map(r => <li>{r}</li>)}</ul>
+        </>
+      )}
+      {job.niceToHave && job.niceToHave.length > 0 && (
+        <>
+          <h2>Լավ կլինի ունենաք</h2>
+          <ul>{job.niceToHave.map(r => <li>{r}</li>)}</ul>
+        </>
+      )}
+    </article>
+
+    <aside class="job-aside">
+      <h4>Դերի համառոտ</h4>
+      <dl>
+        {job.department && <><dt>Բաժին</dt><dd>{job.department}</dd></>}
+        {job.employmentType && <><dt>Տիպ</dt><dd>{job.employmentType.replace('_',' ').toLowerCase()}</dd></>}
+        {job.workplaceType && <><dt>Ձև</dt><dd>{job.workplaceType}</dd></>}
+        {location && <><dt>Տեղակայություն</dt><dd>{location}</dd></>}
+        {salaryText && <><dt>Աշխատավարձ</dt><dd>{salaryText}</dd></>}
+        {job.publishedAt && <><dt>Հրապարակված</dt><dd>{new Date(job.publishedAt).toLocaleDateString('hy-AM',{day:'numeric',month:'short',year:'numeric'})}</dd></>}
+      </dl>
+      {job.status !== 'closed' && <a href="#apply" class="btn-apply">Դիմել →</a>}
+      <div class="share-row">
+        <a class="share-btn" target="_blank" rel="noopener" href={`https://www.linkedin.com/sharing/share-offsite/?url=https://argusrecruit.com/hy/jobs/${job.slug}/`}>LinkedIn</a>
+        <button class="share-btn" type="button" id="copyLink">Պատճենել հղումը</button>
+      </div>
+    </aside>
+  </div>
+
+  {job.status !== 'closed' && (
+    <section class="apply-section" id="apply">
+      <h2>Դիմել</h2>
+      <p class="sub">Բոլոր դիմումները գաղտնի են: Մենք պատասխանում ենք մեկ աշխատանքային օրվա ընթացքում:</p>
+      <form id="applyForm" enctype="multipart/form-data">
+        <input type="hidden" name="jobSlug" value={job.slug} />
+        <input type="hidden" name="jobTitle" value={job.title} />
+        <input type="hidden" name="lang" value="hy" />
+        <input type="text" name="hp_field" style="display:none" tabindex="-1" autocomplete="off" />
+        <div class="apply-fields">
+          <div class="apply-row">
+            <div>
+              <label>Լրիվ անուն *</label>
+              <input type="text" name="name" required />
+            </div>
+            <div>
+              <label>Email *</label>
+              <input type="email" name="email" required />
+            </div>
+          </div>
+          <div class="apply-row">
+            <div>
+              <label>Հեռախոս</label>
+              <input type="tel" name="phone" />
+            </div>
+            <div>
+              <label>LinkedIn URL</label>
+              <input type="url" name="linkedin" placeholder="https://linkedin.com/in/..." />
+            </div>
+          </div>
+          <div>
+            <label>CV / Ռեզյումե * (PDF, DOC, մինչև 10MB)</label>
+            <label class="file-input-wrap">
+              <input type="file" name="cv" required accept=".pdf,.doc,.docx" id="cvInput" />
+              <span id="cvText">Սեղմեք՝ CV կցելու համար</span>
+            </label>
+          </div>
+          <div>
+            <label>Ուղեկցող նամակ (պարտադիր չէ)</label>
+            <textarea name="coverNote" placeholder="Մի քանի տող, թե ինչու եք հետաքրքրված այս դերով…"></textarea>
+          </div>
+          <button class="btn-submit" type="submit" id="applyBtn">Ուղարկել դիմումը →</button>
+          <div class="apply-msg" id="applyMsg"></div>
+        </div>
+      </form>
+    </section>
+  )}
+
+  <footer style="text-align:center; padding: 40px 20px; color: rgba(255,255,255,0.5); font-size: 13px;">© 2026 ArgusRecruit · <a style="color:var(--primary-gold)" href="/hy/jobs/">Բոլոր աշխատանքները</a></footer>
+
+  <script is:inline>
+    document.getElementById('copyLink')?.addEventListener('click', () => {
+      navigator.clipboard.writeText(location.href).then(() => {
+        const b = document.getElementById('copyLink');
+        const orig = b.textContent;
+        b.textContent = '✓ Copied';
+        setTimeout(() => b.textContent = orig, 1800);
+      });
+    });
+    const cvInput = document.getElementById('cvInput');
+    const cvText = document.getElementById('cvText');
+    cvInput?.addEventListener('change', e => {
+      cvText.textContent = e.target.files[0] ? '📎 ' + e.target.files[0].name : 'Սեղմեք՝ CV կցելու համար';
+    });
+
+    const form = document.getElementById('applyForm');
+    const msg = document.getElementById('applyMsg');
+    const btn = document.getElementById('applyBtn');
+    form?.addEventListener('submit', async e => {
+      e.preventDefault();
+      msg.className = 'apply-msg';
+      msg.textContent = '';
+      btn.disabled = true; btn.textContent = 'Ուղարկվում է…';
+      try {
+        const fd = new FormData(form);
+        const r = await fetch('/api/apply', { method: 'POST', body: fd });
+        if (r.ok) {
+          msg.className = 'apply-msg success';
+          msg.textContent = '✓ Դիմումը ուղարկվեց. Մենք կկապվենք ձեզ հետ մեկ աշխատանքային օրվա ընթացքում:';
+          form.querySelector('.apply-fields').style.display = 'none';
+        } else {
+          const j = await r.json().catch(() => ({}));
+          msg.className = 'apply-msg error';
+          msg.textContent = '⚠ ' + (j.error || 'Could not send application. Email contact@argusrecruit.com directly.');
+          btn.disabled = false; btn.textContent = 'Ուղարկել դիմումը →';
+        }
+      } catch (err) {
+        msg.className = 'apply-msg error';
+        msg.textContent = '⚠ Network error. Try again.';
+        btn.disabled = false; btn.textContent = 'Ուղարկել դիմումը →';
+      }
+    });
+  </script>
+</body>
+</html>
