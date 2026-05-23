@@ -106,7 +106,6 @@ const workplaceTypes = [...new Set(jobs.map(j => j.workplaceType).filter(Boolean
                 {j.salaryNegotiable ? <span>· Բանակցելի</span> : (j.salaryMin && j.salaryMax && <span>· {j.salaryCurrency} {(j.salaryMin/1000).toFixed(0)}k–{(j.salaryMax/1000).toFixed(0)}k</span>)}
               </div>
             </div>
-            <span class="job-cta">Տեսնել</span>
           </div>
           <p class="excerpt">{j.excerpt}</p>
           {j.tags && j.tags.length > 0 && (
