@@ -32,6 +32,128 @@ const faqs = [
   <SiteHead title="Услуги — ArgusRecruit" description="Исполнительный поиск, хедхантинг и рекрутинговые услуги. Конфиденциально, под руководством старших, ориентировано на результат." lang="ru" />
   <SharedCSS />
   <style is:global>
+.services { background: var(--navy); }
+.services-grid {
+  display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px; align-items: center;
+}
+.services-photo {
+  position: relative; border-radius: 16px; overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+  border: 1px solid rgba(212,175,55,0.2);
+  aspect-ratio: 4/5;
+}
+.services-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.services-photo::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(22,52,90,0.25) 0%, transparent 50%, rgba(212,175,55,0.12) 100%);
+}
+.services-photo .badge {
+  position: absolute; bottom: 24px; left: 24px; right: 24px;
+  background: rgba(14,36,64,0.85); backdrop-filter: blur(10px);
+  border: 1px solid rgba(212,175,55,0.3); border-radius: 10px;
+  padding: 14px 18px; display: flex; align-items: center; gap: 12px;
+  z-index: 2;
+}
+.services-photo .badge .dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--primary-gold);
+  box-shadow: 0 0 12px var(--primary-gold);
+}
+.services-photo .badge .text {
+  color: var(--white); font-size: 13px; font-weight: 500;
+}
+.services-photo .badge .text span { color: var(--primary-gold); font-weight: 600; }
+.services-text h2 {
+  font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  font-size: clamp(26px, 3.2vw, 38px); font-weight: 500;
+  line-height: 1.15; letter-spacing: -0.5px;
+}
+.services-text h2 .accent { color: var(--primary-gold); font-style: italic; }
+.services-text p { color: rgba(255,255,255,0.65); margin-top: 16px; font-size: 14px; line-height: 1.7; }
+.services-cta { margin-top: 32px; display: flex; gap: 14px; flex-wrap: wrap; }
+
+/* Services: photo left + all content right */
+.services-layout {
+  display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 50px; align-items: start;
+}
+.services-layout .services-photo {
+  position: sticky; top: 110px;
+  aspect-ratio: 4/5;
+}
+.services-content { min-width: 0; }
+.services-content .eyebrow { margin-bottom: 18px; }
+.services-content h2 {
+  font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  font-size: clamp(24px, 2.8vw, 32px); font-weight: 500;
+  letter-spacing: -0.3px; color: var(--white); line-height: 1.2;
+}
+.services-content h2 .accent { color: var(--primary-gold) !important; }
+.services-lede {
+  margin-top: 14px; color: rgba(255,255,255,0.7);
+  font-size: 15px; line-height: 1.7;
+}
+
+/* Tier rows (stacked inside right column) */
+.services-tiers {
+  display: flex; flex-direction: column; gap: 14px;
+  margin-top: 32px;
+}
+.service-tier {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(212,175,55,0.18);
+  border-radius: 12px;
+  padding: 20px 22px;
+  display: flex; gap: 16px; align-items: flex-start;
+  transition: all 0.25s;
+  position: relative;
+}
+.service-tier:hover { border-color: rgba(212,175,55,0.4); background: rgba(255,255,255,0.06); }
+.tier-icon {
+  flex: 0 0 44px; width: 44px; height: 44px; border-radius: 10px;
+  background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(184,134,11,0.08));
+  display: flex; align-items: center; justify-content: center;
+  color: var(--primary-gold);
+}
+.tier-icon svg { width: 22px; height: 22px; }
+.service-tier h3 {
+  font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  font-size: 15px; font-weight: 600; color: var(--white);
+  text-transform: uppercase; letter-spacing: 1.2px;
+  margin-bottom: 6px;
+}
+.service-tier p {
+  font-size: 13px; color: rgba(255,255,255,0.65);
+  line-height: 1.55; margin: 0;
+}
+
+/* Features (Common) */
+.services-features {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  margin-top: 24px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(212,175,55,0.12);
+}
+
+@media (max-width: 960px) {
+  .services-layout { grid-template-columns: 1fr; gap: 32px; }
+  .services-layout .services-photo { position: static; aspect-ratio: 16/9; max-height: 380px; }
+  .services-features { grid-template-columns: 1fr; }
+}
+.feature {
+  background: rgba(255,255,255,0.025); border: 1px solid rgba(212,175,55,0.12);
+  border-radius: 10px; padding: 22px 26px;
+  display: flex; align-items: center; gap: 16px;
+}
+.feature-icon {
+  flex: 0 0 38px; height: 38px; border-radius: 8px;
+  background: rgba(212,175,55,0.12); color: var(--primary-gold);
+  display: flex; align-items: center; justify-content: center;
+}
+.feature-icon svg { width: 18px; height: 18px; }
+.feature-text strong { display: block; font-size: 15px; color: var(--white); }
+.feature-text span { font-size: 13px; color: rgba(255,255,255,0.6); }
+
+
     .eyebrow, .svc-section-header .eyebrow, .svc-hero .eyebrow, .jobs-hero .eyebrow {
       display: inline-flex !important; align-items: center; gap: 10px;
       font-size: 10px !important; letter-spacing: 4px;
@@ -177,57 +299,61 @@ const faqs = [
   </section>
 
   <!-- Service Tiers -->
-  <section class="svc-section" id="tiers">
-    <div class="svc-section-inner">
-      <div class="svc-section-header">
-        <span class="eyebrow">Наши услуги</span>
-        <h2>Три формата. <span class="accent">Один стандарт.</span></h2>
-        <p>От конфиденциальных C-suite поисков до структурированного найма — каждое сотрудничество ведётся лично старшим рекрутером.</p>
-      </div>
-      <div class="tiers-grid">
-        <div class="tier-card flagship">
-          <span class="tier-badge">FLAGSHIP</span>
-          <div class="tier-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle fill="currentColor" cx="12" cy="12" r="2"/></svg>
+  <section id="services-section" class="services">
+    <div class="container">
+      <div class="services-layout">
+        <div class="services-photo">
+          <img src="/photo-handshake.jpg" alt="ArgusRecruit consultation">
+          <div class="badge">
+            <span class="dot"></span>
+            <div class="text"><span>Доверяют лидеры</span> по всему миру</div>
           </div>
-          <div class="tier-tagline">Executive Search</div>
-          <h3>C-suite и Совет директоров</h3>
-          <p>Для назначений CEO, C-suite, VP и Head-of-Function, где конфиденциальность и старшее суждение важнее всего.</p>
-          <ul>
-            <li>Ретейнерная модель</li>
-            <li>Off-market и конфиденциальный outreach</li>
-            <li>Старший рекрутер на каждом поиске</li>
-            <li>Шорт-лист за 7 дней</li>
-            <li>Гарантия замены</li>
-          </ul>
         </div>
-        <div class="tier-card">
-          <div class="tier-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+        <div class="services-content">
+          <span class="eyebrow">Услуги</span>
+          <h2 class="heading-caps">Много глаз, одно обещание — <span class="accent">правильный найм.</span></h2>
+          <p class="services-lede"><span class="accent">Правильный найм</span> не находится в стопке резюме. К нему приходят через сеть, через разговор и через острый взгляд на того, кто действительно подходит для роли.</p>
+          <div class="services-tiers">
+            <div class="service-tier">
+              <div class="tier-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+              </div>
+              <div><h3>Исполнительный поиск</h3><p>Для ролей C-suite, VP и Head-of-Function, где конфиденциальность и старшее суждение важнее всего.</p></div>
+            </div>
+            <div class="service-tier">
+              <div class="tier-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+              </div>
+              <div><h3>Хедхантинг</h3><p>Для трудно-находимых специалистов — даже если они не на руководящем уровне.</p></div>
+            </div>
+            <div class="service-tier">
+              <div class="tier-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div><h3>Услуги рекрутмента</h3><p>Структурированный end-to-end найм для ролей среднего и старшего звена.</p></div>
+            </div>
           </div>
-          <div class="tier-tagline">Хедхантинг</div>
-          <h3>Трудно-находимые специалисты</h3>
-          <p>Для технических и коммерческих специалистов, которые не ищут активно — и не на job boards.</p>
-          <ul>
-            <li>Активное картирование рынка</li>
-            <li>Дискретный, персонализированный outreach</li>
-            <li>Engineering, продукт, продажи, финансы</li>
-            <li>Старший-led от старта до закрытия</li>
-          </ul>
-        </div>
-        <div class="tier-card">
-          <div class="tier-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <div class="services-features">
+            <div class="feature">
+              <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L4 7v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V7l-8-5z"/></svg></div>
+              <div class="feature-text"><strong>Полная конфиденциальность</strong><span>Каждый поиск ведётся дискретно. Ваше имя, кандидаты, timeline — защищены от начала до конца.</span></div>
+            </div>
+            <div class="feature">
+              <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 5l2 5h5l-4 3 1.5 5L12 15l-4.5 3L9 13l-4-3h5z"/></svg></div>
+              <div class="feature-text"><strong>Качество, а не количество</strong><span>Большинство размещений происходят за три-пять разговоров — каждый кандидат глубоко проверен и согласован.</span></div>
+            </div>
+            <div class="feature">
+              <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="feature-text"><strong>Гарантия замены</strong><span>Если размещение не сработает в гарантийный период, мы заново проводим поиск без дополнительной оплаты.</span></div>
+            </div>
+            <div class="feature">
+              <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>
+              <div class="feature-text"><strong>Старший рекрутер, единая точка контакта</strong><span>Лично ведётся старшим рекрутером — без передач и junior менеджеров.</span></div>
+            </div>
           </div>
-          <div class="tier-tagline">Рекрутинговые услуги</div>
-          <h3>Средне-старший найм</h3>
-          <p>Структурированный end-to-end найм. Для быстрорастущих команд.</p>
-          <ul>
-            <li>Целевой sourcing и скрининг</li>
-            <li>Структурированные оценки</li>
-            <li>Объёмные, качество-первый</li>
-            <li>Мульти-роль контракты</li>
-          </ul>
+          <div class="services-cta">
+            <a href="#contact" class="btn btn-primary">Запросить консультацию</a>
+          </div>
         </div>
       </div>
     </div>
