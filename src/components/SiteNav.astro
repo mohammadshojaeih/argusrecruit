@@ -4,9 +4,9 @@ const { lang = 'en', pathInLang = '/' } = Astro.props;
 const langPrefix = lang === 'en' ? '' : `/${lang}`;
 const FLAGS = { en: '🇬🇧', ru: '🇷🇺', hy: '🇦🇲' };
 const NAV_LABELS = {
-  en: { why: 'Why Us', services: 'Services', process: 'Process', jobs: 'Jobs', blog: 'Blog', contact: 'Contact', cta: 'Find Your Fit' },
-  ru: { why: 'Почему мы', services: 'Услуги', process: 'Процесс', jobs: 'Вакансии', blog: 'Блог', contact: 'Контакт', cta: 'Найти своё место' },
-  hy: { why: 'Ինչու մենք', services: 'Ծառայություններ', process: 'Գործընթաց', jobs: 'Աշխատանք', blog: 'Բլոգ', contact: 'Կապ', cta: 'Գտի՛ր քո տեղը' },
+  en: { home: 'Home', process: 'Process', jobs: 'Jobs', blog: 'Blog', contact: 'Contact', cta: 'Find Your Fit' },
+  ru: { home: 'Главная', process: 'Процесс', jobs: 'Вакансии', blog: 'Блог', contact: 'Контакт', cta: 'Найти своё место' },
+  hy: { home: 'Գլխավոր', process: 'Գործընթաց', jobs: 'Աշխատանք', blog: 'Բլոգ', contact: 'Կապ', cta: 'Գտի՛ր քո տեղը' },
 };
 const BRAND = {
   en: { tag: 'Many Eyes. One Purpose.', sub: 'Executive Search & Headhunting' },
@@ -26,8 +26,7 @@ const brand = BRAND[lang];
       </div>
     </a>
     <div class="nav-links">
-      <a href={`${langPrefix}/#why`}>{nav.why}</a>
-      <a href={`${langPrefix}/#services`}>{nav.services}</a>
+      <a href={langPrefix || '/'}>{nav.home}</a>
       <a href={`${langPrefix}/#process`}>{nav.process}</a>
       <a href={`${langPrefix}/jobs/`}>{nav.jobs}</a>
       <a href={`${langPrefix}/blog/`}>{nav.blog}</a>
