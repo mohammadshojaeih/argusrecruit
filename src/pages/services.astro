@@ -84,6 +84,15 @@ const faqs = [
     .svc-tier-icon { flex: 0 0 44px; width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(184,134,11,0.08)); display: flex; align-items: center; justify-content: center; color: var(--primary-gold); }
     .svc-tier-icon svg { width: 22px; height: 22px; }
     .svc-tier h3 { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600; color: var(--white); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; }
+    
+    .svc-features { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px; padding-top: 28px; border-top: 1px solid rgba(212,175,55,0.12); }
+    .svc-feature { background: rgba(255,255,255,0.025); border: 1px solid rgba(212,175,55,0.12); border-radius: 10px; padding: 18px 20px; display: flex; align-items: center; gap: 14px; }
+    .svc-feature-icon { flex: 0 0 36px; height: 36px; border-radius: 8px; background: rgba(212,175,55,0.12); color: var(--primary-gold); display: flex; align-items: center; justify-content: center; }
+    .svc-feature-icon svg { width: 18px; height: 18px; }
+    .svc-feature-text strong { display: block; font-size: 14px; color: var(--white); margin-bottom: 2px; }
+    .svc-feature-text span { font-size: 12.5px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+    @media (max-width: 760px) { .svc-features { grid-template-columns: 1fr; } }
+
     .svc-tier p { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.55; margin: 0; }
 
     .svc-industries-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
