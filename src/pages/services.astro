@@ -33,6 +33,21 @@ const faqs = [
   <SharedCSS />
   <style is:global>
 
+    .clients { background: var(--navy-deep); padding: 60px 32px; border-top: 1px solid rgba(212,175,55,0.12); border-bottom: 1px solid rgba(212,175,55,0.12); }
+    .clients-headline { font-family: 'Space Grotesk', sans-serif; font-size: clamp(24px, 3vw, 36px); font-weight: 500; line-height: 1.2; letter-spacing: -0.3px; margin-top: 14px; }
+    .clients-headline .accent { color: var(--primary-gold); font-style: italic; }
+    .clients-sub { color: rgba(255,255,255,0.7); margin-top: 14px; font-size: 15px; max-width: 580px; margin-left: auto; margin-right: auto; }
+    .clients-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 40px; }
+    .client-logo { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.18); border-radius: 12px; padding: 24px 18px; display: flex; flex-direction: column; align-items: center; gap: 12px; min-height: 150px; position: relative; overflow: hidden; transition: all 0.25s; }
+    .client-logo:hover { border-color: rgba(212,175,55,0.4); }
+    .client-logo-img { width: 90px; height: 70px; display: flex; align-items: center; justify-content: center; filter: blur(6px) grayscale(0.4); }
+    .client-logo-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .client-logo .name { font-size: 13px; color: rgba(255,255,255,0.85); letter-spacing: 0.5px; }
+    .client-logo::after { content: 'CONFIDENTIAL'; position: absolute; bottom: 10px; left: 0; right: 0; text-align: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 10px; color: var(--primary-gold); letter-spacing: 2.5px; pointer-events: none; }
+    .clients-footer { margin-top: 36px; color: rgba(255,255,255,0.55); font-size: 13px; font-style: italic; }
+    @media (max-width: 760px) { .clients-grid { grid-template-columns: repeat(2, 1fr); } }
+
+
     .svc-metrics { background: var(--navy-deep); padding: 60px 32px; border-bottom: 1px solid rgba(212,175,55,0.12); }
     .svc-metrics-inner { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
     .svc-metric { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.18); border-radius: 14px; padding: 24px 26px; display: flex; align-items: center; gap: 18px; transition: all 0.25s; }
@@ -402,6 +417,35 @@ const faqs = [
           </div>
         ))}
       </div>
+    </div>
+  </section>
+
+
+  <!-- Clients -->
+  <section class="clients">
+    <div class="container" style="text-align: center;">
+      <span class="eyebrow">Our Clients</span>
+      <h2 class="clients-headline">Companies that <span class="accent">trust us</span> with their hardest hires</h2>
+      <p class="clients-sub">A selection of the teams we've partnered with — and a small glimpse of who we work with.</p>
+      <div class="clients-grid">
+        <div class="client-logo">
+          <div class="client-logo-img"><img src="/client-huma.png" alt="Huma"></div>
+          <div class="name">Huma</div>
+        </div>
+        <div class="client-logo">
+          <div class="client-logo-img"><img src="/client-qoostudio.jpg" alt="QOO Studio"></div>
+          <div class="name">QOO Studio</div>
+        </div>
+        <div class="client-logo">
+          <div class="client-logo-img" style="background: #1a1a2e;"><img src="/client-alien.jpg" alt="Alien Intellect"></div>
+          <div class="name">Alien Intellect</div>
+        </div>
+        <div class="client-logo">
+          <div class="client-logo-img"><img src="/client-ovou.png" alt="OVOU"></div>
+          <div class="name">OVOU</div>
+        </div>
+      </div>
+      <div class="clients-footer">— and a growing list of companies we can't name publicly yet —</div>
     </div>
   </section>
 
