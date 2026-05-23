@@ -23,6 +23,9 @@ const latestJobs = (await getJobs('en')).slice(0, 3);
 
 <style is:global>
 
+@media (max-width: 700px) { .hero { padding-top: 110px !important; } .hero-inner { padding-top: 30px !important; } }
+
+
 /* MOBILE HERO FIXES */
 @media (max-width: 640px) {
   .hero-inner { padding-left: 24px !important; padding-right: 24px !important; }
@@ -971,8 +974,10 @@ section { padding: 80px 32px; }
   }
   .menu-toggle { display: block; }
   .nav-inner { padding: 6px 20px; }
-  .brand img { height: 52px; }
-  .brand-text { display: none; }
+  .brand img { height: 56px; }
+  .brand-text { padding-left: 10px; min-height: 50px; }
+  .brand-text .tag { font-size: 9.5px !important; letter-spacing: 1.8px !important; }
+  .brand-text .tag-sub { font-size: 7.5px !important; letter-spacing: 1.4px !important; margin-top: 3px !important; }
   .why-grid, .process-grid { grid-template-columns: 1fr 1fr; }
   .services-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
   .services-photo { aspect-ratio: 16/9; max-height: 360px; }
@@ -988,7 +993,7 @@ section { padding: 80px 32px; }
 }
 @media (max-width: 560px) {
   .nav-inner { padding: 12px 18px; }
-  .brand img { height: 42px; }
+  .brand img { height: 50px; }
   section { padding: 60px 20px; }
   .hero { min-height: 88vh; }
   .hero-inner { padding: 0 20px 90px; }
