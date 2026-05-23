@@ -83,116 +83,8 @@ export async function getPost(slug, lang = 'en') {
 
 // ===================== JOBS =====================
 
-const FALLBACK_JOBS_EN = [
-  {
-    _id: 'fb-job-1',
-    title: 'Chief Marketing Officer',
-    slug: 'chief-marketing-officer',
-    status: 'active',
-    featured: true,
-    department: 'Marketing',
-    employmentType: 'FULL_TIME',
-    workplaceType: 'hybrid',
-    locationCity: 'London',
-    locationCountry: 'United Kingdom',
-    salaryMin: 180000,
-    salaryMax: 240000,
-    salaryCurrency: 'GBP',
-    excerpt: 'Lead the marketing function at a fast-scaling B2B SaaS company. Build the brand, build the team, drive growth.',
-    description: [{ _type: 'block', children: [{ _type: 'span', text: 'Our client is a Series C B2B SaaS company looking for a senior marketing leader to take their brand to the next level. You will own go-to-market strategy, build a world-class team, and report directly to the CEO.' }] }],
-    responsibilities: [
-      'Own GTM strategy across product, content, performance, and lifecycle',
-      'Build and lead a marketing org of 20+',
-      'Partner with sales on pipeline and ABM',
-      'Define brand positioning for enterprise expansion'
-    ],
-    requirements: [
-      '10+ years of B2B marketing experience',
-      'Prior CMO or VP Marketing experience at a $50M+ ARR company',
-      'Proven track record building marketing teams from scratch',
-      'Deep understanding of demand generation and ABM'
-    ],
-    niceToHave: ['SaaS experience', 'PE/VC-backed company experience'],
-    tags: ['CMO', 'B2B SaaS', 'Leadership'],
-    publishedAt: '2026-05-20T00:00:00Z'
-  },
-  {
-    _id: 'fb-job-2',
-    title: 'Senior Backend Engineer (Go / Kubernetes)',
-    slug: 'senior-backend-engineer-go',
-    status: 'active',
-    featured: false,
-    department: 'Engineering',
-    employmentType: 'FULL_TIME',
-    workplaceType: 'remote',
-    locationCity: 'Remote',
-    locationCountry: 'Europe / North America',
-    salaryMin: 130000,
-    salaryMax: 180000,
-    salaryCurrency: 'USD',
-    excerpt: 'Build distributed systems at scale. Modern Go stack, K8s, observability done right.',
-    description: [{ _type: 'block', children: [{ _type: 'span', text: 'Join an engineering team obsessed with reliability. Our client runs mission-critical infrastructure for global financial customers and needs senior engineers comfortable with distributed systems.' }] }],
-    responsibilities: [
-      'Design and implement scalable microservices in Go',
-      'Own services end-to-end including on-call rotation',
-      'Improve observability and incident response',
-      'Mentor mid-level engineers'
-    ],
-    requirements: [
-      '6+ years of backend engineering',
-      'Strong Go (or willingness to ramp from another typed language)',
-      'Hands-on Kubernetes in production',
-      'Comfortable with distributed systems trade-offs'
-    ],
-    niceToHave: ['gRPC', 'PostgreSQL internals', 'Open-source contributions'],
-    tags: ['Go', 'Kubernetes', 'Backend', 'Remote'],
-    publishedAt: '2026-05-15T00:00:00Z'
-  },
-  {
-    _id: 'fb-job-3',
-    title: 'VP of Finance',
-    slug: 'vp-of-finance',
-    status: 'active',
-    featured: false,
-    department: 'Finance',
-    employmentType: 'FULL_TIME',
-    workplaceType: 'onsite',
-    locationCity: 'Dubai',
-    locationCountry: 'United Arab Emirates',
-    salaryMin: 220000,
-    salaryMax: 300000,
-    salaryCurrency: 'USD',
-    excerpt: 'Lead finance at a fast-growing FinTech expanding across MENA. Pre-IPO trajectory.',
-    description: [{ _type: 'block', children: [{ _type: 'span', text: 'Confidential search for a VP Finance to lead the function at a regulated FinTech. You will own FP&A, treasury, controllership, and prepare the company for an IPO within 24 months.' }] }],
-    responsibilities: [
-      'Lead FP&A, controllership, and treasury',
-      'Own audit, tax, and regulatory reporting',
-      'Drive IPO readiness',
-      'Build out finance org from 8 to 25+'
-    ],
-    requirements: [
-      'CPA / ACCA / CFA',
-      '12+ years in finance, including senior roles at PE/VC-backed scale-ups',
-      'Prior IPO experience (or strong adjacent)',
-      'MENA regulatory familiarity strongly preferred'
-    ],
-    niceToHave: ['FinTech background', 'Big 4 experience'],
-    tags: ['VP Finance', 'FinTech', 'IPO'],
-    publishedAt: '2026-05-10T00:00:00Z'
-  }
-];
-
-const FALLBACK_JOBS = {
-  en: FALLBACK_JOBS_EN,
-  ru: FALLBACK_JOBS_EN,
-  hy: FALLBACK_JOBS_EN
-};
-
 export async function getJobs(lang = 'en', { includeClosed = false } = {}) {
-  if (!sanityClient) {
-    const all = FALLBACK_JOBS[lang] || FALLBACK_JOBS.en;
-    return includeClosed ? all : all.filter(j => j.status === 'active');
-  }
+  if (!sanityClient) return [];
   try {
     const statusFilter = includeClosed ? `&& status != "hidden"` : `&& status == "active"`;
     const query = `*[_type=="job" ${statusFilter} && (language=="${lang}" || !defined(language)) && (!defined(expiresAt) || expiresAt > now())] | order(featured desc, publishedAt desc) {
@@ -202,15 +94,11 @@ export async function getJobs(lang = 'en', { includeClosed = false } = {}) {
       publishedAt, expiresAt
     }`;
     const jobs = await sanityClient.fetch(query);
-    if (!jobs || jobs.length === 0) {
-      const fb = FALLBACK_JOBS[lang] || FALLBACK_JOBS.en;
-      return includeClosed ? fb : fb.filter(j => j.status === 'active');
-    }
+    if (!jobs) return [];
     return jobs.map(j => ({ ...j, slug: j.slug?.current || j.slug }));
   } catch (e) {
-    console.error('Sanity job fetch failed, using fallback:', e.message);
-    const fb = FALLBACK_JOBS[lang] || FALLBACK_JOBS.en;
-    return includeClosed ? fb : fb.filter(j => j.status === 'active');
+    console.error('Sanity job fetch failed:', e.message);
+    return [];
   }
 }
 
