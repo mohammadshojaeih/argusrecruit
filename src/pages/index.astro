@@ -45,7 +45,7 @@ body {
 }
 
 /* Uppercase headings throughout (nexer-style) */
-.hero-caption h1,
+.hero-caption :is(h1,h2),
 .section-header h2,
 .services-text h2,
 .global-text h2,
@@ -56,8 +56,8 @@ body {
   text-transform: uppercase !important;
   letter-spacing: 1px !important;
 }
-.hero-caption h1 { letter-spacing: -0.5px !important; }
-.hero-caption h1 .accent,
+.hero-caption :is(h1,h2) { letter-spacing: -0.5px !important; }
+.hero-caption :is(h1,h2) .accent,
 .section-header h2 .accent,
 .services-text h2 .accent,
 .global-text h2 .accent,
@@ -250,14 +250,14 @@ body {
   content: ''; width: 4px; height: 4px; border-radius: 50%;
   background: var(--primary-gold); flex: 0 0 4px;
 }
-.hero-caption h1 {
+.hero-caption :is(h1,h2) {
   font-family: 'Space Grotesk', 'Manrope', sans-serif;
   font-size: clamp(28px, 4.4vw, 56px); font-weight: 500;
   line-height: 1.1; letter-spacing: -1.4px; color: var(--white);
   text-shadow: 0 4px 40px rgba(0,0,0,0.5);
   max-width: 880px;
 }
-.hero-caption h1 .accent {
+.hero-caption :is(h1,h2) .accent {
   color: var(--primary-gold); font-weight: 600;
 }
 .hero-caption .lede {
@@ -951,7 +951,7 @@ section { padding: 80px 32px; }
       </div>
       <div class="hero-caption">
         <div class="industry-tag" data-i18n="hero.s2.tag">Technology & Engineering</div>
-        <h1>Building <span class="accent">engineering teams</span> that ship.</h1>
+        <h2>Building <span class="accent">engineering teams</span> that ship.</h2>
         <p class="lede">From senior developers to CTOs — we source the people who turn product roadmaps into shipped reality.</p>
         <div class="hero-cta-row">
           <a href="#contact" class="btn btn-primary">Hire Technical Talent →</a>
@@ -959,7 +959,7 @@ section { padding: 80px 32px; }
       </div>
       <div class="hero-caption">
         <div class="industry-tag" data-i18n="hero.s3.tag">Marketing & Growth</div>
-        <h1>Marketers who <span class="accent">move the needle</span> — not just the metrics.</h1>
+        <h2>Marketers who <span class="accent">move the needle</span> — not just the metrics.</h2>
         <p class="lede">CMOs, performance marketers, brand directors, and growth leads — placed for businesses that need outcomes, not vanity numbers.</p>
         <div class="hero-cta-row">
           <a href="#contact" class="btn btn-primary">Hire Marketing Leaders →</a>
@@ -967,7 +967,7 @@ section { padding: 80px 32px; }
       </div>
       <div class="hero-caption">
         <div class="industry-tag" data-i18n="hero.s4.tag">Finance & FinTech</div>
-        <h1>Leadership for <span class="accent">finance and FinTech</span>.</h1>
+        <h2>Leadership for <span class="accent">finance and FinTech</span>.</h2>
         <p class="lede">From CFOs to risk managers and FinTech engineers — we know where the best financial talent works, and how to reach them quietly.</p>
         <div class="hero-cta-row">
           <a href="#contact" class="btn btn-primary">Source Finance Leaders →</a>
@@ -975,7 +975,7 @@ section { padding: 80px 32px; }
       </div>
       <div class="hero-caption">
         <div class="industry-tag" data-i18n="hero.s5.tag">Healthcare & Life Sciences</div>
-        <h1>People who <span class="accent">advance healthcare</span>.</h1>
+        <h2>People who <span class="accent">advance healthcare</span>.</h2>
         <p class="lede">Clinical leadership, life sciences specialists, and operations managers for healthcare organizations across the region.</p>
         <div class="hero-cta-row">
           <a href="#contact" class="btn btn-primary">Find Healthcare Talent →</a>

@@ -45,7 +45,7 @@ body {
 }
 
 /* Uppercase headings throughout (nexer-style) */
-.hero-caption h1,
+.hero-caption :is(h1,h2),
 .section-header h2,
 .services-text h2,
 .global-text h2,
@@ -56,8 +56,8 @@ body {
   text-transform: uppercase !important;
   letter-spacing: 1px !important;
 }
-.hero-caption h1 { letter-spacing: -0.5px !important; }
-.hero-caption h1 .accent,
+.hero-caption :is(h1,h2) { letter-spacing: -0.5px !important; }
+.hero-caption :is(h1,h2) .accent,
 .section-header h2 .accent,
 .services-text h2 .accent,
 .global-text h2 .accent,
@@ -250,14 +250,14 @@ body {
   content: ''; width: 4px; height: 4px; border-radius: 50%;
   background: var(--primary-gold); flex: 0 0 4px;
 }
-.hero-caption h1 {
+.hero-caption :is(h1,h2) {
   font-family: 'Space Grotesk', 'Manrope', sans-serif;
   font-size: clamp(28px, 4.4vw, 56px); font-weight: 500;
   line-height: 1.1; letter-spacing: -1.4px; color: var(--white);
   text-shadow: 0 4px 40px rgba(0,0,0,0.5);
   max-width: 880px;
 }
-.hero-caption h1 .accent {
+.hero-caption :is(h1,h2) .accent {
   color: var(--primary-gold); font-weight: 600;
 }
 .hero-caption .lede {
@@ -951,7 +951,7 @@ section { padding: 80px 32px; }
       </div>
       <div class="hero-caption">
         <div class="industry-tag" data-i18n="hero.s2.tag">Технологии и Инжиниринг</div>
-        <h1>Строим <span class="accent">инженерные команды</span>, которые поставляют.</h1>
+        <h2>Строим <span class="accent">инженерные команды</span>, которые поставляют.</h2>
         <p class="lede">От старших разработчиков до CTO — мы находим людей, которые превращают продуктовые планы в реализованную реальность.</p>
         <div class="hero-cta-row">
           <a href="#contact" class="btn btn-primary">Нанять технических специалистов →</a>
@@ -959,7 +959,7 @@ section { padding: 80px 32px; }
       </div>
       <div class="hero-caption">
         <div class="industry-tag" data-i18n="hero.s3.tag">Маркетинг и Рост</div>
-        <h1>Маркетологи, которые <span class="accent">двигают стрелки</span> — не только метрики.</h1>
+        <h2>Маркетологи, которые <span class="accent">двигают стрелки</span> — не только метрики.</h2>
         <p class="lede">CMO, performance-маркетологи, директора по брендам и руководители роста — для бизнесов, которым нужны результаты, а не показные цифры.</p>
         <div class="hero-cta-row">
           <a href="#contact" class="btn btn-primary">Нанять руководителей маркетинга →</a>
@@ -967,7 +967,7 @@ section { padding: 80px 32px; }
       </div>
       <div class="hero-caption">
         <div class="industry-tag" data-i18n="hero.s4.tag">Финансы и FinTech</div>
-        <h1>Лидерство для <span class="accent">финансов и FinTech</span>.</h1>
+        <h2>Лидерство для <span class="accent">финансов и FinTech</span>.</h2>
         <p class="lede">От CFO до риск-менеджеров и FinTech-инженеров — мы знаем, где работают лучшие финансовые специалисты, и как тихо до них достучаться.</p>
         <div class="hero-cta-row">
           <a href="#contact" class="btn btn-primary">Найти финансовых лидеров →</a>
@@ -975,7 +975,7 @@ section { padding: 80px 32px; }
       </div>
       <div class="hero-caption">
         <div class="industry-tag" data-i18n="hero.s5.tag">Здравоохранение и Науки о Жизни</div>
-        <h1>Люди, которые <span class="accent">развивают здравоохранение</span>.</h1>
+        <h2>Люди, которые <span class="accent">развивают здравоохранение</span>.</h2>
         <p class="lede">Клиническое лидерство, специалисты по наукам о жизни и операционные менеджеры для медицинских организаций региона.</p>
         <div class="hero-cta-row">
           <a href="#contact" class="btn btn-primary">Найти медицинских специалистов →</a>

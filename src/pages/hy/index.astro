@@ -45,7 +45,7 @@ body {
 }
 
 /* Uppercase headings throughout (nexer-style) */
-.hero-caption h1,
+.hero-caption :is(h1,h2),
 .section-header h2,
 .services-text h2,
 .global-text h2,
@@ -56,8 +56,8 @@ body {
   text-transform: uppercase !important;
   letter-spacing: 1px !important;
 }
-.hero-caption h1 { letter-spacing: -0.5px !important; }
-.hero-caption h1 .accent,
+.hero-caption :is(h1,h2) { letter-spacing: -0.5px !important; }
+.hero-caption :is(h1,h2) .accent,
 .section-header h2 .accent,
 .services-text h2 .accent,
 .global-text h2 .accent,
@@ -250,14 +250,14 @@ body {
   content: ''; width: 4px; height: 4px; border-radius: 50%;
   background: var(--primary-gold); flex: 0 0 4px;
 }
-.hero-caption h1 {
+.hero-caption :is(h1,h2) {
   font-family: 'Space Grotesk', 'Manrope', sans-serif;
   font-size: clamp(28px, 4.4vw, 56px); font-weight: 500;
   line-height: 1.1; letter-spacing: -1.4px; color: var(--white);
   text-shadow: 0 4px 40px rgba(0,0,0,0.5);
   max-width: 880px;
 }
-.hero-caption h1 .accent {
+.hero-caption :is(h1,h2) .accent {
   color: var(--primary-gold); font-weight: 600;
 }
 .hero-caption .lede {
@@ -951,7 +951,7 @@ section { padding: 80px 32px; }
       </div>
       <div class="hero-caption">
         <div class="industry-tag" data-i18n="hero.s2.tag">Տեխնոլոգիա և Ինժեներիա</div>
-        <h1>Կառուցում ենք <span class="accent">ինժեներական թիմեր</span>, որոնք առաքում են.</h1>
+        <h2>Կառուցում ենք <span class="accent">ինժեներական թիմեր</span>, որոնք առաքում են.</h2>
         <p class="lede">Ավագ ծրագրավորողներից մինչև CTO — մենք գտնում ենք այն մարդկանց, ովքեր ճանապարհային քարտեզները վերածում են իրականության։</p>
         <div class="hero-cta-row">
           <a href="#contact" class="btn btn-primary">Վարձել տեխնիկական մասնագետներ →</a>
@@ -959,7 +959,7 @@ section { padding: 80px 32px; }
       </div>
       <div class="hero-caption">
         <div class="industry-tag" data-i18n="hero.s3.tag">Մարքեթինգ և Աճ</div>
-        <h1>Մարքեթոլոգներ, ովքեր <span class="accent">շարժում են ասեղը</span> — ոչ միայն ցուցանիշները.</h1>
+        <h2>Մարքեթոլոգներ, ովքեր <span class="accent">շարժում են ասեղը</span> — ոչ միայն ցուցանիշները.</h2>
         <p class="lede">CMO-ներ, performance մարքեթոլոգներ, բրենդի տնօրեններ և աճի ղեկավարներ — բիզնեսների համար, ովքեր ուզում են արդյունքներ, ոչ թե ցուցադրական թվեր։</p>
         <div class="hero-cta-row">
           <a href="#contact" class="btn btn-primary">Վարձել մարքեթինգի ղեկավարներ →</a>
@@ -967,7 +967,7 @@ section { padding: 80px 32px; }
       </div>
       <div class="hero-caption">
         <div class="industry-tag" data-i18n="hero.s4.tag">Ֆինանսներ և FinTech</div>
-        <h1>Առաջնորդություն <span class="accent">ֆինանսների և FinTech-ի</span> համար.</h1>
+        <h2>Առաջնորդություն <span class="accent">ֆինանսների և FinTech-ի</span> համար.</h2>
         <p class="lede">CFO-ներից մինչև ռիսկի մենեջերներ և FinTech ինժեներներ — մենք գիտենք, թե որտեղ են աշխատում լավագույն ֆինանսական մասնագետները։</p>
         <div class="hero-cta-row">
           <a href="#contact" class="btn btn-primary">Գտնել ֆինանսական ղեկավարներ →</a>
@@ -975,7 +975,7 @@ section { padding: 80px 32px; }
       </div>
       <div class="hero-caption">
         <div class="industry-tag" data-i18n="hero.s5.tag">Առողջապահություն և Կյանքի Գիտություններ</div>
-        <h1>Մարդիկ, ովքեր <span class="accent">զարգացնում են առողջապահությունը</span>.</h1>
+        <h2>Մարդիկ, ովքեր <span class="accent">զարգացնում են առողջապահությունը</span>.</h2>
         <p class="lede">Կլինիկական առաջնորդություն, կյանքի գիտությունների մասնագետներ և գործառնական մենեջերներ տարածաշրջանի առողջապահական կազմակերպությունների համար։</p>
         <div class="hero-cta-row">
           <a href="#contact" class="btn btn-primary">Գտնել առողջապահական մասնագետներ →</a>
