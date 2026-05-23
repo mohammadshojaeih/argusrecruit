@@ -72,6 +72,8 @@ const jobLd = {
     .job-meta { display: flex; flex-wrap: wrap; gap: 10px 18px; color: rgba(255,255,255,0.75); font-size: 14px; margin-bottom: 10px; }
     .job-meta .gold { color: var(--primary-gold); font-weight: 600; }
     .closed-banner { display: inline-block; background: rgba(255,80,80,0.15); border: 1px solid rgba(255,80,80,0.4); color: #ff7a7a; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 12px; }
+    .perk-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .perk-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.4); color: var(--primary-gold); font-size: 12px; font-weight: 600; letter-spacing: 0.5px; padding: 6px 12px; border-radius: 999px; }
 
     .job-body-wrap { max-width: 980px; margin: 0 auto; padding: 50px 32px 80px; display: grid; grid-template-columns: 1fr 320px; gap: 50px; align-items: start; }
     .job-content { color: rgba(255,255,255,0.85); font-size: 15.5px; line-height: 1.75; }
@@ -134,6 +136,12 @@ const jobLd = {
         {location && <span><strong class="gold">Location:</strong> {location}</span>}
         {salaryText && <span><strong class="gold">Salary:</strong> {salaryText}</span>}
       </div>
+      {(job.visaSponsorship || job.relocationAssistance) && (
+        <div class="perk-row">
+          {job.visaSponsorship && <span class="perk-badge">🌍 Վիզայի հովանավորում</span>}
+          {job.relocationAssistance && <span class="perk-badge">✈️ Տեղափոխման աջակցություն</span>}
+        </div>
+      )}
       {isInactive && <div class="closed-banner">{inactiveBanner}</div>}
     </div>
   </section>
@@ -171,6 +179,8 @@ const jobLd = {
         {job.workplaceType && <><dt>Ձև</dt><dd>{job.workplaceType}</dd></>}
         {location && <><dt>Տեղակայություն</dt><dd>{location}</dd></>}
         {salaryText && <><dt>Աշխատավարձ</dt><dd>{salaryText}</dd></>}
+        {job.visaSponsorship && <><dt>Վիզա</dt><dd>Հովանավորում</dd></>}
+        {job.relocationAssistance && <><dt>Տեղափոխում</dt><dd>Աջակցություն</dd></>}
         {job.publishedAt && <><dt>Հրապարակված</dt><dd>{new Date(job.publishedAt).toLocaleDateString('hy-AM',{day:'numeric',month:'short',year:'numeric'})}</dd></>}
       </dl>
       {!isInactive && <a href="#apply" class="btn-apply">Դիմել</a>}
