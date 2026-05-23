@@ -16,6 +16,8 @@ if (!job) return Astro.redirect('/jobs/');
 
 const descHtml = Array.isArray(job.description) ? toHTML(job.description) : (job.description || '');
 const location = [job.locationCity, job.locationCountry].filter(Boolean).join(', ');
+const isInactive = job.status === 'closed' || job.isExpired;
+const inactiveBanner = job.isExpired ? 'This role has expired' : 'This role is closed';
 const salaryText = job.salaryNegotiable ? 'Negotiable' : (job.salaryMin && job.salaryMax ? `${job.salaryCurrency} ${(job.salaryMin/1000).toFixed(0)}k–${(job.salaryMax/1000).toFixed(0)}k` : null);
 
 // JSON-LD JobPosting for Google Jobs
@@ -107,6 +109,10 @@ const jobLd = {
     .apply-msg.success { display: block; background: rgba(60,180,90,0.15); border: 1px solid rgba(60,180,90,0.4); color: #8feca8; }
     .apply-msg.error { display: block; background: rgba(255,80,80,0.15); border: 1px solid rgba(255,80,80,0.4); color: #ff8a8a; }
 
+    
+    body.job-inactive .job-hero, body.job-inactive .job-body-wrap { filter: grayscale(0.85) opacity(0.9); }
+    body.job-inactive .gold, body.job-inactive .accent { color: rgba(255,255,255,0.6) !important; }
+
     @media (max-width: 880px) {
       .job-body-wrap { grid-template-columns: 1fr; gap: 30px; padding: 40px 20px 60px; }
       .job-aside { position: static; }
@@ -115,7 +121,7 @@ const jobLd = {
     }
   </style>
 </head>
-<body>
+<body class={isInactive ? "job-inactive" : ""}>
   <SiteNav lang="en" pathInLang={`/jobs/${job.slug}/`} />
 
   <section class="job-hero">
@@ -128,7 +134,7 @@ const jobLd = {
         {location && <span><strong class="gold">Location:</strong> {location}</span>}
         {salaryText && <span><strong class="gold">Salary:</strong> {salaryText}</span>}
       </div>
-      {job.status === 'closed' && <div class="closed-banner">This role is closed</div>}
+      {isInactive && <div class="closed-banner">{inactiveBanner}</div>}
     </div>
   </section>
 
@@ -166,7 +172,7 @@ const jobLd = {
         {salaryText && <><dt>Salary</dt><dd>{salaryText}</dd></>}
         {job.publishedAt && <><dt>Posted</dt><dd>{new Date(job.publishedAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</dd></>}
       </dl>
-      {job.status !== 'closed' && <a href="#apply" class="btn-apply">Apply for this role →</a>}
+      {!isInactive && <a href="#apply" class="btn-apply">Apply for this role →</a>}
       <div class="share-row">
         <a class="share-btn" target="_blank" rel="noopener" href={`https://www.linkedin.com/sharing/share-offsite/?url=https://argusrecruit.com/jobs/${job.slug}/`}>Share on LinkedIn</a>
         <button class="share-btn" type="button" id="copyLink">Copy Link</button>
@@ -174,7 +180,7 @@ const jobLd = {
     </aside>
   </div>
 
-  {job.status !== 'closed' && (
+  {!isInactive && (
     <section class="apply-section" id="apply">
       <h2>Apply for this role</h2>
       <p class="sub">All applications are confidential. We respond within one business day.</p>

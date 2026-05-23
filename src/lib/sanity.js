@@ -83,27 +83,44 @@ export async function getPost(slug, lang = 'en') {
 
 // ===================== JOBS =====================
 
+function computeEffectiveExpiry(job) {
+  if (!job) return null;
+  if (job.expiryPreset === 'never') return null;
+  if (job.expiryPreset === 'custom') return job.expiresAt || null;
+  const months = { '1m': 1, '2m': 2, '3m': 3, '6m': 6 }[job.expiryPreset];
+  if (!months || !job.publishedAt) return job.expiresAt || null;
+  const d = new Date(job.publishedAt);
+  d.setMonth(d.getMonth() + months);
+  return d.toISOString();
+}
+
 export async function getJobs(lang = 'en', { includeClosed = false } = {}) {
   if (!sanityClient) return [];
   try {
-    const statusFilter = includeClosed ? `&& status != "hidden"` : `&& status == "active"`;
-    const query = `*[_type=="job" ${statusFilter} && (language=="${lang}" || !defined(language)) && (!defined(expiresAt) || expiresAt > now())] | order(featured desc, publishedAt desc) {
-      _id, title, slug, status, featured, department, employmentType, workplaceType,
+    const statusFilter = includeClosed ? `&& status != "hidden"` : `&& status != "hidden"`;
+    const query = `*[_type=="job" ${statusFilter} && (language=="${lang}" || !defined(language))] | order(featured desc, publishedAt desc) {
+      _id, jobId, title, slug, status, featured, department, employmentType, workplaceType,
       locationCity, locationCountry, salaryMin, salaryMax, salaryCurrency, salaryNegotiable,
       excerpt, description, responsibilities, requirements, niceToHave, tags,
-      publishedAt, expiresAt
+      publishedAt, expiryPreset, expiresAt
     }`;
     const jobs = await sanityClient.fetch(query);
     if (!jobs) return [];
-    return jobs.map(j => ({ ...j, slug: j.slug?.current || j.slug }));
+    const now = Date.now();
+    return jobs.map(j => {
+      const effectiveExpiry = computeEffectiveExpiry(j);
+      const isExpired = effectiveExpiry ? (new Date(effectiveExpiry).getTime() < now) : false;
+      const ref = j.jobId || j.slug?.current || j.slug;
+      return { ...j, slug: ref, jobId: j.jobId || ref, effectiveExpiry, isExpired };
+    });
   } catch (e) {
     console.error('Sanity job fetch failed:', e.message);
     return [];
   }
 }
 
-export async function getJob(slug, lang = 'en') {
+export async function getJob(ref, lang = 'en') {
   const jobs = await getJobs(lang, { includeClosed: true });
-  return jobs.find(j => j.slug === slug) || null;
+  return jobs.find(j => j.jobId === ref || j.slug === ref) || null;
 }
 

@@ -16,6 +16,8 @@ if (!job) return Astro.redirect('/jobs/');
 
 const descHtml = Array.isArray(job.description) ? toHTML(job.description) : (job.description || '');
 const location = [job.locationCity, job.locationCountry].filter(Boolean).join(', ');
+const isInactive = job.status === 'closed' || job.isExpired;
+const inactiveBanner = job.isExpired ? 'Срок этой вакансии истёк' : 'Эта роль закрыта';
 const salaryText = job.salaryNegotiable ? 'По договорённости' : (job.salaryMin && job.salaryMax ? `${job.salaryCurrency} ${(job.salaryMin/1000).toFixed(0)}k–${(job.salaryMax/1000).toFixed(0)}k` : null);
 
 // JSON-LD JobPosting for Google Jobs
@@ -107,6 +109,10 @@ const jobLd = {
     .apply-msg.success { display: block; background: rgba(60,180,90,0.15); border: 1px solid rgba(60,180,90,0.4); color: #8feca8; }
     .apply-msg.error { display: block; background: rgba(255,80,80,0.15); border: 1px solid rgba(255,80,80,0.4); color: #ff8a8a; }
 
+    
+    body.job-inactive .job-hero, body.job-inactive .job-body-wrap { filter: grayscale(0.85) opacity(0.9); }
+    body.job-inactive .gold, body.job-inactive .accent { color: rgba(255,255,255,0.6) !important; }
+
     @media (max-width: 880px) {
       .job-body-wrap { grid-template-columns: 1fr; gap: 30px; padding: 40px 20px 60px; }
       .job-aside { position: static; }
@@ -115,7 +121,7 @@ const jobLd = {
     }
   </style>
 </head>
-<body>
+<body class={isInactive ? "job-inactive" : ""}>
   <SiteNav lang="ru" pathInLang={`/ru/jobs/${job.slug}/`} />
 
   <section class="job-hero">
@@ -128,7 +134,7 @@ const jobLd = {
         {location && <span><strong class="gold">Location:</strong> {location}</span>}
         {salaryText && <span><strong class="gold">Salary:</strong> {salaryText}</span>}
       </div>
-      {job.status === 'closed' && <div class="closed-banner">Эта роль закрыта</div>}
+      {isInactive && <div class="closed-banner">{inactiveBanner}</div>}
     </div>
   </section>
 
@@ -166,7 +172,7 @@ const jobLd = {
         {salaryText && <><dt>Зарплата</dt><dd>{salaryText}</dd></>}
         {job.publishedAt && <><dt>Опубликовано</dt><dd>{new Date(job.publishedAt).toLocaleDateString('ru-RU',{day:'numeric',month:'short',year:'numeric'})}</dd></>}
       </dl>
-      {job.status !== 'closed' && <a href="#apply" class="btn-apply">Подать заявку →</a>}
+      {!isInactive && <a href="#apply" class="btn-apply">Подать заявку →</a>}
       <div class="share-row">
         <a class="share-btn" target="_blank" rel="noopener" href={`https://www.linkedin.com/sharing/share-offsite/?url=https://argusrecruit.com/ru/jobs/${job.slug}/`}>Поделиться в LinkedIn</a>
         <button class="share-btn" type="button" id="copyLink">Скопировать ссылку</button>
@@ -174,7 +180,7 @@ const jobLd = {
     </aside>
   </div>
 
-  {job.status !== 'closed' && (
+  {!isInactive && (
     <section class="apply-section" id="apply">
       <h2>Подать заявку</h2>
       <p class="sub">Все заявки конфиденциальны. Мы отвечаем в течение одного рабочего дня.</p>

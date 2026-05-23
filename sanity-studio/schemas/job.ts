@@ -1,12 +1,24 @@
 import { defineType, defineField } from 'sanity'
 
+function genJobId() {
+  return 'AR-' + Math.random().toString(36).slice(2, 8).toUpperCase()
+}
+
 export default defineType({
   name: 'job',
   title: 'Job Posting',
   type: 'document',
   fields: [
+    defineField({
+      name: 'jobId',
+      title: 'Job ID',
+      description: 'Unique reference for this role. Auto-generated. Used as the URL slug.',
+      type: 'string',
+      readOnly: true,
+      initialValue: () => genJobId(),
+      validation: r => r.required()
+    }),
     defineField({ name: 'title', title: 'Job Title', type: 'string', validation: r => r.required() }),
-    defineField({ name: 'slug', type: 'slug', options: { source: 'title' }, validation: r => r.required() }),
     defineField({
       name: 'language', type: 'string',
       options: { list: [
@@ -69,12 +81,27 @@ export default defineType({
     defineField({ name: 'niceToHave', title: 'Nice to Have', type: 'array', of: [{ type: 'string' }] }),
     defineField({ name: 'tags', title: 'Tags', type: 'array', of: [{ type: 'string' }] }),
     defineField({ name: 'publishedAt', type: 'datetime', initialValue: () => new Date().toISOString() }),
-    defineField({ name: 'expiresAt', title: 'Expires At', type: 'datetime' })
+    defineField({
+      name: 'expiryPreset',
+      title: 'Expiry',
+      description: 'Quick pick. If "Custom date" is selected, use the date field below.',
+      type: 'string',
+      options: { list: [
+        { title: '1 month from publish', value: '1m' },
+        { title: '2 months from publish', value: '2m' },
+        { title: '3 months from publish', value: '3m' },
+        { title: '6 months from publish', value: '6m' },
+        { title: 'Custom date', value: 'custom' },
+        { title: 'Never', value: 'never' }
+      ] },
+      initialValue: '2m'
+    }),
+    defineField({ name: 'expiresAt', title: 'Expires At (custom)', type: 'datetime', description: 'Only used when Expiry is set to "Custom date".' })
   ],
   preview: {
-    select: { title: 'title', subtitle: 'department', status: 'status' },
+    select: { title: 'title', subtitle: 'jobId', status: 'status' },
     prepare({ title, subtitle, status }) {
-      return { title, subtitle: `${subtitle || ''} ${status ? '· ' + status : ''}` }
+      return { title, subtitle: `${subtitle || ''} · ${status || 'active'}` }
     }
   }
 })

@@ -154,6 +154,11 @@ body {
 .mini-job-meta { color: rgba(255,255,255,0.6); font-size: 13px; margin-bottom: 14px; display: flex; flex-wrap: wrap; gap: 4px 8px; }
 .mini-job-excerpt { color: rgba(255,255,255,0.7); font-size: 13.5px; line-height: 1.6; flex: 1; margin-bottom: 16px; }
 .mini-job-cta { color: var(--primary-gold); font-size: 13px; font-weight: 600; margin-top: auto; }
+
+.mini-job-card.expired { filter: grayscale(1); opacity: 0.65; }
+.mini-job-card.expired:hover { transform: none; border-color: rgba(212,175,55,0.18); background: rgba(255,255,255,0.04); }
+.expired-pill { display: inline-block; margin-left: 8px; padding: 2px 8px; font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); border-radius: 4px; vertical-align: middle; }
+
 @media (max-width: 900px) { .latest-jobs-grid { grid-template-columns: 1fr; } .latest-jobs { padding: 80px 20px; } }
 .menu-toggle { display: none; background: none; border: 0; color: var(--white); font-size: 28px; cursor: pointer; padding: 6px; }
 
@@ -1078,10 +1083,10 @@ section { padding: 80px 32px; }
     </div>
     <div class="latest-jobs-grid">
       {latestJobs.map(j => (
-        <a class={`mini-job-card${j.featured ? ' featured' : ''}`} href={`/jobs/${j.slug}/`}>
+        <a class={`mini-job-card${j.featured ? ' featured' : ''}${j.isExpired ? ' expired' : ''}`} href={`/jobs/${j.slug}/`}>
           {j.featured && <span class="mini-featured">★ Featured</span>}
           <div class="mini-job-dept">{j.department || 'Open Role'}</div>
-          <h3>{j.title}</h3>
+          <h3>{j.title}{j.isExpired && <span class="expired-pill">Expired</span>}</h3>
           <div class="mini-job-meta">
             {j.workplaceType && <span>{j.workplaceType}</span>}
             {(j.locationCity || j.locationCountry) && <span>· {[j.locationCity, j.locationCountry].filter(Boolean).join(', ')}</span>}
