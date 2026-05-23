@@ -23,6 +23,25 @@ const latestJobs = (await getJobs('hy')).slice(0, 3);
 
 <style is:global>
 
+/* MOBILE HERO FIXES */
+@media (max-width: 640px) {
+  .hero-inner { padding-left: 24px !important; padding-right: 24px !important; }
+  .hero-caption { padding-left: 0 !important; padding-right: 0 !important; }
+  .slide-arrow { width: 36px !important; height: 36px !important; opacity: 0.55; }
+  .slide-arrow:hover { opacity: 1; }
+  .slide-arrow-prev { left: 6px !important; }
+  .slide-arrow-next { right: 6px !important; }
+  .hero-caption :is(h1,h2) { font-size: 30px !important; line-height: 1.15 !important; }
+  .hero-caption .industry-tag { font-size: 11px !important; }
+  .hero-caption .lede { font-size: 14px !important; line-height: 1.5 !important; }
+  .hero-cta-row { flex-direction: column !important; align-items: stretch !important; gap: 10px !important; margin-top: 22px !important; }
+  .hero-cta-row .btn { width: 100% !important; min-width: 0 !important; padding: 13px 18px !important; font-size: 14px !important; }
+  .hero { min-height: auto !important; padding-bottom: 100px !important; }
+  .slide-controls { bottom: 18px !important; right: 50% !important; transform: translateX(50%) !important; left: auto !important; }
+  .slide-counter { display: none !important; }
+}
+
+
 .home-services { padding: 90px 32px; background: var(--navy-darkest); }
 .home-services-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
 .home-services h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(26px, 3.4vw, 40px); font-weight: 600; line-height: 1.2; letter-spacing: 1.2px; text-transform: uppercase; margin-top: 14px; }
