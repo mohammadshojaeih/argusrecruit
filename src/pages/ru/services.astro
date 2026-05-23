@@ -189,6 +189,15 @@ const faqs = [
     .svc-form-group textarea { min-height: 110px; resize: vertical; }
     .svc-form-group input:focus, .svc-form-group select:focus, .svc-form-group textarea:focus { outline: none; border-color: var(--primary-gold); }
 
+    
+@media (max-width: 720px) {
+  .svc-why-banner { aspect-ratio: auto !important; min-height: 220px; }
+  .svc-why-banner img { position: absolute; inset: 0; }
+  .svc-why-banner-overlay { position: relative !important; padding: 100px 18px 18px !important; background: linear-gradient(180deg, rgba(14,36,64,0.2) 0%, rgba(14,36,64,0.6) 50%, rgba(14,36,64,0.85) 100%) !important; }
+  .svc-why-banner-content { max-width: 100% !important; padding: 16px 18px !important; }
+  .svc-why-banner-text { font-size: 14px !important; line-height: 1.5 !important; }
+}
+
     @media (max-width: 960px) {
       .svc-metrics-inner, .svc-industries-grid, .svc-clients-grid { grid-template-columns: repeat(2, 1fr); }
       .svc-services-layout, .svc-global-grid, .svc-contact-grid { grid-template-columns: 1fr; gap: 32px; }
