@@ -22,6 +22,21 @@ const latestJobs = (await getJobs('en')).slice(0, 3);
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style is:global>
+
+.home-clients { background: var(--navy-deep); padding: 70px 32px; border-top: 1px solid rgba(212,175,55,0.12); border-bottom: 1px solid rgba(212,175,55,0.12); }
+.home-clients-inner { max-width: 1240px; margin: 0 auto; text-align: center; }
+.home-clients h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(24px, 3vw, 36px); font-weight: 600; line-height: 1.2; letter-spacing: 1.2px; margin-top: 14px; text-transform: uppercase; }
+.home-clients h2 .accent { color: var(--primary-gold); font-style: italic; }
+.home-clients-sub { color: rgba(255,255,255,0.7); margin-top: 14px; font-size: 15px; max-width: 580px; margin-left: auto; margin-right: auto; }
+.home-clients-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; }
+.home-client { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.18); border-radius: 12px; padding: 24px 18px; display: flex; flex-direction: column; align-items: center; gap: 12px; min-height: 150px; position: relative; }
+.home-client-img { width: 90px; height: 70px; display: flex; align-items: center; justify-content: center; filter: blur(6px) grayscale(0.4); }
+.home-client-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.home-clients-footer { margin-top: 30px; color: rgba(255,255,255,0.55); font-size: 13px; font-style: italic; }
+@media (max-width: 760px) { .home-clients-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.home-client::after { content: 'CONFIDENTIAL'; position: absolute; bottom: 10px; left: 0; right: 0; text-align: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 10px; color: var(--primary-gold); letter-spacing: 2.5px; pointer-events: none; }
+
 :root {
   --primary-gold: #D4AF37;
   --dark-gold: #B8860B;
@@ -1094,26 +1109,18 @@ section { padding: 80px 32px; }
 </section>
 )}
 
-<section class="clients">
-  <div class="container" style="text-align: center;">
-    <span class="eyebrow" data-i18n="clients.eyebrow">Our Clients</span>
-    <h2 class="clients-headline" data-i18n-html="clients.headline">Companies that <span class="accent">trust us</span> with their hardest hires</h2>
-    <p class="clients-sub" data-i18n="clients.sub">A selection of the teams we've partnered with — and a small glimpse of who we work with.</p>
-    <div class="clients-grid">
-      <div class="client-logo">
-        <div class="client-logo-img"><img src="client-huma.png" alt="Huma"></div>
-      </div>
-      <div class="client-logo">
-        <div class="client-logo-img"><img src="client-qoostudio.jpg" alt="QOO Studio"></div>
-      </div>
-      <div class="client-logo">
-        <div class="client-logo-img" style="background: #1a1a2e;"><img src="client-alien.jpg" alt="Alien Intellect"></div>
-      </div>
-      <div class="client-logo">
-        <div class="client-logo-img"><img src="client-ovou.png" alt="OVOU"></div>
-      </div>
+<section class="home-clients">
+  <div class="home-clients-inner">
+    <span class="eyebrow">Our Clients</span>
+    <h2>Companies that <span class="accent">trust us</span> with their hardest hires</h2>
+    <p class="home-clients-sub">A selection of the teams we've partnered with — and a small glimpse of who we work with.</p>
+    <div class="home-clients-grid">
+      <div class="home-client"><div class="home-client-img"><img src="/client-huma.png" alt="Huma"></div></div>
+      <div class="home-client"><div class="home-client-img"><img src="/client-qoostudio.jpg" alt="QOO Studio"></div></div>
+      <div class="home-client"><div class="home-client-img" style="background:#1a1a2e"><img src="/client-alien.jpg" alt="Alien Intellect"></div></div>
+      <div class="home-client"><div class="home-client-img"><img src="/client-ovou.png" alt="OVOU"></div></div>
     </div>
-    <div class="clients-footer" data-i18n="clients.footer">— and a growing list of companies we can't name publicly yet —</div>
+    <div class="home-clients-footer">— and a growing list of companies we can't name publicly yet —</div>
   </div>
 </section>
 
