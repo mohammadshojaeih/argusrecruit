@@ -946,10 +946,10 @@ section { padding: 80px 32px; }
       <a href="#why" data-i18n="nav.why">Why Us</a>
       <a href="#services" data-i18n="nav.services">Services</a>
       <a href="#process" data-i18n="nav.process">Process</a>
-      <a href="/jobs/" class="nav-jobs" data-i18n="nav.jobs"><span class="dot"></span>Find a Job</a>
       <a href="/blog/" data-i18n="nav.blog">Blog</a>
       <a href="#contact" data-i18n="nav.contact">Contact</a>
-      <a href="#contact" class="nav-cta" data-i18n="nav.cta">Find Your Fit</a>
+      <a href="/jobs/" class="nav-jobs" data-i18n="nav.jobs"><span class="dot"></span>Find a Job</a>
+      <a href="/services/" class="nav-cta" data-i18n="nav.cta">Find Your Fit</a>
       <div class="lang-switcher" id="langSwitcher">
         <button class="lang-current" id="langCurrent">🇬🇧</button>
         <div class="lang-menu">
@@ -1068,6 +1068,37 @@ section { padding: 80px 32px; }
   </div>
 </section>
 
+{latestJobs.length > 0 && (
+<section id="latest-jobs" class="latest-jobs">
+  <div class="container">
+    <div class="section-header" style="text-align: center;">
+      <span class="eyebrow">Open Roles</span>
+      <h2>Latest <span class="accent">opportunities.</span></h2>
+      <p>A curated selection of senior and executive openings currently in our network.</p>
+    </div>
+    <div class="latest-jobs-grid">
+      {latestJobs.map(j => (
+        <a class={`mini-job-card${j.featured ? ' featured' : ''}`} href={`/jobs/${j.slug}/`}>
+          {j.featured && <span class="mini-featured">★ Featured</span>}
+          <div class="mini-job-dept">{j.department || 'Open Role'}</div>
+          <h3>{j.title}</h3>
+          <div class="mini-job-meta">
+            {j.workplaceType && <span>{j.workplaceType}</span>}
+            {(j.locationCity || j.locationCountry) && <span>· {[j.locationCity, j.locationCountry].filter(Boolean).join(', ')}</span>}
+            {j.salaryNegotiable ? <span>· Negotiable</span> : (j.salaryMin && j.salaryMax && <span>· {j.salaryCurrency} {(j.salaryMin/1000).toFixed(0)}k–{(j.salaryMax/1000).toFixed(0)}k</span>)}
+          </div>
+          {j.excerpt && <p class="mini-job-excerpt">{j.excerpt}</p>}
+          <span class="mini-job-cta">View role →</span>
+        </a>
+      ))}
+    </div>
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="/jobs/" class="btn btn-primary">Browse all open roles →</a>
+    </div>
+  </div>
+</section>
+)}
+
 <section id="why">
   <div class="container">
     <div class="section-header">
@@ -1079,8 +1110,8 @@ section { padding: 80px 32px; }
       <img src="photo-meeting.jpg" alt="ArgusRecruit team consultation">
       <div class="why-banner-overlay">
         <div class="why-banner-content">
-          <div class="banner-label" data-i18n="why.promise.label">Our promise</div>
-          <div class="banner-text" data-i18n="why.promise.text">Every search is led by a senior recruiter who understands your industry, your culture, and what "the right hire" actually means to you.</div>
+          <div class="banner-label" data-i18n="why.promise.label">Network & Market Depth</div>
+          <div class="banner-text" data-i18n="why.promise.text">Years of relationship-building have given us direct access to senior talent across our verticals — and the market context to know who is the right fit, not just who is available.</div>
         </div>
       </div>
     </div>
@@ -1271,37 +1302,6 @@ section { padding: 80px 32px; }
     </div>
   </div>
 </section>
-
-{latestJobs.length > 0 && (
-<section id="latest-jobs" class="latest-jobs">
-  <div class="container">
-    <div class="section-header" style="text-align: center;">
-      <span class="eyebrow">Open Roles</span>
-      <h2>Latest <span class="accent">opportunities.</span></h2>
-      <p>A curated selection of senior and executive openings currently in our network.</p>
-    </div>
-    <div class="latest-jobs-grid">
-      {latestJobs.map(j => (
-        <a class={`mini-job-card${j.featured ? ' featured' : ''}`} href={`/jobs/${j.slug}/`}>
-          {j.featured && <span class="mini-featured">★ Featured</span>}
-          <div class="mini-job-dept">{j.department || 'Open Role'}</div>
-          <h3>{j.title}</h3>
-          <div class="mini-job-meta">
-            {j.workplaceType && <span>{j.workplaceType}</span>}
-            {(j.locationCity || j.locationCountry) && <span>· {[j.locationCity, j.locationCountry].filter(Boolean).join(', ')}</span>}
-            {j.salaryNegotiable ? <span>· Negotiable</span> : (j.salaryMin && j.salaryMax && <span>· {j.salaryCurrency} {(j.salaryMin/1000).toFixed(0)}k–{(j.salaryMax/1000).toFixed(0)}k</span>)}
-          </div>
-          {j.excerpt && <p class="mini-job-excerpt">{j.excerpt}</p>}
-          <span class="mini-job-cta">View role →</span>
-        </a>
-      ))}
-    </div>
-    <div style="text-align: center; margin-top: 40px;">
-      <a href="/jobs/" class="btn btn-primary">Browse all open roles →</a>
-    </div>
-  </div>
-</section>
-)}
 
 <section id="contact" class="contact">
   <div class="container contact-grid">

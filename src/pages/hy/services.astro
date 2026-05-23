@@ -1,0 +1,390 @@
+---
+import SiteHead from '../../components/SiteHead.astro';
+import SharedCSS from '../../components/SharedCSS.astro';
+import SiteNav from '../../components/SiteNav.astro';
+
+const industries = [
+  { name: "Տեխնոլոգիա", icon: "\ud83d\udcbb", desc: "Ինժեներական ղեկավարություն, արտադրանք, պլատֆորմ:" },
+  { name: "Մարքեթինգ և Աճ", icon: "\ud83d\udce3", desc: "CMO, աճ, բրենդ, performance:" },
+  { name: "Ֆինանսներ", icon: "\ud83d\udcca", desc: "CFO, վերահսկիչներ, FP&A, treasury:" },
+  { name: "Բանկային գործ", icon: "\ud83c\udfe6", desc: "Կոմերցիոն, մանրածախ, ներդրումային:" },
+  { name: "Ապահովագրություն", icon: "\ud83d\udee1\ufe0f", desc: "Անդերռայթինգ, վճարումներ, ակտուարներ:" },
+  { name: "FinTech", icon: "\ud83d\udcb3", desc: "Վճարումներ, վարկավորում, infra:" },
+  { name: "Առողջապահություն", icon: "\ud83c\udfe5", desc: "Կլինիկական ղեկավարություն, գործառնություններ:" },
+  { name: "Էներգետիկա", icon: "\u26a1", desc: "Նավթ, գազ, վերականգնվող, ՀԿ:" },
+  { name: "Անշարժ գույք", icon: "\ud83c\udfe2", desc: "Շինարարություն, ակտիվներ, PropTech:" },
+  { name: "Արտադրություն", icon: "\u2699\ufe0f", desc: "Գործառնություններ, supply chain:" },
+  { name: "Մանրածախ և E-commerce", icon: "\ud83d\uded2", desc: "Մերչանդայզինգ, թվային փոխակերպում:" },
+  { name: "Իրավաբանական", icon: "\u2696\ufe0f", desc: "GC, կարգավորում, ռիսկ, compliance:" }
+]
+
+const faqs = [
+  { q: "Որքա՞ն է տևում սովորական որոնումը:", a: "Մեծ մասամբ բրիֆի հաստատումից 7 օրվա ընթացքում shortlist կտանք: Մինչև առաջարկ 6-10 շաբաթ:" },
+  { q: "Ինչո՞վ եք տարբերվում contingent ռեկրուտերից:", a: "Մեր պայմանագրերը retained են և ղեկավարվում են ավագների կողմից: Մենք ներկայացնում ենք միայն այն թեկնածուներին, որոնց համար անձամբ պատասխանատու ենք:" },
+  { q: "Ինչպե՞ս եք պաշտպանում գաղտնիությունը:", a: "Յուրաքանչյուր որոնում ընթանում է գաղտնիության արձանագրությամբ: Մենք երբեք չենք բացահայտում ձեր անունը առանց թույլտվության:" },
+  { q: "Իսկ եթե նշանակումը չաշխատի:", a: "Յուրաքանչյուր նշանակում երաշխիքով է: Մենք նորից կորոնենք առանց լրացուցիչ վճարման:" },
+  { q: "Միջազգային աշխատում եք:", a: "Այո: Ակտիվ հաճախորդներ UK, ԱՄԷ, Կանադա, Հայաստանում: Աշխատում ենք անգլերեն, ռուսերեն, հայերեն:" },
+  { q: "Որքա՞ն է արժե:", a: "Retainer + completion fee, կապված է թեկնածուի առաջին տարվա վարձավճարի հետ: Թաքնված ծախսեր չկան:" }
+]
+---
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+  <SiteHead title="Ծառայություններ — ArgusRecruit" description="Ղեկավար որոնում, headhunting և հավաքագրման ծառայություններ։ Գաղտնի, ավագ-ղեկավարված, արդյունքի վրա կենտրոնացած:" lang="hy" />
+  <SharedCSS />
+  <style is:global>
+    body { background: var(--navy); }
+    .svc-hero { padding: 160px 32px 90px; background: linear-gradient(180deg, var(--navy-darkest) 0%, var(--navy) 100%); position: relative; overflow: hidden; }
+    .svc-hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(212,175,55,0.08), transparent 70%); }
+    .svc-hero-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+    .svc-hero .eyebrow { display: inline-block; font-size: 11px; letter-spacing: 4px; color: var(--primary-gold); text-transform: uppercase; font-weight: 600; padding: 7px 18px; border: 1px solid rgba(212,175,55,0.35); border-radius: 999px; margin-bottom: 28px; }
+    .svc-hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(36px, 5.5vw, 62px); font-weight: 500; line-height: 1.1; letter-spacing: -1.2px; max-width: 880px; margin-bottom: 22px; }
+    .svc-hero h1 .accent { color: var(--primary-gold); font-style: italic; }
+    .svc-hero p { color: rgba(255,255,255,0.75); font-size: 18px; line-height: 1.65; max-width: 680px; margin-bottom: 38px; }
+    .svc-cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .svc-section { padding: 100px 32px; }
+    .svc-section.alt { background: var(--navy-darkest); }
+    .svc-section-inner { max-width: 1200px; margin: 0 auto; }
+    .svc-section-header { text-align: center; max-width: 720px; margin: 0 auto 60px; }
+    .svc-section-header .eyebrow { display: inline-block; font-size: 11px; letter-spacing: 4px; color: var(--primary-gold); text-transform: uppercase; font-weight: 600; margin-bottom: 16px; }
+    .svc-section-header h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px, 4vw, 44px); font-weight: 500; line-height: 1.2; letter-spacing: -0.5px; }
+    .svc-section-header h2 .accent { color: var(--primary-gold); font-style: italic; }
+    .svc-section-header p { color: rgba(255,255,255,0.7); font-size: 16px; line-height: 1.7; margin-top: 18px; }
+
+    .tiers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .tier-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.2); border-radius: 16px; padding: 36px 32px; position: relative; transition: all 0.3s; }
+    .tier-card:hover { border-color: rgba(212,175,55,0.5); transform: translateY(-4px); background: rgba(255,255,255,0.06); }
+    .tier-card.flagship { border-color: rgba(212,175,55,0.5); background: linear-gradient(135deg, rgba(212,175,55,0.08), rgba(255,255,255,0.04)); }
+    .tier-card .tier-badge { position: absolute; top: -10px; left: 28px; background: var(--primary-gold); color: var(--navy-darkest); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; padding: 4px 10px; border-radius: 4px; }
+    .tier-icon { width: 52px; height: 52px; border-radius: 12px; background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.3); display: flex; align-items: center; justify-content: center; color: var(--primary-gold); margin-bottom: 22px; }
+    .tier-icon svg { width: 24px; height: 24px; }
+    .tier-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 500; margin-bottom: 12px; letter-spacing: 0.3px; }
+    .tier-card .tier-tagline { color: var(--primary-gold); font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px; font-weight: 600; }
+    .tier-card p { color: rgba(255,255,255,0.75); font-size: 14.5px; line-height: 1.7; margin-bottom: 20px; }
+    .tier-card ul { padding: 0; list-style: none; }
+    .tier-card li { color: rgba(255,255,255,0.7); font-size: 13.5px; padding: 6px 0 6px 22px; position: relative; line-height: 1.55; }
+    .tier-card li::before { content: '✓'; position: absolute; left: 0; color: var(--primary-gold); font-weight: 700; }
+
+    .industries-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .industry-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.15); border-radius: 12px; padding: 24px 22px; transition: all 0.25s; }
+    .industry-card:hover { border-color: rgba(212,175,55,0.4); background: rgba(255,255,255,0.06); transform: translateY(-2px); }
+    .industry-icon { font-size: 28px; margin-bottom: 12px; line-height: 1; }
+    .industry-card h4 { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 500; margin-bottom: 6px; color: var(--white); letter-spacing: 0.2px; }
+    .industry-card p { color: rgba(255,255,255,0.6); font-size: 13px; line-height: 1.55; }
+
+    .why-cards-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .svc-why-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.18); border-radius: 14px; padding: 32px 28px; }
+    .svc-why-card .icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(212,175,55,0.12); display: flex; align-items: center; justify-content: center; color: var(--primary-gold); margin-bottom: 18px; }
+    .svc-why-card .icon svg { width: 22px; height: 22px; }
+    .svc-why-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 500; margin-bottom: 10px; }
+    .svc-why-card p { color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.7; }
+
+    .process-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+    .svc-process-step { position: relative; }
+    .svc-process-step .num { font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 500; color: var(--primary-gold); opacity: 0.4; line-height: 1; margin-bottom: 14px; }
+    .svc-process-step h4 { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 500; margin-bottom: 10px; }
+    .svc-process-step p { color: rgba(255,255,255,0.65); font-size: 14px; line-height: 1.6; }
+
+    .stats-svc { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; padding: 60px 0; border-top: 1px solid rgba(212,175,55,0.15); border-bottom: 1px solid rgba(212,175,55,0.15); }
+    .stats-svc .stat-item { text-align: center; }
+    .stats-svc .stat-num { font-family: 'Space Grotesk', sans-serif; font-size: clamp(32px, 4vw, 48px); color: var(--primary-gold); font-weight: 500; line-height: 1; }
+    .stats-svc .stat-label { color: rgba(255,255,255,0.65); font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 12px; }
+
+    .guarantees { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .guarantee-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.2); border-radius: 14px; padding: 28px 26px; }
+    .guarantee-card .gicon { width: 44px; height: 44px; border-radius: 50%; background: var(--primary-gold); color: var(--navy-darkest); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; margin-bottom: 18px; }
+    .guarantee-card h4 { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 500; margin-bottom: 8px; }
+    .guarantee-card p { color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.65; }
+
+    .faq-wrap { max-width: 820px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid rgba(212,175,55,0.15); padding: 22px 0; cursor: pointer; }
+    .faq-item summary { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 500; color: var(--white); display: flex; justify-content: space-between; align-items: center; list-style: none; gap: 20px; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; color: var(--primary-gold); font-size: 24px; font-weight: 300; transition: transform 0.3s; }
+    .faq-item[open] summary::after { transform: rotate(45deg); }
+    .faq-item p { color: rgba(255,255,255,0.72); font-size: 15px; line-height: 1.75; margin-top: 14px; }
+
+    .final-cta { background: linear-gradient(135deg, rgba(212,175,55,0.08), rgba(14,36,64,0.6)); border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; padding: 60px 50px; text-align: center; }
+    .final-cta h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px, 3.5vw, 38px); font-weight: 500; margin-bottom: 16px; letter-spacing: -0.3px; }
+    .final-cta h2 .accent { color: var(--primary-gold); font-style: italic; }
+    .final-cta p { color: rgba(255,255,255,0.75); font-size: 16px; max-width: 580px; margin: 0 auto 30px; line-height: 1.7; }
+
+    @media (max-width: 960px) {
+      .tiers-grid, .industries-grid, .why-cards-row, .process-row, .stats-svc, .guarantees { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .svc-hero { padding: 130px 20px 70px; }
+      .svc-section { padding: 70px 20px; }
+      .tiers-grid, .industries-grid, .why-cards-row, .process-row, .stats-svc, .guarantees { grid-template-columns: 1fr; }
+      .final-cta { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <SiteNav lang="hy" pathInLang="/hy/services/" />
+
+  <section class="svc-hero">
+    <div class="svc-hero-inner">
+      <span class="eyebrow">Գործատուների համար</span>
+      <h1>Վարձեք առաջնորդներ, <span class="accent">ովքեր ձևավորում են</span> ձեր հաջորդ գլուխը.</h1>
+      <p>ArgusRecruit-ը բուտիկ executive search ընկերություն է՝ ստեղծված այն վարձումների համար, որոնք կորոշեն ձեր ընկերության հաջորդ տասնամյակը։</p>
+      <div class="svc-cta-row">
+        <a href="#contact" class="btn btn-primary">Սկսել գաղտնի որոնում →</a>
+        <a href="#tiers" class="btn btn-secondary">Ուսումնասիրել ծառայությունները</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Service Tiers -->
+  <section class="svc-section" id="tiers">
+    <div class="svc-section-inner">
+      <div class="svc-section-header">
+        <span class="eyebrow">Մեր ծառայությունները</span>
+        <h2>Երեք գործակցություն. <span class="accent">Մեկ չափանիշ.</span></h2>
+        <p>Գաղտնի C-suite որոնումներից մինչև միջին-ավագ վարձում — յուրաքանչյուր գործակցություն ղեկավարվում է անձամբ ավագի կողմից:</p>
+      </div>
+      <div class="tiers-grid">
+        <div class="tier-card flagship">
+          <span class="tier-badge">FLAGSHIP</span>
+          <div class="tier-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle fill="currentColor" cx="12" cy="12" r="2"/></svg>
+          </div>
+          <div class="tier-tagline">Ղեկավար Որոնում</div>
+          <h3>C-suite և Տնօրենների խորհուրդ</h3>
+          <p>CEO, C-suite, VP և Function-Head նշանակումների համար, որտեղ գաղտնիությունն ու ավագ դատողությունը ամենակարևորն են:</p>
+          <ul>
+            <li>Retained մոդել</li>
+            <li>Off-market և գաղտնի outreach</li>
+            <li>Ավագ ռեկրուտեր ամեն որոնման վրա</li>
+            <li>7-օրյա shortlist</li>
+            <li>Փոխարինման երաշխիք</li>
+          </ul>
+        </div>
+        <div class="tier-card">
+          <div class="tier-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+          </div>
+          <div class="tier-tagline">Headhunting</div>
+          <h3>Դժվար գտնվող մասնագետներ</h3>
+          <p>Տեխնիկական և կոմերցիոն մասնագետների համար, ովքեր ակտիվ չեն փնտրում:</p>
+          <ul>
+            <li>Շուկայի ակտիվ քարտեզագրում</li>
+            <li>Գաղտնի, անհատականացված outreach</li>
+            <li>Engineering, արտադրանք, վաճառք, ֆինանս</li>
+            <li>Ավագ-ղեկավարվող մինչև փակում</li>
+          </ul>
+        </div>
+        <div class="tier-card">
+          <div class="tier-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="tier-tagline">Հավաքագրման ծառայություններ</div>
+          <h3>Միջին-ավագ վարձում</h3>
+          <p>Կառուցվածքային end-to-end վարձում: Ստեղծված է արագ աճող թիմերի համար:</p>
+          <ul>
+            <li>Թիրախային sourcing և screening</li>
+            <li>Կառուցվածքային գնահատման նոթեր</li>
+            <li>Ծավալային, որակ-առաջին</li>
+            <li>Multi-role պայմանագրեր</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Արդյունաբերություններ -->
+  <section class="svc-section alt">
+    <div class="svc-section-inner">
+      <div class="svc-section-header">
+        <span class="eyebrow">Արդյունաբերություններ</span>
+        <h2>Ոլորտներ, որոնք <span class="accent">խորապես գիտենք.</span></h2>
+        <p>Մեր ցանցը ընդգրկում է տասներկու ուղղություններ՝ FinTech-ից մինչև առողջապահություն:</p>
+      </div>
+      <div class="industries-grid">
+        {industries.map(i => (
+          <div class="industry-card">
+            <div class="industry-icon">{i.icon}</div>
+            <h4>{i.name}</h4>
+            <p>{i.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Why -->
+  <section class="svc-section">
+    <div class="svc-section-inner">
+      <div class="svc-section-header">
+        <span class="eyebrow">Ինչու ArgusRecruit</span>
+        <h2>Որոնման գործընկեր <span class="accent">ցանցով և խորությամբ,</span> որոնք պահանջում է ձեր որոնումը.</h2>
+        <p>Հարաբերությունների տարիները տվել են ուղիղ մուտք ավագ տաղանդներին — և շուկայի համատեքստ:</p>
+      </div>
+      <div class="why-cards-row">
+        <div class="svc-why-card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/></svg></div>
+          <h3>Շատ Աչքեր</h3>
+          <p>Մի քանի ավագ ռեկրուտեր յուրաքանչյուր որոնման վրա: Ընդգրկում որպես enterprise թիմ:</p>
+        </div>
+        <div class="svc-why-card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L4 7v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V7l-8-5z"/></svg></div>
+          <h3>Լիարժեք Գաղտնիություն</h3>
+          <p>Գաղտնիությունը չքննարկվող է: Ձեր որոնումը պաշտպանված է:</p>
+        </div>
+        <div class="svc-why-card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+          <h3>Ճշգրիտ Համապատասխանություն</h3>
+          <p>Մենք ռեզյումեներ չենք ուղարկում: Մենք ուղարկում ենք ճիշտ մարդկանց:</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="svc-section alt">
+    <div class="svc-section-inner">
+      <div class="svc-section-header">
+        <span class="eyebrow">Ինչպես ենք աշխատում</span>
+        <h2>Բրիֆից մինչև <span class="accent">առաջարկ.</span></h2>
+        <p>Հստակ, կրկնվող գործընթաց:</p>
+      </div>
+      <div class="process-row">
+        <div class="svc-process-step">
+          <div class="num">01</div>
+          <h4>Բացահայտում</h4>
+          <p>Խորը ուսումնասիրություն դերի և must-have-երի:</p>
+        </div>
+        <div class="svc-process-step">
+          <div class="num">02</div>
+          <h4>Քարտեզագրում</h4>
+          <p>Շուկայի հետազոտություն, longlist զարգացում, գաղտնի outreach:</p>
+        </div>
+        <div class="svc-process-step">
+          <div class="num">03</div>
+          <h4>Կարճ ցուցակ</h4>
+          <p>3–5 ստուգված թեկնածուներ — 7 օրվա ընթացքում:</p>
+        </div>
+        <div class="svc-process-step">
+          <div class="num">04</div>
+          <h4>Փակում</h4>
+          <p>Հարցազրույցների կազմակերպում, առաջարկի աջակցություն, onboarding:</p>
+        </div>
+      </div>
+
+      <div class="stats-svc">
+        <div class="stat-item">
+          <div class="stat-num">15+</div>
+          <div class="stat-label">Տարվա համատեղ</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Լռելյայն գաղտնի</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">7 days</div>
+          <div class="stat-label">Միջին shortlist</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4</div>
+          <div class="stat-label">Երկրներ որոնք ծածկում ենք</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Համաշխարհային Հասանելիություն -->
+  <section class="svc-section">
+    <div class="svc-section-inner">
+      <div class="svc-section-header">
+        <span class="eyebrow">Համաշխարհային Հասանելիություն</span>
+        <h2>Հայաստանում տեղակայված. <span class="accent">Աշխատում ենք ամբողջ աշխարհում.</span></h2>
+        <p>Չնայած Երևանը մեր տունն է, մեր աշխատանքը գլոբալ է:</p>
+      </div>
+      <div class="industries-grid">
+        <div class="industry-card">
+          <div class="industry-icon">🇬🇧</div>
+          <h4>Միացյալ Թագավորություն</h4>
+          <p>Լոնդոն · Ակտիվ հաճախորդներ</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon">🇨🇦</div>
+          <h4>Կանադա</h4>
+          <p>Տորոնտո · Ակտիվ հաճախորդներ</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon">🇦🇪</div>
+          <h4>ԱՄԷ</h4>
+          <p>Դուբայ · Ակտիվ հաճախորդներ</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon">🇦🇲</div>
+          <h4>Հայաստան</h4>
+          <p>Երևան · Գլխավոր գրասենյակ</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guarantees -->
+  <section class="svc-section alt">
+    <div class="svc-section-inner">
+      <div class="svc-section-header">
+        <span class="eyebrow">Մեր պարտավորությունը</span>
+        <h2>Երաշխիքներ, որոնք <span class="accent">պաշտպանում են</span> ձեր որոնումը.</h2>
+      </div>
+      <div class="guarantees">
+        <div class="guarantee-card">
+          <div class="gicon">✓</div>
+          <h4>Փոխարինման երաշխիք</h4>
+          <p>Եթե նշանակումը չաշխատի երաշխիքային ժամկետում, մենք նորից կորոնենք:</p>
+        </div>
+        <div class="guarantee-card">
+          <div class="gicon">⌀</div>
+          <h4>Լիարժեք գաղտնիություն</h4>
+          <p>Your name, your candidates, and your timeline — պաշտպանում ենed by NDA, controlled outreach, and discrete reporting.</p>
+        </div>
+        <div class="guarantee-card">
+          <div class="gicon">★</div>
+          <h4>Ավագ, մեկ կապի կետ</h4>
+          <p>Անձամբ ղեկավարվում է ավագ ռեկրուտերի կողմից:</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="svc-section">
+    <div class="svc-section-inner">
+      <div class="svc-section-header">
+        <span class="eyebrow">FAQ</span>
+        <h2>Հաճախակի տրվող <span class="accent">հարցեր.</span></h2>
+      </div>
+      <div class="faq-wrap">
+        {faqs.map((f, i) => (
+          <details class="faq-item" open={i===0}>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="svc-section alt" id="contact">
+    <div class="svc-section-inner">
+      <div class="final-cta">
+        <h2>Պատրա՞ստ եք սկսել <span class="accent">գաղտնի որոնում?</span></h2>
+        <p>Պատմեք մեզ դերի մասին: Մենք կպատասխանենք մեկ աշխատանքային օրվա ընթացքում:</p>
+        <div class="svc-cta-row" style="justify-content: center;">
+          <a href="/hy/#contact" class="btn btn-primary">Խորհրդատվություն խնդրել →</a>
+          <a href="/hy/jobs/" class="btn btn-secondary">Բոլոր բաց դերերը</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.5); font-size: 13px; background: var(--navy-darkest);">© 2026 ArgusRecruit · <a style="color:var(--primary-gold)" href="/hy/">Վերադառնալ գլխավոր էջ</a></footer>
+</body>
+</html>

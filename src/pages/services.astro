@@ -1,0 +1,390 @@
+---
+import SiteHead from '../components/SiteHead.astro';
+import SharedCSS from '../components/SharedCSS.astro';
+import SiteNav from '../components/SiteNav.astro';
+
+const industries = [
+  { name: 'Technology', icon: '💻', desc: 'Engineering leadership, product, and platform.' },
+  { name: 'Marketing & Growth', icon: '📣', desc: 'CMOs, growth, brand, and performance.' },
+  { name: 'Finance', icon: '📊', desc: 'CFOs, controllers, FP&A, and treasury.' },
+  { name: 'Banking', icon: '🏦', desc: 'Commercial, retail, and investment banking.' },
+  { name: 'Insurance', icon: '🛡️', desc: 'Underwriting, claims, and actuarial leadership.' },
+  { name: 'FinTech', icon: '💳', desc: 'Payments, lending, infra, and compliance.' },
+  { name: 'Healthcare', icon: '🏥', desc: 'Clinical leadership, operations, life sciences.' },
+  { name: 'Energy', icon: '⚡', desc: 'Oil & gas, renewables, utilities.' },
+  { name: 'Real Estate', icon: '🏢', desc: 'Development, asset management, PropTech.' },
+  { name: 'Manufacturing', icon: '⚙️', desc: 'Operations, supply chain, plant leadership.' },
+  { name: 'Retail & E-commerce', icon: '🛒', desc: 'Merchandising, ops, digital transformation.' },
+  { name: 'Legal & Compliance', icon: '⚖️', desc: 'GC, regulatory, risk, and compliance.' }
+];
+
+const faqs = [
+  { q: 'How long does a typical search take?', a: 'For most executive searches, we deliver a vetted shortlist within 7 days of brief sign-off. Time-to-offer typically lands between 6 and 10 weeks, depending on candidate seniority and decision cadence on your side.' },
+  { q: 'How is ArgusRecruit different from a contingent recruiter?', a: 'Our engagements are retained and senior-led. We work a small number of mandates at a time, source actively (we do not rely on inbound applications), and only present candidates we would personally vouch for.' },
+  { q: 'How do you handle confidentiality?', a: 'Every search runs under a confidentiality protocol agreed before kickoff. We never disclose your name in outreach without explicit permission, and we are comfortable running fully blind searches when leadership transitions require it.' },
+  { q: 'What happens if a hire does not work out?', a: 'Every placement is backed by a replacement guarantee window. If the hire leaves or is terminated during that window for any non-redundancy reason, we re-run the search at no additional fee.' },
+  { q: 'Do you work internationally?', a: 'Yes. Our active client base spans the UK, UAE, Canada, and Armenia, and we run cross-border searches regularly. Our network covers EMEA and North America, and we work in English, Russian, and Armenian.' },
+  { q: 'How much does it cost?', a: 'Fees are structured as a retainer plus completion fee, typically benchmarked against the placed candidate\'s first-year compensation. We share a precise quote after the initial scoping call — there are no hidden costs.' }
+];
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <SiteHead title="Services — ArgusRecruit" description="Executive search, headhunting, and recruitment services. Discreet, senior-led, outcome-driven. Built for the hires that define your next chapter." lang="en" />
+  <SharedCSS />
+  <style is:global>
+    body { background: var(--navy); }
+    .svc-hero { padding: 160px 32px 90px; background: linear-gradient(180deg, var(--navy-darkest) 0%, var(--navy) 100%); position: relative; overflow: hidden; }
+    .svc-hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(212,175,55,0.08), transparent 70%); }
+    .svc-hero-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+    .svc-hero .eyebrow { display: inline-block; font-size: 11px; letter-spacing: 4px; color: var(--primary-gold); text-transform: uppercase; font-weight: 600; padding: 7px 18px; border: 1px solid rgba(212,175,55,0.35); border-radius: 999px; margin-bottom: 28px; }
+    .svc-hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(36px, 5.5vw, 62px); font-weight: 500; line-height: 1.1; letter-spacing: -1.2px; max-width: 880px; margin-bottom: 22px; }
+    .svc-hero h1 .accent { color: var(--primary-gold); font-style: italic; }
+    .svc-hero p { color: rgba(255,255,255,0.75); font-size: 18px; line-height: 1.65; max-width: 680px; margin-bottom: 38px; }
+    .svc-cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .svc-section { padding: 100px 32px; }
+    .svc-section.alt { background: var(--navy-darkest); }
+    .svc-section-inner { max-width: 1200px; margin: 0 auto; }
+    .svc-section-header { text-align: center; max-width: 720px; margin: 0 auto 60px; }
+    .svc-section-header .eyebrow { display: inline-block; font-size: 11px; letter-spacing: 4px; color: var(--primary-gold); text-transform: uppercase; font-weight: 600; margin-bottom: 16px; }
+    .svc-section-header h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px, 4vw, 44px); font-weight: 500; line-height: 1.2; letter-spacing: -0.5px; }
+    .svc-section-header h2 .accent { color: var(--primary-gold); font-style: italic; }
+    .svc-section-header p { color: rgba(255,255,255,0.7); font-size: 16px; line-height: 1.7; margin-top: 18px; }
+
+    .tiers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .tier-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.2); border-radius: 16px; padding: 36px 32px; position: relative; transition: all 0.3s; }
+    .tier-card:hover { border-color: rgba(212,175,55,0.5); transform: translateY(-4px); background: rgba(255,255,255,0.06); }
+    .tier-card.flagship { border-color: rgba(212,175,55,0.5); background: linear-gradient(135deg, rgba(212,175,55,0.08), rgba(255,255,255,0.04)); }
+    .tier-card .tier-badge { position: absolute; top: -10px; left: 28px; background: var(--primary-gold); color: var(--navy-darkest); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; padding: 4px 10px; border-radius: 4px; }
+    .tier-icon { width: 52px; height: 52px; border-radius: 12px; background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.3); display: flex; align-items: center; justify-content: center; color: var(--primary-gold); margin-bottom: 22px; }
+    .tier-icon svg { width: 24px; height: 24px; }
+    .tier-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 500; margin-bottom: 12px; letter-spacing: 0.3px; }
+    .tier-card .tier-tagline { color: var(--primary-gold); font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px; font-weight: 600; }
+    .tier-card p { color: rgba(255,255,255,0.75); font-size: 14.5px; line-height: 1.7; margin-bottom: 20px; }
+    .tier-card ul { padding: 0; list-style: none; }
+    .tier-card li { color: rgba(255,255,255,0.7); font-size: 13.5px; padding: 6px 0 6px 22px; position: relative; line-height: 1.55; }
+    .tier-card li::before { content: '✓'; position: absolute; left: 0; color: var(--primary-gold); font-weight: 700; }
+
+    .industries-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .industry-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.15); border-radius: 12px; padding: 24px 22px; transition: all 0.25s; }
+    .industry-card:hover { border-color: rgba(212,175,55,0.4); background: rgba(255,255,255,0.06); transform: translateY(-2px); }
+    .industry-icon { font-size: 28px; margin-bottom: 12px; line-height: 1; }
+    .industry-card h4 { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 500; margin-bottom: 6px; color: var(--white); letter-spacing: 0.2px; }
+    .industry-card p { color: rgba(255,255,255,0.6); font-size: 13px; line-height: 1.55; }
+
+    .why-cards-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .svc-why-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.18); border-radius: 14px; padding: 32px 28px; }
+    .svc-why-card .icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(212,175,55,0.12); display: flex; align-items: center; justify-content: center; color: var(--primary-gold); margin-bottom: 18px; }
+    .svc-why-card .icon svg { width: 22px; height: 22px; }
+    .svc-why-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 500; margin-bottom: 10px; }
+    .svc-why-card p { color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.7; }
+
+    .process-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+    .svc-process-step { position: relative; }
+    .svc-process-step .num { font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 500; color: var(--primary-gold); opacity: 0.4; line-height: 1; margin-bottom: 14px; }
+    .svc-process-step h4 { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 500; margin-bottom: 10px; }
+    .svc-process-step p { color: rgba(255,255,255,0.65); font-size: 14px; line-height: 1.6; }
+
+    .stats-svc { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; padding: 60px 0; border-top: 1px solid rgba(212,175,55,0.15); border-bottom: 1px solid rgba(212,175,55,0.15); }
+    .stats-svc .stat-item { text-align: center; }
+    .stats-svc .stat-num { font-family: 'Space Grotesk', sans-serif; font-size: clamp(32px, 4vw, 48px); color: var(--primary-gold); font-weight: 500; line-height: 1; }
+    .stats-svc .stat-label { color: rgba(255,255,255,0.65); font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 12px; }
+
+    .guarantees { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .guarantee-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.2); border-radius: 14px; padding: 28px 26px; }
+    .guarantee-card .gicon { width: 44px; height: 44px; border-radius: 50%; background: var(--primary-gold); color: var(--navy-darkest); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; margin-bottom: 18px; }
+    .guarantee-card h4 { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 500; margin-bottom: 8px; }
+    .guarantee-card p { color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.65; }
+
+    .faq-wrap { max-width: 820px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid rgba(212,175,55,0.15); padding: 22px 0; cursor: pointer; }
+    .faq-item summary { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 500; color: var(--white); display: flex; justify-content: space-between; align-items: center; list-style: none; gap: 20px; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; color: var(--primary-gold); font-size: 24px; font-weight: 300; transition: transform 0.3s; }
+    .faq-item[open] summary::after { transform: rotate(45deg); }
+    .faq-item p { color: rgba(255,255,255,0.72); font-size: 15px; line-height: 1.75; margin-top: 14px; }
+
+    .final-cta { background: linear-gradient(135deg, rgba(212,175,55,0.08), rgba(14,36,64,0.6)); border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; padding: 60px 50px; text-align: center; }
+    .final-cta h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px, 3.5vw, 38px); font-weight: 500; margin-bottom: 16px; letter-spacing: -0.3px; }
+    .final-cta h2 .accent { color: var(--primary-gold); font-style: italic; }
+    .final-cta p { color: rgba(255,255,255,0.75); font-size: 16px; max-width: 580px; margin: 0 auto 30px; line-height: 1.7; }
+
+    @media (max-width: 960px) {
+      .tiers-grid, .industries-grid, .why-cards-row, .process-row, .stats-svc, .guarantees { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .svc-hero { padding: 130px 20px 70px; }
+      .svc-section { padding: 70px 20px; }
+      .tiers-grid, .industries-grid, .why-cards-row, .process-row, .stats-svc, .guarantees { grid-template-columns: 1fr; }
+      .final-cta { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <SiteNav lang="en" pathInLang="/services/" />
+
+  <section class="svc-hero">
+    <div class="svc-hero-inner">
+      <span class="eyebrow">For Employers</span>
+      <h1>Hire the leaders who <span class="accent">shape</span> your next chapter.</h1>
+      <p>ArgusRecruit is a boutique executive search firm built for the hires that define your company's next decade. Discreet. Senior-led. Outcome-driven.</p>
+      <div class="svc-cta-row">
+        <a href="#contact" class="btn btn-primary">Start a confidential search →</a>
+        <a href="#tiers" class="btn btn-secondary">Explore our services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Service Tiers -->
+  <section class="svc-section" id="tiers">
+    <div class="svc-section-inner">
+      <div class="svc-section-header">
+        <span class="eyebrow">Our Services</span>
+        <h2>Three engagements. <span class="accent">One standard.</span></h2>
+        <p>From confidential C-suite searches to structured mid-senior hiring — every engagement is led personally by a senior recruiter.</p>
+      </div>
+      <div class="tiers-grid">
+        <div class="tier-card flagship">
+          <span class="tier-badge">FLAGSHIP</span>
+          <div class="tier-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle fill="currentColor" cx="12" cy="12" r="2"/></svg>
+          </div>
+          <div class="tier-tagline">Executive Search</div>
+          <h3>C-suite & Board-level</h3>
+          <p>For CEO, C-suite, VP, and Head-of-Function appointments where confidentiality and senior judgment matter most.</p>
+          <ul>
+            <li>Retained engagement model</li>
+            <li>Off-market and confidential outreach</li>
+            <li>Senior recruiter on every search</li>
+            <li>7-day vetted shortlist</li>
+            <li>Replacement guarantee</li>
+          </ul>
+        </div>
+        <div class="tier-card">
+          <div class="tier-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+          </div>
+          <div class="tier-tagline">Headhunting</div>
+          <h3>Hard-to-Source Specialists</h3>
+          <p>For technical and commercial specialists who are not actively looking — and not on job boards.</p>
+          <ul>
+            <li>Active market mapping</li>
+            <li>Discreet, personalised outreach</li>
+            <li>Engineering, product, sales, finance roles</li>
+            <li>Senior-led from kickoff to close</li>
+          </ul>
+        </div>
+        <div class="tier-card">
+          <div class="tier-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="tier-tagline">Recruitment Services</div>
+          <h3>Mid-to-Senior Hiring</h3>
+          <p>Structured end-to-end hiring for mid-to-senior roles across functions. Built for teams scaling fast.</p>
+          <ul>
+            <li>Targeted sourcing and screening</li>
+            <li>Structured assessment notes</li>
+            <li>Volume-friendly, quality-first</li>
+            <li>Multi-role engagements supported</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Industries -->
+  <section class="svc-section alt">
+    <div class="svc-section-inner">
+      <div class="svc-section-header">
+        <span class="eyebrow">Industries</span>
+        <h2>Sectors we <span class="accent">know deeply.</span></h2>
+        <p>Our network and market knowledge span twelve verticals — from FinTech to healthcare to industrial leadership.</p>
+      </div>
+      <div class="industries-grid">
+        {industries.map(i => (
+          <div class="industry-card">
+            <div class="industry-icon">{i.icon}</div>
+            <h4>{i.name}</h4>
+            <p>{i.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Why -->
+  <section class="svc-section">
+    <div class="svc-section-inner">
+      <div class="svc-section-header">
+        <span class="eyebrow">Why ArgusRecruit</span>
+        <h2>A search partner with the <span class="accent">network and depth</span> your search demands.</h2>
+        <p>Years of relationship-building have given us direct access to senior talent across our verticals — and the market context to know who is right, not just who is available.</p>
+      </div>
+      <div class="why-cards-row">
+        <div class="svc-why-card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/></svg></div>
+          <h3>Many Eyes</h3>
+          <p>Multiple senior recruiters on every search. We cover the market the way an enterprise team would — without the bureaucracy.</p>
+        </div>
+        <div class="svc-why-card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L4 7v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V7l-8-5z"/></svg></div>
+          <h3>Total Discretion</h3>
+          <p>Confidentiality is non-negotiable. Your search, your candidates, your timeline — protected from start to finish.</p>
+        </div>
+        <div class="svc-why-card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+          <h3>Precision Matching</h3>
+          <p>We don't send resumes. We send the right people, briefed and aligned to your role, culture, and pace.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="svc-section alt">
+    <div class="svc-section-inner">
+      <div class="svc-section-header">
+        <span class="eyebrow">How We Work</span>
+        <h2>From brief to <span class="accent">offer.</span></h2>
+        <p>A clear, repeatable process that respects your time and the candidate's.</p>
+      </div>
+      <div class="process-row">
+        <div class="svc-process-step">
+          <div class="num">01</div>
+          <h4>Discovery</h4>
+          <p>Deep dive into the role, company, and the must-haves. Aligned on what success looks like.</p>
+        </div>
+        <div class="svc-process-step">
+          <div class="num">02</div>
+          <h4>Mapping</h4>
+          <p>Target market research, longlist development, and discreet outreach to passive talent.</p>
+        </div>
+        <div class="svc-process-step">
+          <div class="num">03</div>
+          <h4>Shortlist</h4>
+          <p>3–5 vetted candidates with structured assessment notes — within 7 days.</p>
+        </div>
+        <div class="svc-process-step">
+          <div class="num">04</div>
+          <h4>Close</h4>
+          <p>Interview coordination, offer support, and onboarding follow-through.</p>
+        </div>
+      </div>
+
+      <div class="stats-svc">
+        <div class="stat-item">
+          <div class="stat-num">15+</div>
+          <div class="stat-label">Years combined</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Confidential by default</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">7 days</div>
+          <div class="stat-label">Average shortlist</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4</div>
+          <div class="stat-label">Countries we cover</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Global Reach -->
+  <section class="svc-section">
+    <div class="svc-section-inner">
+      <div class="svc-section-header">
+        <span class="eyebrow">Global Reach</span>
+        <h2>Based in Armenia. <span class="accent">Working worldwide.</span></h2>
+        <p>While Yerevan is home, our search work is global. We go wherever the right candidate lives — in whichever language the conversation needs to happen.</p>
+      </div>
+      <div class="industries-grid">
+        <div class="industry-card">
+          <div class="industry-icon">🇬🇧</div>
+          <h4>United Kingdom</h4>
+          <p>London · Active engagements</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon">🇨🇦</div>
+          <h4>Canada</h4>
+          <p>Toronto · Active engagements</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon">🇦🇪</div>
+          <h4>UAE</h4>
+          <p>Dubai · Active engagements</p>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon">🇦🇲</div>
+          <h4>Armenia</h4>
+          <p>Yerevan · Home base</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guarantees -->
+  <section class="svc-section alt">
+    <div class="svc-section-inner">
+      <div class="svc-section-header">
+        <span class="eyebrow">Our Commitment</span>
+        <h2>Guarantees that <span class="accent">protect</span> your search.</h2>
+      </div>
+      <div class="guarantees">
+        <div class="guarantee-card">
+          <div class="gicon">✓</div>
+          <h4>Replacement Guarantee</h4>
+          <p>If a placement doesn't work out within the guarantee period, we re-run the search at no additional fee.</p>
+        </div>
+        <div class="guarantee-card">
+          <div class="gicon">⌀</div>
+          <h4>Total Confidentiality</h4>
+          <p>Your name, your candidates, and your timeline — protected by NDA, controlled outreach, and discrete reporting.</p>
+        </div>
+        <div class="guarantee-card">
+          <div class="gicon">★</div>
+          <h4>Senior, Single Point of Contact</h4>
+          <p>Led personally by a senior recruiter from kickoff to close — no handoffs, no junior account managers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="svc-section">
+    <div class="svc-section-inner">
+      <div class="svc-section-header">
+        <span class="eyebrow">FAQ</span>
+        <h2>Common <span class="accent">questions.</span></h2>
+      </div>
+      <div class="faq-wrap">
+        {faqs.map((f, i) => (
+          <details class="faq-item" open={i===0}>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="svc-section alt" id="contact">
+    <div class="svc-section-inner">
+      <div class="final-cta">
+        <h2>Ready to start a <span class="accent">confidential search?</span></h2>
+        <p>Tell us about the role you need to hire. We'll come back within one business day with next steps and a clear plan.</p>
+        <div class="svc-cta-row" style="justify-content: center;">
+          <a href="/#contact" class="btn btn-primary">Request a consultation →</a>
+          <a href="/jobs/" class="btn btn-secondary">Browse open roles</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.5); font-size: 13px; background: var(--navy-darkest);">© 2026 ArgusRecruit · <a style="color:var(--primary-gold)" href="/">Back to home</a></footer>
+</body>
+</html>
