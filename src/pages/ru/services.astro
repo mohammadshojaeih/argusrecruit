@@ -32,6 +32,18 @@ const faqs = [
   <SiteHead title="Услуги — ArgusRecruit" description="Исполнительный поиск, хедхантинг и рекрутинговые услуги. Конфиденциально, под руководством старших, ориентировано на результат." lang="ru" />
   <SharedCSS />
   <style is:global>
+
+    .svc-metrics { background: var(--navy-deep); padding: 60px 32px; border-bottom: 1px solid rgba(212,175,55,0.12); }
+    .svc-metrics-inner { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .svc-metric { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.18); border-radius: 14px; padding: 24px 26px; display: flex; align-items: center; gap: 18px; transition: all 0.25s; }
+    .svc-metric:hover { border-color: rgba(212,175,55,0.45); background: rgba(255,255,255,0.06); transform: translateY(-2px); }
+    .svc-metric-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(212,175,55,0.12); display: flex; align-items: center; justify-content: center; color: var(--primary-gold); flex: 0 0 48px; }
+    .svc-metric-icon svg { width: 22px; height: 22px; }
+    .svc-metric-text .num { font-family: 'Space Grotesk', sans-serif; font-size: clamp(24px, 2.8vw, 34px); font-weight: 700; color: var(--primary-gold); line-height: 1; margin-bottom: 6px; }
+    .svc-metric-text .label { color: rgba(255,255,255,0.75); font-size: 13.5px; line-height: 1.4; }
+    @media (max-width: 960px) { .svc-metrics-inner { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .svc-metrics-inner { grid-template-columns: 1fr; gap: 12px; } }
+
     .heading-caps { text-transform: uppercase !important; letter-spacing: 2px !important; font-weight: 600 !important; font-size: clamp(22px, 2.6vw, 30px) !important; }
     .heading-caps .accent { font-style: normal !important; }
         .container { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
@@ -135,80 +147,6 @@ const faqs = [
   margin-top: 24px;
   padding-top: 28px;
   border-top: 1px solid rgba(212,175,55,0.12);
-}
-
-
-    .svc-metrics { background: var(--navy-deep); padding: 60px 32px; border-bottom: 1px solid rgba(212,175,55,0.12); }
-    .svc-metrics-inner { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
-    .svc-metric { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.18); border-radius: 14px; padding: 22px 24px; display: flex; align-items: center; gap: 16px; transition: all 0.25s; }
-    .svc-metric:hover { border-color: rgba(212,175,55,0.4); background: rgba(255,255,255,0.06); }
-    .svc-metric-icon { width: 44px; height: 44px; border-radius: 10px; background: rgba(212,175,55,0.12); display: flex; align-items: center; justify-content: center; font-size: 22px; flex: 0 0 44px; }
-    .svc-metric-text .num { font-family: 'Space Grotesk', sans-serif; font-size: clamp(22px, 2.4vw, 30px); font-weight: 700; color: var(--primary-gold); line-height: 1; margin-bottom: 4px; }
-    .svc-metric-text .label { color: rgba(255,255,255,0.7); font-size: 13px; }
-    
-    .section-header { text-align: center; margin-bottom: 50px; max-width: 720px; margin-left: auto; margin-right: auto; }
-    .section-header .eyebrow { margin-bottom: 16px; }
-    .section-header h2 { font-family: 'Space Grotesk', 'Manrope', sans-serif; font-size: clamp(28px, 4vw, 44px); font-weight: 500; line-height: 1.2; letter-spacing: -0.5px; }
-    .section-header h2 .accent { color: var(--primary-gold); font-style: italic; }
-    .section-header p { color: rgba(255,255,255,0.7); margin-top: 14px; font-size: 15px; line-height: 1.7; }
-    #why .section-header h2 { text-transform: uppercase !important; letter-spacing: 1px !important; font-weight: 600 !important; }
-    #why .section-header h2 .accent { font-style: normal !important; }
-    #why { padding: 100px 32px; } .why-banner { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 40px; aspect-ratio: 16/6; border: 1px solid rgba(212,175,55,0.2); box-shadow: 0 30px 60px rgba(0,0,0,0.3); }
-    .why-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .why-banner-overlay { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: flex-start; background: linear-gradient(135deg, rgba(14,36,64,0.4) 0%, rgba(14,36,64,0.15) 50%, rgba(14,36,64,0.7) 100%); padding: 32px 40px; }
-    .why-banner-content { max-width: 560px; background: rgba(14, 36, 64, 0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(212,175,55,0.25); border-radius: 12px; padding: 22px 26px; box-shadow: 0 14px 40px rgba(0,0,0,0.4); }
-    .banner-label { display: inline-block; font-size: 10px; letter-spacing: 4px; color: var(--primary-gold); text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
-    .banner-text { font-family: 'Space Grotesk', 'Manrope', sans-serif; font-size: clamp(15px, 1.7vw, 19px); font-weight: 500; line-height: 1.5; color: var(--white); text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
-    .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
-    .why-card { background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005)); border: 1px solid rgba(212,175,55,0.12); border-radius: 14px; padding: 38px 32px; transition: all 0.3s; position: relative; overflow: hidden; }
-    .why-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--primary-gold), transparent); opacity: 0; transition: opacity 0.3s; }
-    .why-card:hover { border-color: rgba(212,175,55,0.35); transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-    .why-card:hover::before { opacity: 1; }
-    .why-card .icon { width: 56px; height: 56px; border-radius: 12px; background: linear-gradient(135deg, rgba(212,175,55,0.18), rgba(184,134,11,0.08)); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: var(--primary-gold); }
-    .why-card .icon svg { width: 28px; height: 28px; }
-    .why-card h3 { font-family: 'Space Grotesk', 'Manrope', sans-serif; font-size: 22px; font-weight: 600; margin-bottom: 10px; }
-    .why-card p { color: rgba(255,255,255,0.65); font-size: 14px; }
-    @media (max-width: 880px) { .why-grid { grid-template-columns: 1fr; } #why .section-header h2 { text-transform: uppercase !important; letter-spacing: 1px !important; font-weight: 600 !important; }
-    #why .section-header h2 .accent { font-style: normal !important; }
-    #why { padding: 100px 32px; } .why-banner { aspect-ratio: 16/9; } .why-banner-overlay { padding: 20px; } }
-
-    
-    .global-section { background: var(--navy-deep); padding: 70px 32px; border-top: 1px solid rgba(212,175,55,0.12); border-bottom: 1px solid rgba(212,175,55,0.12); }
-    .global-grid { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end; }
-    .global-text h2 { font-family: 'Space Grotesk', 'Manrope', sans-serif; font-size: clamp(28px, 3.6vw, 44px); font-weight: 500; line-height: 1.15; letter-spacing: -0.5px; color: var(--white); }
-    .global-text h2 .accent { color: var(--primary-gold); font-style: italic; }
-    .global-text p { margin-top: 18px; color: rgba(255,255,255,0.7); font-size: 16px; line-height: 1.7; }
-    .country-list { display: grid; gap: 12px; margin-top: 28px; }
-    .country-item { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.15); border-radius: 10px; }
-    .country-item .flag { font-size: 22px; line-height: 1; }
-    .country-item .info { flex: 1; }
-    .country-item .info strong { display: block; font-size: 14px; font-weight: 600; color: var(--white); letter-spacing: 0.3px; }
-    .country-item .info span { font-size: 12px; color: rgba(255,255,255,0.55); letter-spacing: 0.5px; }
-    .country-item .pulse { width: 10px; height: 10px; border-radius: 50%; background: var(--primary-gold); box-shadow: 0 0 0 0 rgba(212,175,55,0.7); animation: pulse 2.5s infinite; }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(212,175,55,0.7); } 70% { box-shadow: 0 0 0 12px rgba(212,175,55,0); } 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0); } }
-    .map-wrap { position: relative; border-radius: 14px; overflow: hidden; background: linear-gradient(135deg, rgba(212,175,55,0.05) 0%, rgba(14,36,64,0.3) 70%); padding: 24px; border: 1px solid rgba(212,175,55,0.18); width: 100%; }
-    .map-wrap object, .map-wrap img { width: 100%; height: auto; display: block; min-height: 360px; }
-    .map-legend { display: flex; gap: 16px; align-items: center; margin-top: 16px; font-size: 11px; letter-spacing: 1.5px; color: rgba(255,255,255,0.6); text-transform: uppercase; }
-    .map-legend .dot { width: 10px; height: 10px; border-radius: 2px; background: var(--primary-gold); display: inline-block; margin-right: 6px; vertical-align: middle; }
-    .map-legend .dot.dim { background: #1B3B6F; }
-    @media (max-width: 880px) { .global-grid { grid-template-columns: 1fr; gap: 40px; } }
-
-    
-    #process { padding: 90px 32px; }
-    .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; position: relative; }
-    .process-step { background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005)); border: 1px solid rgba(212,175,55,0.12); border-radius: 14px; padding: 32px 26px; position: relative; }
-    .process-step .num { font-family: 'Space Grotesk', 'Manrope', sans-serif; font-size: 38px; font-weight: 600; color: var(--primary-gold); line-height: 1; opacity: 0.4; }
-    .process-step h4 { font-size: 16px; font-weight: 600; margin-top: 10px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1.5px; }
-    .process-step p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.6; }
-    @media (max-width: 880px) { .process-grid { grid-template-columns: 1fr 1fr; gap: 18px; } }
-    @media (max-width: 560px) { .process-grid { grid-template-columns: 1fr; } }
-
-    @media (max-width: 960px) { .svc-metrics-inner { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 560px) { .svc-metrics-inner { grid-template-columns: 1fr; gap: 14px; } }
-
-    @media (max-width: 960px) {
-  .services-layout { grid-template-columns: 1fr; gap: 32px; }
-  .services-layout .services-photo { position: static; aspect-ratio: 16/9; max-height: 380px; }
-  .services-features { grid-template-columns: 1fr; }
 }
 .feature {
   background: rgba(255,255,255,0.025); border: 1px solid rgba(212,175,55,0.12);
@@ -374,12 +312,15 @@ const faqs = [
 
 
   <!-- Stats Metrics -->
+  
+
+  <!-- Stats Metrics -->
   <section class="svc-metrics">
     <div class="svc-metrics-inner">
-      <div class="svc-metric"><div class="svc-metric-icon">👥</div><div class="svc-metric-text"><div class="num">86%</div><div class="label">Успешных размещений</div></div></div>
-      <div class="svc-metric"><div class="svc-metric-icon">⏱</div><div class="svc-metric-text"><div class="num">20 дней</div><div class="label">Среднее время найма</div></div></div>
-      <div class="svc-metric"><div class="svc-metric-icon">💎</div><div class="svc-metric-text"><div class="num">10,000+</div><div class="label">Профессионалов в сети</div></div></div>
-      <div class="svc-metric"><div class="svc-metric-icon">🌐</div><div class="svc-metric-text"><div class="num">4</div><div class="label">Стран присутствия</div></div></div>
+      <div class="svc-metric"><div class="svc-metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="svc-metric-text"><div class="num">86%</div><div class="label">Успешных размещений</div></div></div>
+      <div class="svc-metric"><div class="svc-metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="svc-metric-text"><div class="num">20 дней</div><div class="label">Среднее время найма</div></div></div>
+      <div class="svc-metric"><div class="svc-metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg></div><div class="svc-metric-text"><div class="num">10,000+</div><div class="label">Профессионалов в сети</div></div></div>
+      <div class="svc-metric"><div class="svc-metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div class="svc-metric-text"><div class="num">4</div><div class="label">Страны присутствия</div></div></div>
     </div>
   </section>
 
