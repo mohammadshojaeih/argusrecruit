@@ -6,7 +6,7 @@ import { schemaTypes } from './schemas'
 export default defineConfig({
   name: 'argusrecruit',
   title: 'ArgusRecruit Studio',
-  projectId: process.env.SANITY_STUDIO_PROJECT_ID || 'YOUR_PROJECT_ID_HERE',
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID || '832bmk23',
   dataset: 'production',
   plugins: [structureTool(), visionTool()],
   schema: { types: schemaTypes }
