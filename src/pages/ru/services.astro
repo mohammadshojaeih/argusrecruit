@@ -136,10 +136,13 @@ const faqs = [
 
 
     .svc-metrics { background: var(--navy-deep); padding: 60px 32px; border-bottom: 1px solid rgba(212,175,55,0.12); }
-    .svc-metrics-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-    .svc-metric .num { font-family: 'Space Grotesk', sans-serif; font-size: clamp(38px, 5vw, 58px); font-weight: 600; color: var(--primary-gold); line-height: 1; margin-bottom: 8px; }
-    .svc-metric .label { color: rgba(255,255,255,0.85); font-size: 15px; }
-    @media (max-width: 720px) { .svc-metrics-inner { grid-template-columns: 1fr; gap: 24px; } }
+    .svc-metrics-inner { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .svc-metric { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.18); border-radius: 14px; padding: 22px 24px; display: flex; align-items: center; gap: 16px; transition: all 0.25s; }
+    .svc-metric:hover { border-color: rgba(212,175,55,0.4); background: rgba(255,255,255,0.06); }
+    .svc-metric-icon { width: 44px; height: 44px; border-radius: 10px; background: rgba(212,175,55,0.12); display: flex; align-items: center; justify-content: center; font-size: 22px; flex: 0 0 44px; }
+    .svc-metric-text .num { font-family: 'Space Grotesk', sans-serif; font-size: clamp(22px, 2.4vw, 30px); font-weight: 700; color: var(--primary-gold); line-height: 1; margin-bottom: 4px; }
+    .svc-metric-text .label { color: rgba(255,255,255,0.7); font-size: 13px; }
+    @media (max-width: 960px) { .svc-metrics-inner { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 560px) { .svc-metrics-inner { grid-template-columns: 1fr; gap: 14px; } }
 
     @media (max-width: 960px) {
   .services-layout { grid-template-columns: 1fr; gap: 32px; }
@@ -312,9 +315,10 @@ const faqs = [
   <!-- Stats Metrics -->
   <section class="svc-metrics">
     <div class="svc-metrics-inner">
-      <div class="svc-metric"><div class="num">98%</div><div class="label">Удержание размещений на 12 месяцев</div></div>
-      <div class="svc-metric"><div class="num">21 день</div><div class="label">Средний срок шорт-листа</div></div>
-      <div class="svc-metric"><div class="num">450+</div><div class="label">Компаний наняли с 2018 года</div></div>
+      <div class="svc-metric"><div class="svc-metric-icon">👥</div><div class="svc-metric-text"><div class="num">86%</div><div class="label">Успешных размещений</div></div></div>
+      <div class="svc-metric"><div class="svc-metric-icon">⏱</div><div class="svc-metric-text"><div class="num">20 дней</div><div class="label">Среднее время найма</div></div></div>
+      <div class="svc-metric"><div class="svc-metric-icon">💎</div><div class="svc-metric-text"><div class="num">10,000+</div><div class="label">Профессионалов в сети</div></div></div>
+      <div class="svc-metric"><div class="svc-metric-icon">🌐</div><div class="svc-metric-text"><div class="num">5+</div><div class="label">Стран присутствия</div></div></div>
     </div>
   </section>
 
