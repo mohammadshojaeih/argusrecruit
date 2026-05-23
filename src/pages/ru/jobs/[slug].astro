@@ -65,7 +65,7 @@ const jobLd = {
   <SharedCSS />
   <script type="application/ld+json" set:html={JSON.stringify(jobLd)}></script>
   <style is:global>
-    .job-hero { padding: 150px 32px 50px; background: linear-gradient(180deg, var(--navy-darkest), var(--navy)); border-bottom: 1px solid rgba(212,175,55,0.12); }
+    .job-hero { padding: 150px 32px 50px; position: relative; background: linear-gradient(180deg, rgba(14,36,64,0.85), rgba(30,65,112,0.92)), url('/cover.png') center/cover no-repeat; border-bottom: 1px solid rgba(212,175,55,0.12); }
     .job-hero-inner { max-width: 980px; margin: 0 auto; }
     .job-hero .eyebrow { font-size: 11px; letter-spacing: 4px; color: var(--primary-gold); text-transform: uppercase; font-weight: 600; }
     .job-hero h1 { font-family: 'Space Grotesk',sans-serif; font-size: clamp(28px,4vw,46px); font-weight: 500; letter-spacing: -0.5px; line-height: 1.15; margin: 14px 0 18px; }
