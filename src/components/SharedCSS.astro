@@ -61,8 +61,10 @@ footer a { color: var(--primary-gold); }
   .brand-text .tag { font-size: 9.5px; letter-spacing: 1.8px; }
   .brand-text .tag-sub { font-size: 7.5px; letter-spacing: 1.4px; margin-top: 3px; }
   .nav-links { display: none; }
-  .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 80px; left: 0; right: 0; background: rgba(14,36,64,0.97); padding: 24px; gap: 18px; border-bottom: 1px solid rgba(212,175,55,0.15); align-items: stretch; }
-  .nav-links.open a { width: 100%; text-align: center; padding: 10px 0; }
+  .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 80px; left: 0; right: 0; background: rgba(14,36,64,0.97); padding: 24px; gap: 18px; border-bottom: 1px solid rgba(212,175,55,0.15); align-items: center; }
+  .nav-links.open a { width: 100%; text-align: center; padding: 10px 0; max-width: 320px; }
+  .nav-links.open .nav-jobs, .nav-links.open .nav-cta { width: auto !important; min-width: 200px; }
+  .nav-links.open .lang-switcher { margin: 0 auto; }
   .menu-toggle { display: block; margin-left: auto; }
   .lang-switcher { margin-left: 0; }
 }
