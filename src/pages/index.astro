@@ -112,18 +112,17 @@ body {
 .nav-links a:not(.nav-cta):hover { color: var(--primary-gold); opacity: 1; }
 .nav-links a:not(.nav-cta):hover::after { transform: scaleX(1); }
 .nav-cta {
-  display: inline-flex; align-items: center; justify-content: center;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
   background: var(--primary-gold);
   color: var(--navy-darkest) !important;
-  padding: 14px 44px; border-radius: 4px;
-  font-weight: 600; opacity: 1 !important;
-  font-size: 14px; letter-spacing: 0.3px;
+  padding: 8px 18px; border-radius: 999px;
+  font-weight: 700; opacity: 1 !important;
+  font-size: 13px; letter-spacing: 0.3px;
   white-space: nowrap; line-height: 1;
   border: 1px solid var(--primary-gold);
-  transition: all 0.2s;
-  min-width: 160px;
+  transition: all 0.25s;
 }
-.nav-cta:hover { background: var(--white); border-color: var(--white); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(212,175,55,0.3); }
+.nav-cta:hover { background: var(--dark-gold); border-color: var(--dark-gold); transform: translateY(-1px); }
 .nav-jobs {
   display: inline-flex !important; align-items: center; gap: 7px;
   padding: 8px 16px !important; border-radius: 999px;
