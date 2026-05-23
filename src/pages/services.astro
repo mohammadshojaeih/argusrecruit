@@ -134,7 +134,14 @@ const faqs = [
   border-top: 1px solid rgba(212,175,55,0.12);
 }
 
-@media (max-width: 960px) {
+
+    .svc-metrics { background: var(--navy-deep); padding: 60px 32px; border-bottom: 1px solid rgba(212,175,55,0.12); }
+    .svc-metrics-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+    .svc-metric .num { font-family: 'Space Grotesk', sans-serif; font-size: clamp(38px, 5vw, 58px); font-weight: 600; color: var(--primary-gold); line-height: 1; margin-bottom: 8px; }
+    .svc-metric .label { color: rgba(255,255,255,0.85); font-size: 15px; }
+    @media (max-width: 720px) { .svc-metrics-inner { grid-template-columns: 1fr; gap: 24px; } }
+
+    @media (max-width: 960px) {
   .services-layout { grid-template-columns: 1fr; gap: 32px; }
   .services-layout .services-photo { position: static; aspect-ratio: 16/9; max-height: 380px; }
   .services-features { grid-template-columns: 1fr; }
@@ -272,6 +279,13 @@ const faqs = [
     .svc-form-group textarea { min-height: 110px; resize: vertical; }
     .svc-form-group input:focus, .svc-form-group select:focus, .svc-form-group textarea:focus { outline: none; border-color: var(--primary-gold); }
     @media (max-width: 880px) { .svc-contact-grid { grid-template-columns: 1fr; } .svc-form-row { grid-template-columns: 1fr; } }
+
+    
+    .svc-metrics { background: var(--navy-deep); padding: 60px 32px; border-bottom: 1px solid rgba(212,175,55,0.12); }
+    .svc-metrics-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+    .svc-metric .num { font-family: 'Space Grotesk', sans-serif; font-size: clamp(38px, 5vw, 58px); font-weight: 600; color: var(--primary-gold); line-height: 1; margin-bottom: 8px; }
+    .svc-metric .label { color: rgba(255,255,255,0.85); font-size: 15px; }
+    @media (max-width: 720px) { .svc-metrics-inner { grid-template-columns: 1fr; gap: 24px; } }
 
     @media (max-width: 960px) {
       .tiers-grid, .industries-grid, .why-cards-row, .process-row, .stats-svc, .guarantees { grid-template-columns: repeat(2, 1fr); }
