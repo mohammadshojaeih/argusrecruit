@@ -142,6 +142,24 @@ const faqs = [
     .svc-metric-icon { width: 44px; height: 44px; border-radius: 10px; background: rgba(212,175,55,0.12); display: flex; align-items: center; justify-content: center; font-size: 22px; flex: 0 0 44px; }
     .svc-metric-text .num { font-family: 'Space Grotesk', sans-serif; font-size: clamp(22px, 2.4vw, 30px); font-weight: 700; color: var(--primary-gold); line-height: 1; margin-bottom: 4px; }
     .svc-metric-text .label { color: rgba(255,255,255,0.7); font-size: 13px; }
+    
+    #why { padding: 100px 32px; } .why-banner { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 40px; aspect-ratio: 16/6; border: 1px solid rgba(212,175,55,0.2); box-shadow: 0 30px 60px rgba(0,0,0,0.3); }
+    .why-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .why-banner-overlay { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: flex-start; background: linear-gradient(135deg, rgba(14,36,64,0.4) 0%, rgba(14,36,64,0.15) 50%, rgba(14,36,64,0.7) 100%); padding: 32px 40px; }
+    .why-banner-content { max-width: 560px; background: rgba(14, 36, 64, 0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(212,175,55,0.25); border-radius: 12px; padding: 22px 26px; box-shadow: 0 14px 40px rgba(0,0,0,0.4); }
+    .banner-label { display: inline-block; font-size: 10px; letter-spacing: 4px; color: var(--primary-gold); text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+    .banner-text { font-family: 'Space Grotesk', 'Manrope', sans-serif; font-size: clamp(15px, 1.7vw, 19px); font-weight: 500; line-height: 1.5; color: var(--white); text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+    .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .why-card { background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005)); border: 1px solid rgba(212,175,55,0.12); border-radius: 14px; padding: 38px 32px; transition: all 0.3s; position: relative; overflow: hidden; }
+    .why-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--primary-gold), transparent); opacity: 0; transition: opacity 0.3s; }
+    .why-card:hover { border-color: rgba(212,175,55,0.35); transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+    .why-card:hover::before { opacity: 1; }
+    .why-card .icon { width: 56px; height: 56px; border-radius: 12px; background: linear-gradient(135deg, rgba(212,175,55,0.18), rgba(184,134,11,0.08)); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: var(--primary-gold); }
+    .why-card .icon svg { width: 28px; height: 28px; }
+    .why-card h3 { font-family: 'Space Grotesk', 'Manrope', sans-serif; font-size: 22px; font-weight: 600; margin-bottom: 10px; }
+    .why-card p { color: rgba(255,255,255,0.65); font-size: 14px; }
+    @media (max-width: 880px) { .why-grid { grid-template-columns: 1fr; } #why { padding: 100px 32px; } .why-banner { aspect-ratio: 16/9; } .why-banner-overlay { padding: 20px; } }
+
     @media (max-width: 960px) { .svc-metrics-inner { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 560px) { .svc-metrics-inner { grid-template-columns: 1fr; gap: 14px; } }
 
     @media (max-width: 960px) {
@@ -404,25 +422,34 @@ const faqs = [
   </section>
 
   <!-- Why -->
-  <section class="svc-section">
-    <div class="svc-section-inner">
-      <div class="svc-section-header">
+  <section id="why">
+    <div class="container">
+      <div class="section-header">
         <span class="eyebrow">Ինչու ArgusRecruit</span>
-        <h2>Որոնման գործընկեր <span class="accent">ցանցով և խորությամբ,</span> որոնք պահանջում է ձեր որոնումը.</h2>
-        <p>Հարաբերությունների տարիները տվել են ուղիղ մուտք ավագ տաղանդներին — և շուկայի համատեքստ:</p>
+        <h2>Որոնման գործընկեր, ով ձեր <span class="accent">հաջորդ քայլը</span> լուրջ է վերաբերվում.</h2>
+        <p>Մենք համատեղում ենք մարդկային փորձառությունը խնամքով ընտրված ցանցի հետ՝ ձեզ ստուգված թեկնածուներ ներկայացնելու համար:</p>
       </div>
-      <div class="why-cards-row">
-        <div class="svc-why-card">
+      <div class="why-banner">
+        <img src="/photo-meeting.jpg" alt="ArgusRecruit team consultation">
+        <div class="why-banner-overlay">
+          <div class="why-banner-content">
+            <div class="banner-label">Ցանց և Շուկայի Խորություն</div>
+            <div class="banner-text">Հարաբերությունների տարիները տվել են ուղիղ մուտք ավագ տաղանդներին — և շուկայի համատեքստ:</div>
+          </div>
+        </div>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/></svg></div>
           <h3>Շատ Աչքեր</h3>
           <p>Մի քանի ավագ ռեկրուտեր յուրաքանչյուր որոնման վրա: Ընդգրկում որպես enterprise թիմ:</p>
         </div>
-        <div class="svc-why-card">
+        <div class="why-card">
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L4 7v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V7l-8-5z"/></svg></div>
           <h3>Լիարժեք Գաղտնիություն</h3>
           <p>Գաղտնիությունը չքննարկվող է: Ձեր որոնումը պաշտպանված է:</p>
         </div>
-        <div class="svc-why-card">
+        <div class="why-card">
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
           <h3>Ճշգրիտ Համապատասխանություն</h3>
           <p>Մենք ռեզյումեներ չենք ուղարկում: Մենք ուղարկում ենք ճիշտ մարդկանց:</p>
