@@ -23,6 +23,9 @@ const latestJobs = (await getJobs('ru')).slice(0, 3);
 
 <style is:global>
 
+@media (max-width: 700px) { .hero-captions { min-height: 480px !important; } .hero { align-items: flex-start !important; padding-top: 110px !important; } .hero-inner { padding-bottom: 90px !important; padding-top: 0 !important; } }
+
+
 @media (max-width: 700px) {
   .hero { min-height: 720px !important; height: auto !important; display: block !important; padding-top: 100px !important; padding-bottom: 80px !important; }
   .hero-inner { padding-top: 0 !important; padding-bottom: 0 !important; align-self: center; }
@@ -993,7 +996,7 @@ section { padding: 80px 32px; }
   .clients-grid { grid-template-columns: repeat(2, 1fr); }
   .global-grid { grid-template-columns: 1fr; gap: 40px; }
   .hero-inner { padding: 0 28px 100px; }
-  .hero-captions { min-height: 280px; }
+  .hero-captions { min-height: 460px; }
   .slide-counter, .slide-controls { left: 28px; right: auto; bottom: 24px; }
   .slide-controls { left: auto; right: 28px; }
 }
