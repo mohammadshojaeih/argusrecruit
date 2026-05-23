@@ -28,10 +28,10 @@ const brand = BRAND[lang];
     <div class="nav-links">
       <a href={langPrefix || '/'}>{nav.home}</a>
       <a href={`${langPrefix}/#process`}>{nav.process}</a>
-      <a href={`${langPrefix}/jobs/`}>{nav.jobs}</a>
       <a href={`${langPrefix}/blog/`}>{nav.blog}</a>
       <a href={`${langPrefix}/#contact`}>{nav.contact}</a>
-      <a href={`${langPrefix}/#contact`} class="nav-cta">{nav.cta}</a>
+      <a href={`${langPrefix}/jobs/`} class="nav-jobs"><span class="dot"></span>{nav.jobs}</a>
+      <a href={`${langPrefix}/services/`} class="nav-cta">{nav.cta}</a>
       <div class="lang-switcher" id="langSwitcher">
         <button class="lang-current" id="langCurrent">{FLAGS[lang]}</button>
         <div class="lang-menu">
