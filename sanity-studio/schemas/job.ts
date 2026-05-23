@@ -79,6 +79,17 @@ export default defineType({
     defineField({ name: 'responsibilities', title: 'Responsibilities', type: 'array', of: [{ type: 'string' }] }),
     defineField({ name: 'requirements', title: 'Requirements', type: 'array', of: [{ type: 'string' }] }),
     defineField({ name: 'niceToHave', title: 'Nice to Have', type: 'array', of: [{ type: 'string' }] }),
+    defineField({
+      name: 'languagesRequired',
+      title: 'Languages Required',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: { list: [
+        'English', 'Russian', 'Armenian', 'Arabic', 'French', 'German',
+        'Spanish', 'Italian', 'Portuguese', 'Chinese (Mandarin)', 'Hindi',
+        'Turkish', 'Persian', 'Hebrew', 'Dutch', 'Polish', 'Ukrainian'
+      ] }
+    }),
     defineField({ name: 'tags', title: 'Tags', type: 'array', of: [{ type: 'string' }] }),
     defineField({ name: 'publishedAt', type: 'datetime', initialValue: () => new Date().toISOString() }),
     defineField({

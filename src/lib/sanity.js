@@ -101,7 +101,7 @@ export async function getJobs(lang = 'en', { includeClosed = false } = {}) {
     const query = `*[_type=="job" ${statusFilter} && (language=="${lang}" || !defined(language))] | order(featured desc, publishedAt desc) {
       _id, jobId, title, slug, status, featured, department, employmentType, workplaceType,
       locationCity, locationCountry, salaryMin, salaryMax, salaryCurrency, salaryNegotiable,
-      excerpt, description, responsibilities, requirements, niceToHave, tags,
+      excerpt, description, responsibilities, requirements, niceToHave, tags, languagesRequired,
       publishedAt, expiryPreset, expiresAt
     }`;
     const jobs = await sanityClient.fetch(query);

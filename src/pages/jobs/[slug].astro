@@ -167,6 +167,7 @@ const jobLd = {
       <dl>
         {job.department && <><dt>Department</dt><dd>{job.department}</dd></>}
         {job.employmentType && <><dt>Employment</dt><dd>{job.employmentType.replace('_',' ').toLowerCase()}</dd></>}
+        {job.languagesRequired && job.languagesRequired.length > 0 && <><dt>Languages</dt><dd>{job.languagesRequired.join(', ')}</dd></>}
         {job.workplaceType && <><dt>Workplace</dt><dd>{job.workplaceType}</dd></>}
         {location && <><dt>Location</dt><dd>{location}</dd></>}
         {salaryText && <><dt>Salary</dt><dd>{salaryText}</dd></>}

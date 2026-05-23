@@ -167,6 +167,7 @@ const jobLd = {
       <dl>
         {job.department && <><dt>Բաժին</dt><dd>{job.department}</dd></>}
         {job.employmentType && <><dt>Տիպ</dt><dd>{job.employmentType.replace('_',' ').toLowerCase()}</dd></>}
+        {job.languagesRequired && job.languagesRequired.length > 0 && <><dt>Լեզուներ</dt><dd>{job.languagesRequired.join(', ')}</dd></>}
         {job.workplaceType && <><dt>Ձև</dt><dd>{job.workplaceType}</dd></>}
         {location && <><dt>Տեղակայություն</dt><dd>{location}</dd></>}
         {salaryText && <><dt>Աշխատավարձ</dt><dd>{salaryText}</dd></>}
