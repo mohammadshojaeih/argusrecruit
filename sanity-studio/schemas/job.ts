@@ -66,6 +66,8 @@ export default defineType({
     }),
     defineField({ name: 'locationCity', title: 'City', type: 'string' }),
     defineField({ name: 'locationCountry', title: 'Country', type: 'string' }),
+    defineField({ name: 'visaSponsorship', title: 'Visa Sponsorship', type: 'boolean', initialValue: false, description: 'Does the employer sponsor work visas for international candidates?' }),
+    defineField({ name: 'relocationAssistance', title: 'Relocation Assistance', type: 'boolean', initialValue: false, description: 'Does the employer help with relocation costs/logistics?' }),
     defineField({ name: 'salaryNegotiable', title: 'Salary Negotiable', type: 'boolean', initialValue: false, description: 'If true, "Negotiable" is shown instead of a range.' }),
     defineField({ name: 'salaryMin', title: 'Salary Min (annual)', type: 'number' }),
     defineField({ name: 'salaryMax', title: 'Salary Max (annual)', type: 'number' }),
