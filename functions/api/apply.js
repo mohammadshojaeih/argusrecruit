@@ -19,33 +19,15 @@ export async function onRequestPost(context) {
     }
 
     const attachments = [];
-    let cvBuf = null;
-    let cvMime = '';
-    let cvOriginalName = '';
     const cv = form.get('cv');
     if (cv && typeof cv === 'object' && cv.size > 0) {
       if (cv.size > 10 * 1024 * 1024) {
         return json({ ok: false, error: 'CV file too large (max 10MB)' }, 400);
       }
-      cvBuf = await cv.arrayBuffer();
-      cvMime = cv.type || 'application/octet-stream';
-      cvOriginalName = cv.name || 'cv';
-      attachments.push({ filename: cvOriginalName, content: arrayBufferToBase64(cvBuf) });
+      const buf = await cv.arrayBuffer();
+      attachments.push({ filename: cv.name || 'cv', content: arrayBufferToBase64(buf) });
     } else {
       return json({ ok: false, error: 'CV is required' }, 400);
-    }
-
-    // Upload CV to Google Drive (parallel, non-blocking)
-    if (env.GOOGLE_SERVICE_ACCOUNT_JSON && env.DRIVE_FOLDER_ID) {
-      const drivePromise = uploadCvToDrive({
-        env,
-        buf: cvBuf,
-        mime: cvMime,
-        originalName: cvOriginalName,
-        candidateName: name,
-        jobTitle
-      }).catch(err => console.error('Drive upload failed:', err));
-      context.waitUntil ? context.waitUntil(drivePromise) : drivePromise;
     }
 
     const adminHtml = `
@@ -218,159 +200,4 @@ function arrayBufferToBase64(buffer) {
     binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
   }
   return btoa(binary);
-}
-
-// === Google Drive upload (Service Account, RS256 JWT) ===
-
-function sanitizeSegment(s) {
-  return String(s)
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')   // strip diacritics
-    .replace(/[^A-Za-z0-9 ]+/g, '')
-    .trim()
-    .replace(/\s+/g, '_')
-    .slice(0, 60) || 'unknown';
-}
-
-function buildCvFilename(name, jobTitle, originalName) {
-  const now = new Date();
-  const yyyy = now.getUTCFullYear();
-  const mm = String(now.getUTCMonth() + 1).padStart(2, '0');
-  const dd = String(now.getUTCDate()).padStart(2, '0');
-  const ext = (originalName.match(/\.[A-Za-z0-9]{1,8}$/) || ['.pdf'])[0].toLowerCase();
-  return `${yyyy}-${mm}-${dd}_${sanitizeSegment(name)}_${sanitizeSegment(jobTitle)}${ext}`;
-}
-
-function b64urlFromBytes(bytes) {
-  let bin = '';
-  const arr = new Uint8Array(bytes);
-  for (let i = 0; i < arr.length; i++) bin += String.fromCharCode(arr[i]);
-  return btoa(bin).replace(/=+$/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-}
-
-function b64urlFromString(s) {
-  return btoa(s).replace(/=+$/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-}
-
-async function getDriveAccessToken(sa) {
-  const now = Math.floor(Date.now() / 1000);
-  const header = { alg: 'RS256', typ: 'JWT' };
-  const payload = {
-    iss: sa.client_email,
-    scope: 'https://www.googleapis.com/auth/drive',
-    aud: sa.token_uri,
-    iat: now,
-    exp: now + 3600
-  };
-  const unsigned = `${b64urlFromString(JSON.stringify(header))}.${b64urlFromString(JSON.stringify(payload))}`;
-
-  // Import PKCS#8 private key
-  const pem = sa.private_key
-    .replace(/-----BEGIN PRIVATE KEY-----/, '')
-    .replace(/-----END PRIVATE KEY-----/, '')
-    .replace(/\s+/g, '');
-  const keyBuf = Uint8Array.from(atob(pem), c => c.charCodeAt(0)).buffer;
-  const key = await crypto.subtle.importKey(
-    'pkcs8',
-    keyBuf,
-    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
-    false,
-    ['sign']
-  );
-  const sig = await crypto.subtle.sign(
-    'RSASSA-PKCS1-v1_5',
-    key,
-    new TextEncoder().encode(unsigned)
-  );
-  const jwt = `${unsigned}.${b64urlFromBytes(sig)}`;
-
-  const tokenRes = await fetch(sa.token_uri, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: 'grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=' + encodeURIComponent(jwt)
-  });
-  if (!tokenRes.ok) {
-    const t = await tokenRes.text();
-    throw new Error('Drive token exchange failed: ' + t);
-  }
-  const tj = await tokenRes.json();
-  return tj.access_token;
-}
-
-function sanitizeFolderName(s) {
-  return String(s)
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .replace(/[\\\/\:\*\?\"\<\>\|]+/g, ' ')   // drive-illegal chars
-    .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, 80) || 'Untitled Role';
-}
-
-async function findOrCreateJobFolder(accessToken, parentId, jobTitle) {
-  const name = sanitizeFolderName(jobTitle);
-  // Escape single quotes for the Drive query
-  const safe = name.replace(/'/g, "\\'");
-  const q = encodeURIComponent(
-    `name='${safe}' and mimeType='application/vnd.google-apps.folder' ` +
-    `and '${parentId}' in parents and trashed=false`
-  );
-  const listRes = await fetch(
-    `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)&supportsAllDrives=true&includeItemsFromAllDrives=true`,
-    { headers: { Authorization: 'Bearer ' + accessToken } }
-  );
-  if (listRes.ok) {
-    const body = await listRes.json();
-    if (body.files && body.files.length > 0) return body.files[0].id;
-  }
-  // Create
-  const createRes = await fetch(
-    'https://www.googleapis.com/drive/v3/files?supportsAllDrives=true',
-    {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + accessToken,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name,
-        mimeType: 'application/vnd.google-apps.folder',
-        parents: [parentId]
-      })
-    }
-  );
-  if (!createRes.ok) {
-    const t = await createRes.text();
-    throw new Error('Drive folder create failed: ' + t);
-  }
-  const created = await createRes.json();
-  return created.id;
-}
-
-async function uploadCvToDrive({ env, buf, mime, originalName, candidateName, jobTitle }) {
-  const sa = JSON.parse(env.GOOGLE_SERVICE_ACCOUNT_JSON);
-  const rootFolderId = env.DRIVE_FOLDER_ID;
-  const filename = buildCvFilename(candidateName, jobTitle, originalName);
-
-  const accessToken = await getDriveAccessToken(sa);
-  const jobFolderId = await findOrCreateJobFolder(accessToken, rootFolderId, jobTitle);
-
-  const boundary = 'BR-' + Math.random().toString(36).slice(2);
-  const metadata = { name: filename, parents: [jobFolderId] };
-  const head = `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(metadata)}\r\n--${boundary}\r\nContent-Type: ${mime}\r\nContent-Transfer-Encoding: binary\r\n\r\n`;
-  const tail = `\r\n--${boundary}--`;
-
-  const body = new Blob([head, buf, tail]);
-
-  const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true', {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer ' + accessToken,
-      'Content-Type': 'multipart/related; boundary=' + boundary
-    },
-    body
-  });
-  if (!res.ok) {
-    const t = await res.text();
-    throw new Error('Drive upload failed (' + res.status + '): ' + t);
-  }
-  return res.json();
 }
