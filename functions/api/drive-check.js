@@ -124,7 +124,7 @@ async function getAccessToken(sa) {
   const header = { alg: 'RS256', typ: 'JWT' };
   const payload = {
     iss: sa.client_email,
-    scope: 'https://www.googleapis.com/auth/drive.file',
+    scope: 'https://www.googleapis.com/auth/drive',
     aud: sa.token_uri,
     iat: now,
     exp: now + 3600
