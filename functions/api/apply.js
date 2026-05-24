@@ -295,15 +295,65 @@ async function getDriveAccessToken(sa) {
   return tj.access_token;
 }
 
+function sanitizeFolderName(s) {
+  return String(s)
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[\\\/\:\*\?\"\<\>\|]+/g, ' ')   // drive-illegal chars
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 80) || 'Untitled Role';
+}
+
+async function findOrCreateJobFolder(accessToken, parentId, jobTitle) {
+  const name = sanitizeFolderName(jobTitle);
+  // Escape single quotes for the Drive query
+  const safe = name.replace(/'/g, "\\'");
+  const q = encodeURIComponent(
+    `name='${safe}' and mimeType='application/vnd.google-apps.folder' ` +
+    `and '${parentId}' in parents and trashed=false`
+  );
+  const listRes = await fetch(
+    `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)&supportsAllDrives=true&includeItemsFromAllDrives=true`,
+    { headers: { Authorization: 'Bearer ' + accessToken } }
+  );
+  if (listRes.ok) {
+    const body = await listRes.json();
+    if (body.files && body.files.length > 0) return body.files[0].id;
+  }
+  // Create
+  const createRes = await fetch(
+    'https://www.googleapis.com/drive/v3/files?supportsAllDrives=true',
+    {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name,
+        mimeType: 'application/vnd.google-apps.folder',
+        parents: [parentId]
+      })
+    }
+  );
+  if (!createRes.ok) {
+    const t = await createRes.text();
+    throw new Error('Drive folder create failed: ' + t);
+  }
+  const created = await createRes.json();
+  return created.id;
+}
+
 async function uploadCvToDrive({ env, buf, mime, originalName, candidateName, jobTitle }) {
   const sa = JSON.parse(env.GOOGLE_SERVICE_ACCOUNT_JSON);
-  const folderId = env.DRIVE_FOLDER_ID;
+  const rootFolderId = env.DRIVE_FOLDER_ID;
   const filename = buildCvFilename(candidateName, jobTitle, originalName);
 
   const accessToken = await getDriveAccessToken(sa);
+  const jobFolderId = await findOrCreateJobFolder(accessToken, rootFolderId, jobTitle);
 
   const boundary = 'BR-' + Math.random().toString(36).slice(2);
-  const metadata = { name: filename, parents: [folderId] };
+  const metadata = { name: filename, parents: [jobFolderId] };
   const head = `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(metadata)}\r\n--${boundary}\r\nContent-Type: ${mime}\r\nContent-Transfer-Encoding: binary\r\n\r\n`;
   const tail = `\r\n--${boundary}--`;
 
