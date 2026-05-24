@@ -235,8 +235,9 @@ function buildCvFilename(name, jobTitle, originalName) {
   const now = new Date();
   const yyyy = now.getUTCFullYear();
   const mm = String(now.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(now.getUTCDate()).padStart(2, '0');
   const ext = (originalName.match(/\.[A-Za-z0-9]{1,8}$/) || ['.pdf'])[0].toLowerCase();
-  return `${yyyy}-${mm}_${sanitizeSegment(name)}_${sanitizeSegment(jobTitle)}${ext}`;
+  return `${yyyy}-${mm}-${dd}_${sanitizeSegment(name)}_${sanitizeSegment(jobTitle)}${ext}`;
 }
 
 function b64urlFromBytes(bytes) {
