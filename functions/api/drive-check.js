@@ -44,6 +44,24 @@ export async function onRequestGet(context) {
     return json(out, 500);
   }
 
+  // 3.5. List ALL folders the service account can see — tells us if share is taking effect at all
+  try {
+    const q = encodeURIComponent("mimeType='application/vnd.google-apps.folder' and trashed=false");
+    const r = await fetch(
+      `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)&supportsAllDrives=true&includeItemsFromAllDrives=true&pageSize=20`,
+      { headers: { Authorization: 'Bearer ' + accessToken } }
+    );
+    const body = await r.json();
+    if (r.ok) {
+      const list = (body.files || []).map(f => `${f.name} [${f.id}]`).join(' | ');
+      step('list visible folders', true, `count=${(body.files||[]).length} — ${list || '(none — service account sees no folders)'}`);
+    } else {
+      step('list visible folders', false, JSON.stringify(body));
+    }
+  } catch (e) {
+    step('list visible folders', false, e.message);
+  }
+
   // 4. Try to GET the folder metadata (verifies share permission)
   try {
     const r = await fetch(
