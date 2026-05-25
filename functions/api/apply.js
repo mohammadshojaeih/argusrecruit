@@ -30,18 +30,32 @@ export async function onRequestPost(context) {
       return json({ ok: false, error: 'CV is required' }, 400);
     }
 
+    // Structured payload for Apps Script ATS to parse reliably (kept hidden in the email).
+    const atsPayload = JSON.stringify({
+      jobId: jobSlug,
+      jobTitle,
+      name,
+      email,
+      phone,
+      linkedin,
+      lang,
+      source: 'web-apply',
+      submittedAt: new Date().toISOString()
+    });
+
     const adminHtml = `
       <h2>New Application — ${esc(jobTitle)}</h2>
       <p><strong>Name:</strong> ${esc(name)}</p>
       <p><strong>Email:</strong> ${esc(email)}</p>
       <p><strong>Phone:</strong> ${esc(phone) || '—'}</p>
       <p><strong>LinkedIn:</strong> ${linkedin ? `<a href="${esc(linkedin)}">${esc(linkedin)}</a>` : '—'}</p>
-      <p><strong>Role:</strong> ${esc(jobTitle)} (slug: ${esc(jobSlug)})</p>
+      <p><strong>Role:</strong> ${esc(jobTitle)} (jobId: ${esc(jobSlug)})</p>
       <p><strong>Language:</strong> ${esc(lang)}</p>
       <p><strong>Cover Note:</strong></p>
       <p style="white-space:pre-wrap; background:#f5f5f5; padding:12px; border-radius:6px;">${esc(coverNote) || '—'}</p>
       <hr>
       <p style="color:#888; font-size:12px;">CV attached.</p>
+      <!--ATS_PAYLOAD_START${atsPayload}ATS_PAYLOAD_END-->
     `;
 
     const subjects = {
@@ -152,7 +166,7 @@ export async function onRequestPost(context) {
         from,
         to: [adminTo],
         reply_to: email,
-        subject: `[Application] ${jobTitle} — ${name}`,
+        subject: `[Application ${jobSlug || 'AR-UNKNOWN'}] ${jobTitle} — ${name}`,
         html: adminHtml,
         attachments
       })
