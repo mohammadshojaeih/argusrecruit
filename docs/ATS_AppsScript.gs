@@ -1006,15 +1006,29 @@ function stageTemplates_() {
   return stages.map(s => [
     s.key,
     s.copy.en.subject,
-    brandedEmailHtml_(s.copy.en),
+    brandedEmailHtml_(s.copy.en, 'en'),
     s.copy.ru.subject,
-    brandedEmailHtml_(s.copy.ru),
+    brandedEmailHtml_(s.copy.ru, 'ru'),
     s.copy.hy.subject,
-    brandedEmailHtml_(s.copy.hy)
+    brandedEmailHtml_(s.copy.hy, 'hy')
   ]);
 }
 
-function brandedEmailHtml_(c) {
+const CTA_TEXT = {
+  en: 'Browse All Open Roles',
+  ru: 'Все открытые вакансии',
+  hy: 'Բոլոր բաց դերերը'
+};
+const CTA_URL = {
+  en: 'https://argusrecruit.com/jobs/',
+  ru: 'https://argusrecruit.com/ru/jobs/',
+  hy: 'https://argusrecruit.com/hy/jobs/'
+};
+
+function brandedEmailHtml_(c, lang) {
+  lang = lang || 'en';
+  const ctaText = CTA_TEXT[lang] || CTA_TEXT.en;
+  const ctaUrl = CTA_URL[lang] || CTA_URL.en;
   const paragraphs = c.body
     .map(p => `<p style="margin:0 0 14px;color:rgba(255,255,255,0.85);">${p}</p>`)
     .join('');
@@ -1039,7 +1053,7 @@ function brandedEmailHtml_(c) {
           ${paragraphs}
         </td></tr>
         <tr><td align="center" style="padding:10px 32px 32px;">
-          <a href="https://argusrecruit.com/jobs/" style="display:inline-block;background:#D4AF37;color:#0E2440;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:13px 28px;border-radius:999px;text-decoration:none;">Browse All Open Roles</a>
+          <a href="${ctaUrl}" style="display:inline-block;background:#D4AF37;color:#0E2440;font-weight:700;font-size:13px;letter-spacing:1px;padding:13px 28px;border-radius:999px;text-decoration:none;">${ctaText}</a>
         </td></tr>
         <tr><td style="padding:0 32px 28px;color:rgba(255,255,255,0.7);font-size:13px;line-height:1.6;text-align:center;font-style:italic;">— ${c.team}</td></tr>
         <tr><td style="padding:22px 32px;background:#0E2440;border-top:1px solid rgba(212,175,55,0.15);text-align:center;">
