@@ -932,7 +932,7 @@ function stageTemplates_() {
           greeting: 'Hi {name},',
           body: [
             'Excellent news — the employer has approved you for a formal offer on the <strong style="color:#D4AF37;">{jobTitle}</strong> role.',
-            'Please keep an eye on your phone — a call will come from our team or directly from the employer with the offer details. We\'ll cover the package, relocation, and start date together.'
+            'The offer will reach you shortly — typically by email, sometimes by phone — from our team or directly from the employer. It will cover the package, relocation, and start date.'
           ],
           team: 'The ArgusRecruit Team'
         },
@@ -943,7 +943,7 @@ function stageTemplates_() {
           greeting: 'Здравствуйте, {name},',
           body: [
             'Отличные новости — работодатель одобрил вашу кандидатуру и готовит официальный оффер по роли <strong style="color:#D4AF37;">{jobTitle}</strong>.',
-            'Пожалуйста, оставайтесь на связи — ожидайте звонок от нашей команды или напрямую от работодателя с деталями оффера. Мы обсудим пакет, релокацию и сроки выхода.'
+            'Оффер придёт вам в ближайшее время — обычно по email, иногда по телефону — от нашей команды или напрямую от работодателя. Он покрывает пакет, релокацию и дату выхода.'
           ],
           team: 'Команда ArgusRecruit'
         },
@@ -954,7 +954,7 @@ function stageTemplates_() {
           greeting: 'Բարև, {name},',
           body: [
             'Գերազանց լուր — գործատուն հաստատել է ձեր թեկնածությունը <strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի համար և պատրաստում է պաշտոնական առաջարկը:',
-            'Խնդրում ենք պահել ձեր հեռախոսը հասանելի — մեր թիմից կամ ուղղակիորեն գործատուից կզանգահարեն ձեզ առաջարկի մանրամասներով: Կքննարկենք փաթեթը, տեղափոխումը և մեկնարկի օրը:'
+            'Առաջարկը կհասնի ձեզ շուտով — սովորաբար էլեկտրոնային փոստով, երբեմն հեռախոսով — մեր թիմից կամ ուղղակիորեն գործատուից: Այն ընդգրկում է փաթեթը, տեղափոխումը և մեկնարկի օրը:'
           ],
           team: 'ArgusRecruit-ի թիմը'
         }
