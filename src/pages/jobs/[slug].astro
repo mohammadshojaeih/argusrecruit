@@ -65,6 +65,13 @@ const jobLd = {
   <SiteHead title={`${job.title} — ArgusRecruit`} description={job.excerpt || `Apply for ${job.title} via ArgusRecruit.`} lang="en" />
   <SharedCSS />
   <script type="application/ld+json" set:html={JSON.stringify(jobLd)}></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24/build/css/intlTelInput.css">
+  <style is:global>
+    .iti { width: 100%; }
+    .iti__country-list { background: var(--navy-deep) !important; color: var(--white) !important; }
+    .iti__country:hover, .iti__country.iti__highlight { background: rgba(212,175,55,0.18) !important; }
+    .iti__selected-flag { background: rgba(0,0,0,0.25) !important; }
+  </style>
   <style is:global>
     .job-hero { padding: 150px 32px 50px; position: relative; background: linear-gradient(180deg, rgba(30,65,112,0.55) 0%, rgba(42,85,137,0.7) 100%), url('/cover.png') center/cover no-repeat; border-bottom: 1px solid rgba(212,175,55,0.12); }
     .job-hero-inner { max-width: 980px; margin: 0 auto; }
@@ -241,7 +248,20 @@ const jobLd = {
 
   <footer style="text-align:center; padding: 40px 20px; color: rgba(255,255,255,0.5); font-size: 13px;">© 2026 ArgusRecruit · <a style="color:var(--primary-gold)" href="/jobs/">All Jobs</a> · <a href="/privacy/" style="color:var(--primary-gold)">Privacy</a></footer>
 
+  <script is:inline src="https://cdn.jsdelivr.net/npm/intl-tel-input@24/build/js/intlTelInput.min.js"></script>
   <script is:inline>
+    // Initialize international phone input on the phone field
+    const phoneInput = document.querySelector('#applyForm input[name="phone"]');
+    let iti = null;
+    if (phoneInput && window.intlTelInput) {
+      iti = window.intlTelInput(phoneInput, {
+        initialCountry: 'am',
+        preferredCountries: ['am', 'ir', 'ru', 'gb', 'ae', 'ca', 'us'],
+        separateDialCode: true,
+        utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@24/build/js/utils.js'
+      });
+    }
+
     document.getElementById('copyLink')?.addEventListener('click', () => {
       navigator.clipboard.writeText(location.href).then(() => {
         const b = document.getElementById('copyLink');
@@ -263,6 +283,15 @@ const jobLd = {
       e.preventDefault();
       msg.className = 'apply-msg';
       msg.textContent = '';
+      // Validate + normalize phone via intl-tel-input before submit
+      if (iti && phoneInput.value.trim()) {
+        if (!iti.isValidNumber()) {
+          msg.className = 'apply-msg error';
+          msg.textContent = '⚠ Please enter a valid phone number (or leave it blank).';
+          return;
+        }
+        phoneInput.value = iti.getNumber(); // E.164 format
+      }
       btn.disabled = true; btn.textContent = 'Sending…';
       try {
         const fd = new FormData(form);

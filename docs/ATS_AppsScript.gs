@@ -513,6 +513,8 @@ function intakeFormHtml_() {
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Add candidate · ArgusRecruit ATS</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24/build/css/intlTelInput.css">
+<style>.iti { width: 100%; }</style>
 <style>
   :root { --navy:#0E2440; --gold:#D4AF37; --soft:#F5EFE3; }
   * { box-sizing: border-box; }
@@ -566,13 +568,35 @@ function intakeFormHtml_() {
     <div id="msg" class="msg"></div>
   </form>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24/build/js/intlTelInput.min.js"></script>
 <script>
 const form = document.getElementById('f');
 const msg = document.getElementById('msg');
+const phoneInput = form.querySelector('input[name="phone"]');
+let iti = null;
+if (window.intlTelInput) {
+  iti = window.intlTelInput(phoneInput, {
+    initialCountry: 'am',
+    preferredCountries: ['am','ir','ru','gb','ae','ca','us'],
+    separateDialCode: true,
+    utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@24/build/js/utils.js'
+  });
+}
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   msg.className = 'msg'; msg.textContent = '';
   const submitBtn = form.querySelector('button');
+
+  // Validate + normalize phone if filled in
+  let phoneE164 = '';
+  if (iti && phoneInput.value.trim()) {
+    if (!iti.isValidNumber()) {
+      msg.className = 'msg err';
+      msg.textContent = 'Please enter a valid phone number (or leave it empty).';
+      return;
+    }
+    phoneE164 = iti.getNumber();
+  }
   submitBtn.disabled = true; submitBtn.textContent = 'Saving…';
 
   const f = new FormData(form);
@@ -582,7 +606,7 @@ form.addEventListener('submit', async (e) => {
     source: f.get('source'),
     name: (f.get('name')||'').trim(),
     email: (f.get('email')||'').trim().toLowerCase(),
-    phone: (f.get('phone')||'').trim(),
+    phone: phoneE164,
     linkedin: (f.get('linkedin')||'').trim(),
     lang: f.get('lang') || 'en',
     notes: (f.get('notes')||'').trim(),
