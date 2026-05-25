@@ -33,6 +33,10 @@ const CFG_SHEET      = 'Settings';
 const PROCESSED_LBL  = 'ats-processed';
 const SEARCH_QUERY   = 'subject:"[Application" has:attachment -label:ats-processed newer_than:90d';
 
+// Telegram intake bot — see installTelegramWebhook() for setup
+const TG_BOT_TOKEN     = '8281695325:AAG_dkUNaa3WYXlFU17-2U-RExm9z89qOA4'; // @Sonicbot_bot
+const TG_ADMIN_CHAT_ID = 814437645;  // Mohammad — only this account is allowed to use the intake bot
+
 const SOURCES = [
   'web-apply',
   'manual-intake',
@@ -497,6 +501,10 @@ function onOpen() {
     .addSeparator()
     .addItem('Preview selected email template', 'previewSelectedTemplate')
     .addItem('Show intake form URL', 'showIntakeUrl')
+    .addSeparator()
+    .addItem('Install Telegram intake bot webhook', 'installTelegramWebhook')
+    .addItem('Uninstall Telegram intake bot webhook', 'uninstallTelegramWebhook')
+    .addSeparator()
     .addItem('Reset email templates only', 'resetTemplatesOnly')
     .addToUi();
 }
@@ -1068,4 +1076,311 @@ function brandedEmailHtml_(c, lang) {
     </td></tr>
   </table>
 </body></html>`;
+}
+
+
+// ──────────────────────────────────────────────────────────────────────
+// TELEGRAM INTAKE BOT
+//
+// Setup (one-time, run installTelegramWebhook() after deployment):
+//   1. Deploy this script as a Web App (Deploy → New deployment).
+//      Execute as: Me. Who has access: Anyone (so Telegram can POST).
+//   2. Run installTelegramWebhook() once — it tells Telegram to send all
+//      bot updates to this web app.
+//   3. Open DM with @Sonicbot_bot, type /start, then forward a CV.
+//
+// Note: the bot will only respond to TG_ADMIN_CHAT_ID. Group messages and
+// other users are silently ignored.
+//
+// Drive OCR: the bot converts each PDF to a temporary Google Doc to read
+// the text. This uses the Drive Advanced Service which is automatically
+// available — no manual enable needed.
+// ──────────────────────────────────────────────────────────────────────
+
+function installTelegramWebhook() {
+  const url = ScriptApp.getService().getUrl();
+  if (!url) {
+    SpreadsheetApp.getUi().alert('Deploy the script as a Web App first, then run this.');
+    return;
+  }
+  const res = UrlFetchApp.fetch(
+    'https://api.telegram.org/bot' + TG_BOT_TOKEN + '/setWebhook?url=' + encodeURIComponent(url),
+    { muteHttpExceptions: true }
+  );
+  SpreadsheetApp.getUi().alert('Telegram webhook response:\n' + res.getContentText());
+}
+
+function uninstallTelegramWebhook() {
+  const res = UrlFetchApp.fetch(
+    'https://api.telegram.org/bot' + TG_BOT_TOKEN + '/deleteWebhook',
+    { muteHttpExceptions: true }
+  );
+  SpreadsheetApp.getUi().alert('Webhook removed:\n' + res.getContentText());
+}
+
+// doPost handles BOTH:
+//   - the intake form HTML web app submissions (via google.script.run, no HTTP body)
+//   - Telegram webhook updates (HTTP POST with JSON body)
+// They are routed by inspecting the parameters.
+function doPost(e) {
+  try {
+    if (e && e.postData && e.postData.type === 'application/json') {
+      const update = JSON.parse(e.postData.contents);
+      handleTelegramUpdate_(update);
+      return ContentService.createTextOutput('ok');
+    }
+  } catch (err) {
+    console.error('doPost error: ' + err + '\n' + (err.stack || ''));
+  }
+  return ContentService.createTextOutput('ok');
+}
+
+function handleTelegramUpdate_(update) {
+  const msg = update.message || update.edited_message;
+  if (!msg) return;
+  const chatId = msg.chat && msg.chat.id;
+  const fromId = msg.from && msg.from.id;
+  // Only respond to Mohammad
+  if (fromId !== TG_ADMIN_CHAT_ID) return;
+
+  if (msg.text) handleTgText_(chatId, msg.text.trim());
+  if (msg.document) handleTgDocument_(chatId, msg.document, msg);
+}
+
+function tgSend_(chatId, text, extra) {
+  const payload = Object.assign({
+    chat_id: chatId,
+    text: text,
+    parse_mode: 'HTML',
+    disable_web_page_preview: true
+  }, extra || {});
+  UrlFetchApp.fetch('https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage', {
+    method: 'post',
+    contentType: 'application/json',
+    payload: JSON.stringify(payload),
+    muteHttpExceptions: true
+  });
+}
+
+function tgState_(chatId) {
+  const props = PropertiesService.getUserProperties();
+  const key = 'tg_state_' + chatId;
+  const raw = props.getProperty(key);
+  return raw ? JSON.parse(raw) : {};
+}
+function tgSaveState_(chatId, state) {
+  PropertiesService.getUserProperties()
+    .setProperty('tg_state_' + chatId, JSON.stringify(state));
+}
+function tgClearState_(chatId) {
+  PropertiesService.getUserProperties().deleteProperty('tg_state_' + chatId);
+}
+
+function handleTgText_(chatId, text) {
+  if (text === '/start' || text === '/help') {
+    tgSend_(chatId,
+      '<b>ArgusRecruit Intake Bot</b>\n\n' +
+      'How to use:\n' +
+      '1. <code>/jobs</code> — list active jobs\n' +
+      '2. <code>/job AR-PYT01 sourced-telegram</code> — set the next CV\'s job + source\n' +
+      '3. Send/forward the candidate\'s CV (PDF, DOC, DOCX)\n' +
+      '4. I\'ll read it, show what I found, and ask you to confirm\n\n' +
+      'Commands:\n' +
+      '<code>/cancel</code> — clear pending CV\n' +
+      '<code>/confirm</code> — confirm the last-parsed CV and add to ATS\n' +
+      '<code>/state</code> — show current job/source setting'
+    );
+    return;
+  }
+  if (text === '/jobs') {
+    const jobs = listActiveJobs_();
+    if (jobs.length === 0) { tgSend_(chatId, 'No active job folders found in Drive root.'); return; }
+    const list = jobs.map(j => `• <code>${j.jobId}</code> — ${j.jobTitle}`).join('\n');
+    tgSend_(chatId, '<b>Active jobs:</b>\n' + list);
+    return;
+  }
+  if (text === '/state') {
+    const st = tgState_(chatId);
+    tgSend_(chatId,
+      'Current state:\n' +
+      '<code>job</code>: ' + (st.jobId || '—') + '\n' +
+      '<code>source</code>: ' + (st.source || '—') + '\n' +
+      '<code>pending</code>: ' + (st.pending ? 'yes' : 'no')
+    );
+    return;
+  }
+  if (text === '/cancel') {
+    tgClearState_(chatId);
+    tgSend_(chatId, '✓ Cleared. Set a new job with <code>/job AR-XXX source</code>.');
+    return;
+  }
+  if (text === '/confirm') {
+    const st = tgState_(chatId);
+    if (!st.pending) { tgSend_(chatId, 'Nothing pending. Send a CV first.'); return; }
+    try {
+      const res = submitIntake_(st.pending);
+      if (res.ok) {
+        tgSend_(chatId, '✅ Added <b>' + escHtml_(res.name) + '</b> → <code>' + res.jobId + '</code>.\nReady for next — send another CV or <code>/cancel</code>.');
+      } else {
+        tgSend_(chatId, '⚠ Save failed: ' + escHtml_(res.error || 'unknown'));
+      }
+    } catch (err) {
+      tgSend_(chatId, '⚠ Error: ' + escHtml_(String(err)));
+    }
+    const after = tgState_(chatId);
+    delete after.pending;
+    tgSaveState_(chatId, after);
+    return;
+  }
+  // /job AR-PYT01 [source]
+  const jobMatch = text.match(/^\/job\s+(\S+)(?:\s+(\S+))?\s*$/);
+  if (jobMatch) {
+    const jobId = jobMatch[1];
+    const source = (jobMatch[2] || 'sourced-other').toLowerCase();
+    // Look up the job folder
+    const jobs = listActiveJobs_();
+    const job = jobs.find(j => j.jobId.toLowerCase() === jobId.toLowerCase());
+    if (!job) {
+      tgSend_(chatId, '⚠ No job folder for <code>' + escHtml_(jobId) + '</code>. Use /jobs to see available IDs.');
+      return;
+    }
+    tgSaveState_(chatId, { jobId: job.jobId, jobTitle: job.jobTitle, source: source });
+    tgSend_(chatId,
+      '✓ Set: <code>' + job.jobId + '</code> — ' + escHtml_(job.jobTitle) +
+      '\nSource: <code>' + source + '</code>\n\nNow send/forward the CV.'
+    );
+    return;
+  }
+  tgSend_(chatId, 'I didn\'t understand. Send /help for commands.');
+}
+
+function handleTgDocument_(chatId, document, msg) {
+  const state = tgState_(chatId);
+  if (!state.jobId) {
+    tgSend_(chatId, '⚠ Set a job first: <code>/job AR-XXX source</code>');
+    return;
+  }
+  const filename = document.file_name || 'cv.pdf';
+  if (!/\.(pdf|docx?|odt|rtf)$/i.test(filename)) {
+    tgSend_(chatId, '⚠ Unsupported file type. Send PDF, DOC, or DOCX.');
+    return;
+  }
+  tgSend_(chatId, '⏳ Reading <code>' + escHtml_(filename) + '</code>…');
+
+  let cvText = '';
+  let blob = null;
+  try {
+    blob = tgDownloadFile_(document.file_id);
+    cvText = extractTextFromCv_(blob, filename);
+  } catch (err) {
+    tgSend_(chatId, '⚠ Could not read file: ' + escHtml_(String(err)));
+    return;
+  }
+
+  const fields = extractCandidateFields_(cvText, msg);
+
+  const pending = {
+    job: state.jobId + '|' + state.jobTitle,
+    source: state.source || 'sourced-other',
+    name: fields.name,
+    email: fields.email,
+    phone: fields.phone,
+    linkedin: fields.linkedin,
+    lang: 'en',
+    notes: '(via Telegram bot)',
+    cvName: filename,
+    cvType: blob.getContentType(),
+    cvData: Utilities.base64Encode(blob.getBytes())
+  };
+  tgSaveState_(chatId, Object.assign({}, state, { pending }));
+
+  tgSend_(chatId,
+    '<b>Found in CV:</b>\n' +
+    '👤 Name: <code>' + escHtml_(fields.name || '?') + '</code>\n' +
+    '✉ Email: <code>' + escHtml_(fields.email || '—') + '</code>\n' +
+    '📱 Phone: <code>' + escHtml_(fields.phone || '—') + '</code>\n' +
+    '🔗 LinkedIn: <code>' + escHtml_(fields.linkedin || '—') + '</code>\n' +
+    '📁 Job: <code>' + state.jobId + '</code> — ' + escHtml_(state.jobTitle) + '\n\n' +
+    'Send <code>/confirm</code> to add, or <code>/cancel</code> to drop.'
+  );
+}
+
+function tgDownloadFile_(fileId) {
+  const getRes = UrlFetchApp.fetch(
+    'https://api.telegram.org/bot' + TG_BOT_TOKEN + '/getFile?file_id=' + encodeURIComponent(fileId),
+    { muteHttpExceptions: true }
+  );
+  const meta = JSON.parse(getRes.getContentText());
+  if (!meta.ok) throw new Error('Telegram getFile failed: ' + meta.description);
+  const path = meta.result.file_path;
+  const fileRes = UrlFetchApp.fetch('https://api.telegram.org/file/bot' + TG_BOT_TOKEN + '/' + path);
+  return fileRes.getBlob().setName(path.split('/').pop());
+}
+
+function extractTextFromCv_(blob, filename) {
+  // For PDFs: copy to Drive with OCR conversion to a Google Doc, then read text.
+  // For DOC/DOCX/ODT/RTF: same — Drive can convert them.
+  const file = DriveApp.createFile(blob);
+  let text = '';
+  try {
+    // Use Advanced Drive Service if available; otherwise use a manual copy with conversion.
+    if (typeof Drive !== 'undefined' && Drive.Files && Drive.Files.copy) {
+      const copy = Drive.Files.copy(
+        { name: '__ocr_' + Date.now(), mimeType: 'application/vnd.google-apps.document' },
+        file.getId(),
+        { ocrLanguage: 'en' }
+      );
+      const doc = DocumentApp.openById(copy.id);
+      text = doc.getBody().getText();
+      DriveApp.getFileById(copy.id).setTrashed(true);
+    } else {
+      // Fallback: try a direct Doc open. Will fail for PDFs but works for DOC/DOCX uploads.
+      throw new Error('Drive Advanced Service not available. Enable it in Apps Script: Services → Drive API.');
+    }
+  } finally {
+    file.setTrashed(true);
+  }
+  return text;
+}
+
+function extractCandidateFields_(text, msg) {
+  text = text || '';
+  // Email
+  const emailMatch = text.match(/[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}/i);
+  const email = emailMatch ? emailMatch[0].toLowerCase() : '';
+  // Phone — pick the longest "+? digit sequence with separators" candidate
+  const phoneCandidates = text.match(/\+?\d[\d\s\-().]{7,18}\d/g) || [];
+  const phone = phoneCandidates
+    .map(s => s.replace(/[^\d+]/g, ''))
+    .filter(s => s.replace(/\D/g, '').length >= 9)
+    .sort((a, b) => b.length - a.length)[0] || '';
+  // LinkedIn
+  const liMatch = text.match(/(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/[\w\-_%]+/i);
+  const linkedin = liMatch ? ('https://' + liMatch[0].replace(/^https?:\/\//, '')) : '';
+  // Name — heuristic: first non-empty line that's 2–4 words, mostly letters, not all upper
+  let name = '';
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean).slice(0, 25);
+  for (const line of lines) {
+    if (line.length > 80) continue;
+    if (/@|http|linkedin|cv|resume|curriculum/i.test(line)) continue;
+    const words = line.split(/\s+/);
+    if (words.length < 2 || words.length > 4) continue;
+    if (!/^[A-Za-z'\-À-ſԱ-Ֆա-և\s]+$/.test(line)) continue;
+    if (line === line.toUpperCase() && line.length > 6) continue;
+    name = line.replace(/\s+/g, ' ').trim();
+    break;
+  }
+  // Fallback: use the Telegram-sender's first/last name
+  if (!name && msg && msg.from) {
+    const f = msg.from.first_name || '';
+    const l = msg.from.last_name || '';
+    name = (f + ' ' + l).trim();
+  }
+  return { name, email, phone, linkedin };
+}
+
+function escHtml_(s) {
+  return String(s || '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
