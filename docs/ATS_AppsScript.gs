@@ -418,7 +418,6 @@ function setup() {
   tpl.getRange('A1:G1').setFontWeight('bold').setBackground('#0E2440').setFontColor('#FFFFFF');
   // (Body cells hold full HTML — branded ArgusRecruit template per stage/language.)
   const rowsTpl = stageTemplates_();
-  ];
   tpl.getRange(2, 1, rowsTpl.length, 7).setValues(rowsTpl);
   tpl.setColumnWidth(1, 110);
   for (let c = 2; c <= 7; c++) tpl.setColumnWidth(c, 300);
