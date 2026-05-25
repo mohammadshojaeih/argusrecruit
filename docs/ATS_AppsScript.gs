@@ -896,35 +896,35 @@ function stageTemplates_() {
       key: 'interview',
       copy: {
         en: {
-          subject: 'Your profile is moving forward — {jobTitle}',
-          eyebrow: '• Profile Forwarded •',
-          h1: 'Thanks — your profile is moving forward.',
+          subject: 'Employer has approved your profile — {jobTitle}',
+          eyebrow: '• Employer Approved •',
+          h1: 'Good news — the employer wants to interview you.',
           greeting: 'Hi {name},',
           body: [
-            'Thank you for taking the time for the initial interview with us. Based on our conversation, your profile could be a strong match for the <strong style="color:#D4AF37;">{jobTitle}</strong> role.',
-            'We\'re now sharing your CV with the employer. Please wait to hear from us, or directly from the employer, to schedule the next interview.'
+            'After reviewing your profile, the employer has approved you for the next stage of the <strong style="color:#D4AF37;">{jobTitle}</strong> hiring process.',
+            'They will coordinate directly with you in the next few days to schedule the interview. Please keep your calendar flexible for the coming week.'
           ],
           team: 'The ArgusRecruit Team'
         },
         ru: {
-          subject: 'Ваш профиль передан работодателю — {jobTitle}',
-          eyebrow: '• Профиль передан •',
-          h1: 'Спасибо — мы передаём ваш профиль дальше.',
+          subject: 'Работодатель одобрил ваш профиль — {jobTitle}',
+          eyebrow: '• Одобрено работодателем •',
+          h1: 'Хорошие новости — работодатель хочет провести с вами интервью.',
           greeting: 'Здравствуйте, {name},',
           body: [
-            'Спасибо за время, уделённое первичному интервью с нами. По итогам разговора ваш профиль может стать отличным совпадением для роли <strong style="color:#D4AF37;">{jobTitle}</strong>.',
-            'Сейчас мы передаём ваше резюме работодателю. Пожалуйста, ожидайте обратной связи от нас или напрямую от работодателя для назначения следующего интервью.'
+            'После рассмотрения вашего профиля работодатель одобрил вашу кандидатуру для следующего этапа отбора на роль <strong style="color:#D4AF37;">{jobTitle}</strong>.',
+            'В ближайшие несколько дней работодатель напрямую согласует с вами время интервью. Постарайтесь оставить календарь гибким на ближайшую неделю.'
           ],
           team: 'Команда ArgusRecruit'
         },
         hy: {
-          subject: 'Ձեր պրոֆիլն առաջ է գնում — {jobTitle}',
-          eyebrow: '• Պրոֆիլը փոխանցված է •',
-          h1: 'Շնորհակալություն — ձեր պրոֆիլն առաջ է գնում:',
+          subject: 'Գործատուն հաստատել է ձեր պրոֆիլը — {jobTitle}',
+          eyebrow: '• Հաստատված է գործատուի կողմից •',
+          h1: 'Հաճելի լուր — գործատուն ցանկանում է հարցազրույց վերցնել ձեզ հետ:',
           greeting: 'Բարև, {name},',
           body: [
-            'Շնորհակալություն մեզ հետ առաջնային հարցազրույցին հատկացրած ժամանակի համար: Մեր խոսակցության հիման վրա ձեր պրոֆիլը կարող է լավ համապատասխան լինել <strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնին:',
-            'Այժմ ձեր CV-ն փոխանցում ենք գործատուին: Խնդրում ենք սպասել մեր կողմից կամ ուղղակիորեն գործատուի կողմից պատասխանին՝ հաջորդ հարցազրույցը պլանավորելու համար:'
+            'Ձեր պրոֆիլը ուսումնասիրելուց հետո գործատուն հաստատել է ձեր թեկնածությունը <strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի հաջորդ փուլի համար:',
+            'Հաջորդ մի քանի օրվա ընթացքում գործատուն ուղղակիորեն կհամակարգի ձեզ հետ՝ հարցազրույցը պլանավորելու համար: Խնդրում ենք պահել ձեր օրացույցը ճկուն:'
           ],
           team: 'ArgusRecruit-ի թիմը'
         }
