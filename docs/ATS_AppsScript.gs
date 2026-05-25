@@ -932,7 +932,7 @@ function stageTemplates_() {
           greeting: 'Hi {name},',
           body: [
             'Excellent news — the employer has approved you for a formal offer on the <strong style="color:#D4AF37;">{jobTitle}</strong> role.',
-            'The offer will reach you shortly — typically by email, sometimes by phone — from our team or directly from the employer. It will cover the package, relocation, and start date.'
+            'Please wait to receive the formal offer — our team or the employer will share it with you soon. It will cover the package, relocation, and start date.'
           ],
           team: 'The ArgusRecruit Team'
         },
@@ -943,7 +943,7 @@ function stageTemplates_() {
           greeting: 'Здравствуйте, {name},',
           body: [
             'Отличные новости — работодатель одобрил вашу кандидатуру и готовит официальный оффер по роли <strong style="color:#D4AF37;">{jobTitle}</strong>.',
-            'Оффер придёт вам в ближайшее время — обычно по email, иногда по телефону — от нашей команды или напрямую от работодателя. Он покрывает пакет, релокацию и дату выхода.'
+            'Пожалуйста, ожидайте официального оффера — наша команда или работодатель свяжутся с вами в ближайшее время. Оффер охватит пакет, релокацию и дату выхода.'
           ],
           team: 'Команда ArgusRecruit'
         },
@@ -954,7 +954,7 @@ function stageTemplates_() {
           greeting: 'Բարև, {name},',
           body: [
             'Գերազանց լուր — գործատուն հաստատել է ձեր թեկնածությունը <strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի համար և պատրաստում է պաշտոնական առաջարկը:',
-            'Առաջարկը կհասնի ձեզ շուտով — սովորաբար էլեկտրոնային փոստով, երբեմն հեռախոսով — մեր թիմից կամ ուղղակիորեն գործատուից: Այն ընդգրկում է փաթեթը, տեղափոխումը և մեկնարկի օրը:'
+            'Խնդրում ենք սպասել պաշտոնական առաջարկին — մեր թիմը կամ գործատուն շուտով կկապվեն ձեզ հետ: Առաջարկը կներառի փաթեթը, տեղափոխումը և մեկնարկի օրը:'
           ],
           team: 'ArgusRecruit-ի թիմը'
         }
