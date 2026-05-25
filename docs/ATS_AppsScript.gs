@@ -896,35 +896,35 @@ function stageTemplates_() {
       key: 'interview',
       copy: {
         en: {
-          subject: 'Interview confirmed — {jobTitle}',
-          eyebrow: '• Interview Confirmed •',
-          h1: 'Congratulations — interview confirmed.',
+          subject: 'Your profile is moving forward — {jobTitle}',
+          eyebrow: '• Profile Forwarded •',
+          h1: 'Thanks — your profile is moving forward.',
           greeting: 'Hi {name},',
           body: [
-            'Your interview for <strong style="color:#D4AF37;">{jobTitle}</strong> has been confirmed. A senior member of our team and the hiring manager will meet you.',
-            'We will follow up shortly with the exact time, format, and the people you will be meeting. If you have a preferred time window in the next 5 business days, reply to this email so we can prioritize it.'
+            'Thank you for taking the time for the initial interview with us. Based on our conversation, your profile could be a strong match for the <strong style="color:#D4AF37;">{jobTitle}</strong> role.',
+            'We\'re now sharing your CV with the employer. Please wait to hear from us, or directly from the employer, to schedule the next interview.'
           ],
           team: 'The ArgusRecruit Team'
         },
         ru: {
-          subject: 'Собеседование подтверждено — {jobTitle}',
-          eyebrow: '• Собеседование подтверждено •',
-          h1: 'Поздравляем — собеседование подтверждено.',
+          subject: 'Ваш профиль передан работодателю — {jobTitle}',
+          eyebrow: '• Профиль передан •',
+          h1: 'Спасибо — мы передаём ваш профиль дальше.',
           greeting: 'Здравствуйте, {name},',
           body: [
-            'Ваше собеседование на роль <strong style="color:#D4AF37;">{jobTitle}</strong> подтверждено. Вас встретит старший член нашей команды и руководитель найма.',
-            'Мы пришлём точное время, формат и список участников. Если у вас есть предпочтительные слоты в ближайшие 5 рабочих дней — ответьте на это письмо.'
+            'Спасибо за время, уделённое первичному интервью с нами. По итогам разговора ваш профиль может стать отличным совпадением для роли <strong style="color:#D4AF37;">{jobTitle}</strong>.',
+            'Сейчас мы передаём ваше резюме работодателю. Пожалуйста, ожидайте обратной связи от нас или напрямую от работодателя для назначения следующего интервью.'
           ],
           team: 'Команда ArgusRecruit'
         },
         hy: {
-          subject: 'Հարցազրույցը հաստատվել է — {jobTitle}',
-          eyebrow: '• Հարցազրույցը հաստատված •',
-          h1: 'Շնորհավորում ենք — հարցազրույցը հաստատվել է:',
+          subject: 'Ձեր պրոֆիլն առաջ է գնում — {jobTitle}',
+          eyebrow: '• Պրոֆիլը փոխանցված է •',
+          h1: 'Շնորհակալություն — ձեր պրոֆիլն առաջ է գնում:',
           greeting: 'Բարև, {name},',
           body: [
-            'Ձեր հարցազրույցը <strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի համար հաստատվել է: Մեր թիմի ավագ անդամը և վարձող մենեջերը կհանդիպեն ձեզ հետ:',
-            'Շուտով կուղարկենք ձեզ ճշգրիտ ժամանակը, ձևաչափը և մասնակիցների ցանկը: Եթե հաջորդ 5 աշխատանքային օրերի ընթացքում ունեք նախընտրելի ժամ, պատասխանեք այս նամակին:'
+            'Շնորհակալություն մեզ հետ առաջնային հարցազրույցին հատկացրած ժամանակի համար: Մեր խոսակցության հիման վրա ձեր պրոֆիլը կարող է լավ համապատասխան լինել <strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնին:',
+            'Այժմ ձեր CV-ն փոխանցում ենք գործատուին: Խնդրում ենք սպասել մեր կողմից կամ ուղղակիորեն գործատուի կողմից պատասխանին՝ հաջորդ հարցազրույցը պլանավորելու համար:'
           ],
           team: 'ArgusRecruit-ի թիմը'
         }
