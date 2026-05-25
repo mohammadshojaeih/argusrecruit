@@ -33,6 +33,15 @@ const CFG_SHEET      = 'Settings';
 const PROCESSED_LBL  = 'ats-processed';
 const SEARCH_QUERY   = 'subject:"[Application" has:attachment -label:ats-processed newer_than:90d';
 
+const SOURCES = [
+  'web-apply',
+  'manual-intake',
+  'sourced-telegram',
+  'sourced-linkedin',
+  'referral',
+  'sourced-other'
+];
+
 const STAGES = [
   '00-New',
   '00-Pre-Contact',
@@ -377,11 +386,18 @@ function setup() {
   app.hideColumns(16, 2);
 
   // Stage validation
-  const rule = SpreadsheetApp.newDataValidation()
+  const stageRule = SpreadsheetApp.newDataValidation()
     .requireValueInList(STAGES, true)
     .setAllowInvalid(false)
     .build();
-  app.getRange(2, COL.stage, 1000, 1).setDataValidation(rule);
+  app.getRange(2, COL.stage, 1000, 1).setDataValidation(stageRule);
+
+  // Source validation
+  const sourceRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(SOURCES, true)
+    .setAllowInvalid(true)
+    .build();
+  app.getRange(2, COL.source, 1000, 1).setDataValidation(sourceRule);
 
   // Highlight rows where # Other Apps > 0
   const condRule = SpreadsheetApp.newConditionalFormatRule()
@@ -477,5 +493,235 @@ function onOpen() {
     .createMenu('ATS')
     .addItem('Sync now', 'tick')
     .addItem('Run setup (first time only)', 'setup')
+    .addSeparator()
+    .addItem('Show intake form URL', 'showIntakeUrl')
     .addToUi();
+}
+
+function showIntakeUrl() {
+  const url = ScriptApp.getService().getUrl();
+  const ui = SpreadsheetApp.getUi();
+  if (!url) {
+    ui.alert('Deploy first',
+      'You need to deploy the script as a Web app.\n\n' +
+      '1. In the Apps Script editor: Deploy → New deployment\n' +
+      '2. Type: Web app\n' +
+      '3. Execute as: Me (you)\n' +
+      '4. Who has access: Anyone with the link  (or Anyone within your domain)\n' +
+      '5. Click Deploy and copy the Web app URL.\n\n' +
+      'Then run this menu item again to see the URL.',
+      ui.ButtonSet.OK);
+    return;
+  }
+  ui.alert('Intake form URL', url + '\n\nBookmark this. Open it on phone or desktop to add a candidate from any source.', ui.ButtonSet.OK);
+}
+
+
+// ──────────────────────────────────────────────────────────────────────
+// INTAKE FORM (Apps Script Web App)
+// ──────────────────────────────────────────────────────────────────────
+
+function doGet() {
+  return HtmlService.createHtmlOutput(intakeFormHtml_())
+    .setTitle('ArgusRecruit · Add Candidate')
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
+function listActiveJobs_() {
+  const root = DriveApp.getFolderById(ROOT_FOLDER_ID);
+  const folders = root.getFolders();
+  const jobs = [];
+  while (folders.hasNext()) {
+    const f = folders.next();
+    const m = f.getName().match(/^([A-Z]+-[A-Z0-9]+)\s+-\s+(.+)$/);
+    if (m) jobs.push({ jobId: m[1], jobTitle: m[2], folderName: f.getName() });
+  }
+  jobs.sort((a, b) => a.jobId.localeCompare(b.jobId));
+  return jobs;
+}
+
+function intakeFormHtml_() {
+  const jobs = listActiveJobs_();
+  const jobOptions = jobs.map(j =>
+    `<option value="${j.jobId}|${j.jobTitle}">${j.jobId} — ${j.jobTitle}</option>`
+  ).join('');
+  const sourceOptions = SOURCES
+    .filter(s => s !== 'web-apply') // can't be web-apply from here
+    .map(s => `<option value="${s}">${s}</option>`).join('');
+
+  return `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Add candidate · ArgusRecruit ATS</title>
+<style>
+  :root { --navy:#0E2440; --gold:#D4AF37; --soft:#F5EFE3; }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+         margin:0; padding:24px; background: var(--soft); color:#222; }
+  .card { max-width: 560px; margin: 0 auto; background:#fff; border-radius:14px;
+          box-shadow: 0 6px 24px rgba(0,0,0,0.07); padding:28px; }
+  h1 { color: var(--navy); margin: 0 0 6px; font-size: 22px; }
+  .sub { color:#666; font-size: 13px; margin-bottom: 22px; }
+  label { display:block; font-size: 12px; color:#444; margin-top: 14px; font-weight:600;
+          letter-spacing: 0.5px; }
+  input, select, textarea { width:100%; padding: 10px 12px; border:1px solid #d2c9b6;
+          border-radius:8px; font-size:14px; font-family:inherit; background:#fff; margin-top:5px; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold); }
+  .req::after { content:" *"; color:#b00; }
+  button { background: var(--gold); color: var(--navy); border:0; padding: 14px 22px;
+           border-radius:10px; font-weight:700; font-size:14px; letter-spacing:.5px;
+           cursor:pointer; margin-top:22px; width:100%; }
+  button:hover { background:#b88f1f; color:#fff; }
+  .msg { margin-top:14px; padding:12px; border-radius:8px; font-size:14px; display:none; }
+  .ok  { display:block; background:#e7f5e8; color:#216c2c; border:1px solid #b5e2bb; }
+  .err { display:block; background:#fdecea; color:#7a1f15; border:1px solid #f3b9b1; }
+</style>
+</head><body>
+<div class="card">
+  <h1>Add a candidate</h1>
+  <div class="sub">For passive sourcing or anyone who didn't come through the website.</div>
+  <form id="f">
+    <label class="req">Job</label>
+    <select name="job" required>
+      <option value="">— select a job —</option>
+      ${jobOptions}
+    </select>
+    <label class="req">Source</label>
+    <select name="source" required>${sourceOptions}</select>
+    <label class="req">Candidate name</label>
+    <input name="name" required maxlength="120">
+    <label>Email</label>
+    <input name="email" type="email" maxlength="200">
+    <label>Phone</label>
+    <input name="phone" type="tel" maxlength="60">
+    <label>LinkedIn URL</label>
+    <input name="linkedin" type="url" maxlength="300">
+    <label>CV file (optional — PDF, DOC, DOCX, max 10MB)</label>
+    <input name="cv" type="file" accept=".pdf,.doc,.docx,.odt,.rtf">
+    <label>Lang for outgoing emails</label>
+    <select name="lang"><option value="en">English</option><option value="ru">Russian</option><option value="hy">Armenian</option></select>
+    <label>Notes (private)</label>
+    <textarea name="notes" rows="3" maxlength="2000" placeholder="e.g. ex-CTO at FinTech in Yerevan; open to next move; speaks RU+FA"></textarea>
+    <button type="submit">Add candidate</button>
+    <div id="msg" class="msg"></div>
+  </form>
+</div>
+<script>
+const form = document.getElementById('f');
+const msg = document.getElementById('msg');
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  msg.className = 'msg'; msg.textContent = '';
+  const submitBtn = form.querySelector('button');
+  submitBtn.disabled = true; submitBtn.textContent = 'Saving…';
+
+  const f = new FormData(form);
+  const cv = f.get('cv');
+  const payload = {
+    job: f.get('job'),
+    source: f.get('source'),
+    name: (f.get('name')||'').trim(),
+    email: (f.get('email')||'').trim().toLowerCase(),
+    phone: (f.get('phone')||'').trim(),
+    linkedin: (f.get('linkedin')||'').trim(),
+    lang: f.get('lang') || 'en',
+    notes: (f.get('notes')||'').trim(),
+    cvName: cv && cv.size ? cv.name : '',
+    cvType: cv && cv.size ? cv.type : '',
+    cvData: ''
+  };
+  if (cv && cv.size > 10 * 1024 * 1024) {
+    msg.className = 'msg err'; msg.textContent = 'CV file too large (max 10MB).';
+    submitBtn.disabled = false; submitBtn.textContent = 'Add candidate';
+    return;
+  }
+  if (cv && cv.size > 0) {
+    payload.cvData = await new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = () => res(r.result.split(',')[1]);
+      r.onerror = rej;
+      r.readAsDataURL(cv);
+    });
+  }
+  google.script.run
+    .withSuccessHandler(r => {
+      if (r.ok) {
+        msg.className = 'msg ok';
+        msg.textContent = '✓ Added: ' + r.name + ' → ' + r.jobId;
+        form.reset();
+      } else {
+        msg.className = 'msg err';
+        msg.textContent = '⚠ ' + (r.error || 'Could not save.');
+      }
+      submitBtn.disabled = false; submitBtn.textContent = 'Add candidate';
+    })
+    .withFailureHandler(err => {
+      msg.className = 'msg err';
+      msg.textContent = '⚠ ' + err.message;
+      submitBtn.disabled = false; submitBtn.textContent = 'Add candidate';
+    })
+    .submitIntake_(payload);
+});
+</script>
+</body></html>`;
+}
+
+function submitIntake_(payload) {
+  try {
+    if (!payload || !payload.job || !payload.name) {
+      return { ok: false, error: 'Missing required fields' };
+    }
+    const [jobId, jobTitle] = payload.job.split('|');
+    const sheet = SpreadsheetApp.getActive().getSheetByName(APP_SHEET);
+    if (!sheet) return { ok: false, error: 'Applications sheet not found. Run setup() first.' };
+
+    const root = DriveApp.getFolderById(ROOT_FOLDER_ID);
+    const jobFolder = findOrCreateFolder_(root, `${jobId} - ${jobTitle}`);
+
+    // Determine initial stage:
+    //   if no CV at all → 00-Pre-Contact
+    //   else            → 00-New
+    const hasCv = payload.cvData && payload.cvName;
+    const initialStage = hasCv ? '00-New' : '00-Pre-Contact';
+    const stageFolder = findOrCreateFolder_(jobFolder, initialStage);
+
+    let fileId = '';
+    let cvHyperlink = '';
+    if (hasCv) {
+      const bytes = Utilities.base64Decode(payload.cvData);
+      const blob = Utilities.newBlob(bytes, payload.cvType || 'application/pdf', payload.cvName);
+      const fileName = buildFilename_(new Date().toISOString(), payload.name, jobTitle, payload.cvName);
+      const file = stageFolder.createFile(blob).setName(fileName);
+      fileId = file.getId();
+      cvHyperlink = '=HYPERLINK("' + file.getUrl() + '","Open")';
+    }
+
+    const row = [
+      new Date(),
+      jobId,
+      jobTitle,
+      payload.source || 'manual-intake',
+      payload.name,
+      (payload.email || '').toLowerCase(),
+      payload.phone || '',
+      payload.linkedin || '',
+      payload.lang || 'en',
+      initialStage,
+      cvHyperlink,
+      payload.notes || '',
+      '',
+      new Date(),
+      'created (' + (payload.source || 'manual') + ') → ' + initialStage,
+      initialStage,
+      fileId
+    ];
+    sheet.appendRow(row);
+    const r = sheet.getLastRow();
+    sheet.getRange(r, COL.otherApps).setFormula(
+      `=IFERROR(COUNTIF($F$2:$F, $F${r})-1, 0)`
+    );
+    return { ok: true, name: payload.name, jobId: jobId };
+  } catch (e) {
+    return { ok: false, error: String(e) };
+  }
 }
