@@ -495,9 +495,55 @@ function onOpen() {
     .addItem('Sync now', 'tick')
     .addItem('Verify setup (safe to re-run)', 'setup')
     .addSeparator()
+    .addItem('Preview selected email template', 'previewSelectedTemplate')
     .addItem('Show intake form URL', 'showIntakeUrl')
     .addItem('Reset email templates only', 'resetTemplatesOnly')
     .addToUi();
+}
+
+/**
+ * Preview the email template under the currently-selected cell.
+ * Usage: open Email Templates sheet → click any body cell (en, ru, hy columns)
+ *        → ATS menu → "Preview selected email template".
+ * Renders the cell's HTML with sample placeholders filled in.
+ */
+function previewSelectedTemplate() {
+  const ss = SpreadsheetApp.getActive();
+  const range = ss.getActiveRange();
+  const sheet = range.getSheet();
+  const ui = SpreadsheetApp.getUi();
+
+  if (sheet.getName() !== TPL_SHEET) {
+    ui.alert('Open the Email Templates sheet first, then click on a body cell.');
+    return;
+  }
+  const col = range.getColumn();
+  const row = range.getRow();
+  if (row < 2) { ui.alert('Pick a body cell (rows 2+).'); return; }
+
+  // Body columns are: C(3)=en body, E(5)=ru body, G(7)=hy body.
+  let html = '';
+  let langLabel = '';
+  if (col === 3) { html = sheet.getRange(row, 3).getValue(); langLabel = 'EN'; }
+  else if (col === 5) { html = sheet.getRange(row, 5).getValue(); langLabel = 'RU'; }
+  else if (col === 7) { html = sheet.getRange(row, 7).getValue(); langLabel = 'HY'; }
+  else {
+    ui.alert('Select a cell in the "en (body)", "ru (body)", or "hy (body)" column.');
+    return;
+  }
+  if (!html) { ui.alert('That cell is empty.'); return; }
+
+  const key = sheet.getRange(row, 1).getValue();
+  const filled = String(html)
+    .replace(/\{name\}/g, 'Sara Mohammadi')
+    .replace(/\{jobTitle\}/g, 'Senior QA Engineer')
+    .replace(/\{jobId\}/g, 'AR-STE01');
+
+  const out = HtmlService.createHtmlOutput(filled)
+    .setWidth(720)
+    .setHeight(720)
+    .setTitle('Preview: ' + key + ' (' + langLabel + ')');
+  ui.showModalDialog(out, 'Preview: ' + key + ' (' + langLabel + ')');
 }
 
 function showIntakeUrl() {
