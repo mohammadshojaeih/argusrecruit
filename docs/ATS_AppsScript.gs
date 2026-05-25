@@ -931,8 +931,8 @@ function stageTemplates_() {
           h1: 'Excellent — an offer is being prepared.',
           greeting: 'Hi {name},',
           body: [
-            'Excellent news — our client is preparing a formal offer for the <strong style="color:#D4AF37;">{jobTitle}</strong> role.',
-            'We will reach out in the next 24 hours to walk you through the package, answer any questions about compensation, relocation, or timing, and align on next steps.'
+            'Excellent news — the employer has approved you for a formal offer on the <strong style="color:#D4AF37;">{jobTitle}</strong> role.',
+            'Please keep an eye on your phone — a call will come from our team or directly from the employer with the offer details. We\'ll cover the package, relocation, and start date together.'
           ],
           team: 'The ArgusRecruit Team'
         },
@@ -942,8 +942,8 @@ function stageTemplates_() {
           h1: 'Отлично — оффер готовится.',
           greeting: 'Здравствуйте, {name},',
           body: [
-            'Отличные новости — клиент готовит официальный оффер по роли <strong style="color:#D4AF37;">{jobTitle}</strong>.',
-            'В ближайшие 24 часа мы свяжемся, чтобы обсудить пакет, ответить на вопросы о компенсации, переезде и сроках, и согласовать следующие шаги.'
+            'Отличные новости — работодатель одобрил вашу кандидатуру и готовит официальный оффер по роли <strong style="color:#D4AF37;">{jobTitle}</strong>.',
+            'Пожалуйста, оставайтесь на связи — ожидайте звонок от нашей команды или напрямую от работодателя с деталями оффера. Мы обсудим пакет, релокацию и сроки выхода.'
           ],
           team: 'Команда ArgusRecruit'
         },
@@ -953,8 +953,8 @@ function stageTemplates_() {
           h1: 'Հիանալի — առաջարկը պատրաստվում է:',
           greeting: 'Բարև, {name},',
           body: [
-            'Գերազանց լուր — մեր հաճախորդը պատրաստում է պաշտոնական առաջարկ <strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի համար:',
-            'Հաջորդ 24 ժամվա ընթացքում մենք կկապվենք ձեզ հետ՝ քննարկելու փաթեթը, փոխհատուցման, տեղափոխման և ժամանակացույցի մանրամասները:'
+            'Գերազանց լուր — գործատուն հաստատել է ձեր թեկնածությունը <strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի համար և պատրաստում է պաշտոնական առաջարկը:',
+            'Խնդրում ենք պահել ձեր հեռախոսը հասանելի — մեր թիմից կամ ուղղակիորեն գործատուից կզանգահարեն ձեզ առաջարկի մանրամասներով: Կքննարկենք փաթեթը, տեղափոխումը և մեկնարկի օրը:'
           ],
           team: 'ArgusRecruit-ի թիմը'
         }
