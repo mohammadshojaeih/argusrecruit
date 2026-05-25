@@ -416,48 +416,8 @@ function setup() {
   ]]);
   tpl.setFrozenRows(1);
   tpl.getRange('A1:G1').setFontWeight('bold').setBackground('#0E2440').setFontColor('#FFFFFF');
-  // (Body cells should hold HTML.)
-  const rowsTpl = [
-    ['reviewed',
-      'Your application is being reviewed — {jobTitle}',
-      '<p>Hi {name},</p><p>Thank you for applying to <strong>{jobTitle}</strong> at ArgusRecruit. A senior recruiter is now reviewing your application personally.</p><p>If your background matches the role, we will be in touch within 1–3 business days. If not, we will still keep your details in our network for future opportunities that may fit you better.</p><p>Warm regards,<br>The ArgusRecruit Team</p>',
-      'Ваша заявка на рассмотрении — {jobTitle}',
-      '<p>Здравствуйте, {name},</p><p>Спасибо за вашу заявку на роль <strong>{jobTitle}</strong>. Старший рекрутер лично рассматривает ваш профиль. Если ваш опыт подходит, мы свяжемся с вами в течение 1–3 рабочих дней.</p><p>С уважением,<br>Команда ArgusRecruit</p>',
-      'Ձեր դիմումը քննարկվում է — {jobTitle}',
-      '<p>Բարև, {name},</p><p>Շնորհակալություն <strong>{jobTitle}</strong> պաշտոնի համար դիմելու համար: Մեր ավագ ռեկրուտերն այժմ անձամբ քննարկում է ձեր փորձառությունը: Համապատասխան լինելու դեպքում մենք կկապվենք ձեզ հետ 1–3 աշխատանքային օրվա ընթացքում:</p><p>Հարգանքով,<br>ArgusRecruit-ի թիմը</p>'
-    ],
-    ['shortlist',
-      'You have been shortlisted — {jobTitle}',
-      '<p>Hi {name},</p><p>Great news — you have been shortlisted for the <strong>{jobTitle}</strong> role. Our client will now review your profile, and we will get back to you with next steps within a few business days.</p><p>Warm regards,<br>ArgusRecruit</p>',
-      'Вы в шорт-листе — {jobTitle}',
-      '<p>Здравствуйте, {name},</p><p>Хорошие новости — вы вошли в шорт-лист по позиции <strong>{jobTitle}</strong>. Клиент сейчас рассматривает ваш профиль, и мы свяжемся с вами в течение нескольких рабочих дней.</p><p>С уважением,<br>ArgusRecruit</p>',
-      'Դուք ընտրվել եք կարճ ցուցակում — {jobTitle}',
-      '<p>Բարև, {name},</p><p>Հաճելի լուր — դուք ընտրվել եք <strong>{jobTitle}</strong> պաշտոնի կարճ ցուցակում: Մեր հաճախորդն այժմ ուսումնասիրում է ձեր պրոֆիլը, և մենք կտեղեկացնենք ձեզ հաջորդ քայլերի մասին մի քանի աշխատանքային օրվա ընթացքում:</p><p>Հարգանքով,<br>ArgusRecruit</p>'
-    ],
-    ['interview',
-      'Congratulations — interview confirmed for {jobTitle}',
-      '<p>Hi {name},</p><p>Congratulations — your interview has been confirmed for the <strong>{jobTitle}</strong> role. We will follow up shortly with the exact time, format, and the people you will meet.</p><p>Warm regards,<br>ArgusRecruit</p>',
-      'Поздравляем — собеседование подтверждено для {jobTitle}',
-      '<p>Здравствуйте, {name},</p><p>Поздравляем — ваше собеседование подтверждено для роли <strong>{jobTitle}</strong>. Скоро мы пришлём вам точное время, формат и список участников.</p><p>С уважением,<br>ArgusRecruit</p>',
-      'Շնորհավորում ենք — հարցազրույցը հաստատվել է {jobTitle} պաշտոնի համար',
-      '<p>Բարև, {name},</p><p>Շնորհավորում ենք — ձեր հարցազրույցը հաստատվել է <strong>{jobTitle}</strong> պաշտոնի համար: Շուտով կուղարկենք ձեզ ժամանակի, ձևաչափի և մասնակիցների ճշգրիտ մանրամասները:</p><p>Հարգանքով,<br>ArgusRecruit</p>'
-    ],
-    ['offer',
-      'An offer is coming your way — {jobTitle}',
-      '<p>Hi {name},</p><p>Excellent news — our client is preparing a formal offer for the <strong>{jobTitle}</strong> role. We will reach out in the next 24 hours to walk you through the package and answer any questions.</p><p>Warm regards,<br>ArgusRecruit</p>',
-      'Вам направляется оффер — {jobTitle}',
-      '<p>Здравствуйте, {name},</p><p>Отличные новости — клиент готовит официальный оффер по роли <strong>{jobTitle}</strong>. В ближайшие 24 часа мы свяжемся, чтобы обсудить пакет и ответить на ваши вопросы.</p><p>С уважением,<br>ArgusRecruit</p>',
-      'Ձեզ ուղարկվում է առաջարկ — {jobTitle}',
-      '<p>Բարև, {name},</p><p>Գերազանց լուր — մեր հաճախորդը պատրաստում է պաշտոնական առաջարկ <strong>{jobTitle}</strong> պաշտոնի համար: Հաջորդ 24 ժամվա ընթացքում մենք կկապվենք ձեզ հետ՝ փաթեթը քննարկելու և ձեր հարցերին պատասխանելու համար:</p><p>Հարգանքով,<br>ArgusRecruit</p>'
-    ],
-    ['rejected',
-      'Update on your {jobTitle} application',
-      '<p>Hi {name},</p><p>Thank you again for your interest in the <strong>{jobTitle}</strong> role and for the time you put into your application. After careful consideration, we will not be moving forward with your candidacy for this specific role.</p><p>This was not an easy decision. We will keep your profile in our network and may reach out about future roles that better match your background.</p><p>Wishing you the very best,<br>ArgusRecruit</p>',
-      'Обновление по вашей заявке на {jobTitle}',
-      '<p>Здравствуйте, {name},</p><p>Спасибо за интерес к роли <strong>{jobTitle}</strong> и за время, потраченное на заявку. После тщательного рассмотрения мы решили не продолжать рассмотрение вашей кандидатуры по этой конкретной позиции.</p><p>Это было непростое решение. Мы сохраним ваш профиль и можем связаться с вами по поводу будущих ролей, лучше подходящих вам.</p><p>Желаем всего наилучшего,<br>ArgusRecruit</p>',
-      'Թարմացում ձեր {jobTitle} դիմումի վերաբերյալ',
-      '<p>Բարև, {name},</p><p>Կրկին շնորհակալություն <strong>{jobTitle}</strong> պաշտոնի նկատմամբ ձեր հետաքրքրության և դիմումի վրա ծախսված ժամանակի համար: Մանրակրկիտ քննարկումից հետո մենք որոշել ենք չշարունակել ձեր թեկնածությունը այս կոնկրետ դերի համար:</p><p>Սա հեշտ որոշում չէր: Մենք կպահպանենք ձեր պրոֆիլը և կարող ենք կապվել ձեզ հետ ձեր փորձառությանն ավելի համապատասխան ապագա դերերի վերաբերյալ:</p><p>Բարեմաղթանքներով,<br>ArgusRecruit</p>'
-    ]
+  // (Body cells hold full HTML — branded ArgusRecruit template per stage/language.)
+  const rowsTpl = stageTemplates_();
   ];
   tpl.getRange(2, 1, rowsTpl.length, 7).setValues(rowsTpl);
   tpl.setColumnWidth(1, 110);
@@ -724,4 +684,262 @@ function submitIntake_(payload) {
   } catch (e) {
     return { ok: false, error: String(e) };
   }
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// BRANDED EMAIL TEMPLATES
+// ──────────────────────────────────────────────────────────────────────
+//   Each cell stores a complete HTML document with ArgusRecruit branding
+//   (navy + gold). Placeholders: {name}, {jobTitle}, {jobId}.
+//   To edit copy: open Email Templates sheet and change the text — the
+//   HTML structure is in the cell, edit between the tags.
+
+function stageTemplates_() {
+  const stages = [
+    {
+      key: 'reviewed',
+      copy: {
+        en: {
+          subject: 'Your application is being reviewed — {jobTitle}',
+          eyebrow: '• Application Under Review •',
+          h1: 'Thanks — we\'re looking at your profile.',
+          greeting: 'Hi {name},',
+          body: [
+            'Thank you for applying to <strong style="color:#D4AF37;">{jobTitle}</strong> at ArgusRecruit. A senior recruiter is now reviewing your application personally.',
+            'If your background matches the role, we will be in touch within 1–3 business days. If we don\'t see a fit for this specific role, your profile will stay in our network and we may reach out about future openings that better match your background.'
+          ],
+          team: 'The ArgusRecruit Team'
+        },
+        ru: {
+          subject: 'Ваша заявка на рассмотрении — {jobTitle}',
+          eyebrow: '• Заявка рассматривается •',
+          h1: 'Спасибо — мы рассматриваем ваш профиль.',
+          greeting: 'Здравствуйте, {name},',
+          body: [
+            'Спасибо за вашу заявку на роль <strong style="color:#D4AF37;">{jobTitle}</strong>. Старший рекрутер лично рассматривает ваш профиль.',
+            'Если ваш опыт подходит роли, мы свяжемся с вами в течение 1–3 рабочих дней. Если совпадения для этой конкретной роли не будет, мы сохраним ваш профиль в нашей сети и можем связаться с вами по поводу будущих вакансий.'
+          ],
+          team: 'Команда ArgusRecruit'
+        },
+        hy: {
+          subject: 'Ձեր դիմումը քննարկվում է — {jobTitle}',
+          eyebrow: '• Դիմումը քննարկման փուլում •',
+          h1: 'Շնորհակալություն — մենք ուսումնասիրում ենք ձեր պրոֆիլը:',
+          greeting: 'Բարև, {name},',
+          body: [
+            '<strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի համար դիմելու համար շնորհակալություն: Ավագ ռեկրուտերը այժմ անձամբ ուսումնասիրում է ձեր փորձառությունը:',
+            'Համապատասխան լինելու դեպքում մենք կկապվենք ձեզ հետ 1–3 աշխատանքային օրվա ընթացքում: Հակառակ դեպքում ձեր պրոֆիլը կպահպանվի մեր ցանցում ապագա հնարավորությունների համար:'
+          ],
+          team: 'ArgusRecruit-ի թիմը'
+        }
+      }
+    },
+    {
+      key: 'shortlist',
+      copy: {
+        en: {
+          subject: 'You\'ve been shortlisted — {jobTitle}',
+          eyebrow: '• Shortlisted •',
+          h1: 'You\'re on the shortlist.',
+          greeting: 'Hi {name},',
+          body: [
+            'Great news — you have been shortlisted for the <strong style="color:#D4AF37;">{jobTitle}</strong> role. Our client will now review your profile directly.',
+            'We\'ll get back to you with the next steps within a few business days. In the meantime, please keep your calendar flexible for the coming week in case interview slots are offered.'
+          ],
+          team: 'The ArgusRecruit Team'
+        },
+        ru: {
+          subject: 'Вы в шорт-листе — {jobTitle}',
+          eyebrow: '• В шорт-листе •',
+          h1: 'Вы попали в шорт-лист.',
+          greeting: 'Здравствуйте, {name},',
+          body: [
+            'Хорошие новости — вы вошли в шорт-лист по позиции <strong style="color:#D4AF37;">{jobTitle}</strong>. Клиент сейчас рассматривает ваш профиль.',
+            'Мы свяжемся с вами по следующим шагам в течение нескольких рабочих дней. Постарайтесь оставить календарь гибким на следующую неделю — возможны слоты для собеседования.'
+          ],
+          team: 'Команда ArgusRecruit'
+        },
+        hy: {
+          subject: 'Դուք ընտրվել եք կարճ ցուցակում — {jobTitle}',
+          eyebrow: '• Կարճ ցուցակում •',
+          h1: 'Դուք կարճ ցուցակում եք:',
+          greeting: 'Բարև, {name},',
+          body: [
+            'Հաճելի լուր — դուք ընտրվել եք <strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի կարճ ցուցակում: Մեր հաճախորդն այժմ ուղղակիորեն ուսումնասիրում է ձեր պրոֆիլը:',
+            'Մենք կտեղեկացնենք ձեզ հաջորդ քայլերի մասին մի քանի աշխատանքային օրվա ընթացքում: Խնդրում ենք պահել ձեր օրացույցը ճկուն հաջորդ շաբաթվա համար:'
+          ],
+          team: 'ArgusRecruit-ի թիմը'
+        }
+      }
+    },
+    {
+      key: 'interview',
+      copy: {
+        en: {
+          subject: 'Interview confirmed — {jobTitle}',
+          eyebrow: '• Interview Confirmed •',
+          h1: 'Congratulations — interview confirmed.',
+          greeting: 'Hi {name},',
+          body: [
+            'Your interview for <strong style="color:#D4AF37;">{jobTitle}</strong> has been confirmed. A senior member of our team and the hiring manager will meet you.',
+            'We will follow up shortly with the exact time, format, and the people you will be meeting. If you have a preferred time window in the next 5 business days, reply to this email so we can prioritize it.'
+          ],
+          team: 'The ArgusRecruit Team'
+        },
+        ru: {
+          subject: 'Собеседование подтверждено — {jobTitle}',
+          eyebrow: '• Собеседование подтверждено •',
+          h1: 'Поздравляем — собеседование подтверждено.',
+          greeting: 'Здравствуйте, {name},',
+          body: [
+            'Ваше собеседование на роль <strong style="color:#D4AF37;">{jobTitle}</strong> подтверждено. Вас встретит старший член нашей команды и руководитель найма.',
+            'Мы пришлём точное время, формат и список участников. Если у вас есть предпочтительные слоты в ближайшие 5 рабочих дней — ответьте на это письмо.'
+          ],
+          team: 'Команда ArgusRecruit'
+        },
+        hy: {
+          subject: 'Հարցազրույցը հաստատվել է — {jobTitle}',
+          eyebrow: '• Հարցազրույցը հաստատված •',
+          h1: 'Շնորհավորում ենք — հարցազրույցը հաստատվել է:',
+          greeting: 'Բարև, {name},',
+          body: [
+            'Ձեր հարցազրույցը <strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի համար հաստատվել է: Մեր թիմի ավագ անդամը և վարձող մենեջերը կհանդիպեն ձեզ հետ:',
+            'Շուտով կուղարկենք ձեզ ճշգրիտ ժամանակը, ձևաչափը և մասնակիցների ցանկը: Եթե հաջորդ 5 աշխատանքային օրերի ընթացքում ունեք նախընտրելի ժամ, պատասխանեք այս նամակին:'
+          ],
+          team: 'ArgusRecruit-ի թիմը'
+        }
+      }
+    },
+    {
+      key: 'offer',
+      copy: {
+        en: {
+          subject: 'An offer is on its way — {jobTitle}',
+          eyebrow: '• Offer Incoming •',
+          h1: 'Excellent — an offer is being prepared.',
+          greeting: 'Hi {name},',
+          body: [
+            'Excellent news — our client is preparing a formal offer for the <strong style="color:#D4AF37;">{jobTitle}</strong> role.',
+            'We will reach out in the next 24 hours to walk you through the package, answer any questions about compensation, relocation, or timing, and align on next steps.'
+          ],
+          team: 'The ArgusRecruit Team'
+        },
+        ru: {
+          subject: 'Оффер скоро у вас — {jobTitle}',
+          eyebrow: '• Оффер скоро •',
+          h1: 'Отлично — оффер готовится.',
+          greeting: 'Здравствуйте, {name},',
+          body: [
+            'Отличные новости — клиент готовит официальный оффер по роли <strong style="color:#D4AF37;">{jobTitle}</strong>.',
+            'В ближайшие 24 часа мы свяжемся, чтобы обсудить пакет, ответить на вопросы о компенсации, переезде и сроках, и согласовать следующие шаги.'
+          ],
+          team: 'Команда ArgusRecruit'
+        },
+        hy: {
+          subject: 'Առաջարկը ձեր ճանապարհին է — {jobTitle}',
+          eyebrow: '• Մոտալուտ առաջարկ •',
+          h1: 'Հիանալի — առաջարկը պատրաստվում է:',
+          greeting: 'Բարև, {name},',
+          body: [
+            'Գերազանց լուր — մեր հաճախորդը պատրաստում է պաշտոնական առաջարկ <strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի համար:',
+            'Հաջորդ 24 ժամվա ընթացքում մենք կկապվենք ձեզ հետ՝ քննարկելու փաթեթը, փոխհատուցման, տեղափոխման և ժամանակացույցի մանրամասները:'
+          ],
+          team: 'ArgusRecruit-ի թիմը'
+        }
+      }
+    },
+    {
+      key: 'rejected',
+      copy: {
+        en: {
+          subject: 'Update on your {jobTitle} application',
+          eyebrow: '• Application Update •',
+          h1: 'Update on your application.',
+          greeting: 'Hi {name},',
+          body: [
+            'Thank you again for your interest in the <strong style="color:#D4AF37;">{jobTitle}</strong> role and for the time you put into your application.',
+            'After careful consideration, we will not be moving forward with your candidacy for this specific role. This was not an easy decision — the bar was very high and the final shortlist was small.',
+            'Your profile will stay in our network. If we see future roles that better match your background, we will reach out. Wishing you the very best in your search.'
+          ],
+          team: 'The ArgusRecruit Team'
+        },
+        ru: {
+          subject: 'Обновление по вашей заявке на {jobTitle}',
+          eyebrow: '• Обновление по заявке •',
+          h1: 'Обновление по вашей заявке.',
+          greeting: 'Здравствуйте, {name},',
+          body: [
+            'Спасибо за интерес к роли <strong style="color:#D4AF37;">{jobTitle}</strong> и за время, потраченное на заявку.',
+            'После тщательного рассмотрения мы решили не продолжать рассмотрение вашей кандидатуры по этой конкретной позиции. Это было непростое решение — конкурс был очень высокий, и финальный шорт-лист небольшой.',
+            'Ваш профиль останется в нашей сети. Если у нас появятся будущие роли, которые лучше подходят вам, мы свяжемся. Желаем удачи в поиске.'
+          ],
+          team: 'Команда ArgusRecruit'
+        },
+        hy: {
+          subject: 'Թարմացում {jobTitle} պաշտոնի դիմումի վերաբերյալ',
+          eyebrow: '• Դիմումի թարմացում •',
+          h1: 'Թարմացում ձեր դիմումի վերաբերյալ:',
+          greeting: 'Բարև, {name},',
+          body: [
+            'Կրկին շնորհակալություն <strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի նկատմամբ ձեր հետաքրքրության և դիմումի վրա ծախսված ժամանակի համար:',
+            'Մանրակրկիտ դիտարկումից հետո մենք որոշել ենք չշարունակել ձեր թեկնածությունը այս կոնկրետ դերի համար: Սա հեշտ որոշում չէր — մրցակցությունը շատ բարձր էր:',
+            'Ձեր պրոֆիլը կպահպանվի մեր ցանցում: Ապագայում ավելի համապատասխան դերեր ունենալու դեպքում մենք կկապվենք ձեզ հետ: Բարեմաղթանքներով ձեր որոնման մեջ:'
+          ],
+          team: 'ArgusRecruit-ի թիմը'
+        }
+      }
+    }
+  ];
+
+  return stages.map(s => [
+    s.key,
+    s.copy.en.subject,
+    brandedEmailHtml_(s.copy.en),
+    s.copy.ru.subject,
+    brandedEmailHtml_(s.copy.ru),
+    s.copy.hy.subject,
+    brandedEmailHtml_(s.copy.hy)
+  ]);
+}
+
+function brandedEmailHtml_(c) {
+  const paragraphs = c.body
+    .map(p => `<p style="margin:0 0 14px;color:rgba(255,255,255,0.85);">${p}</p>`)
+    .join('');
+  return `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ArgusRecruit</title></head>
+<body style="margin:0;padding:0;background:#0E2440;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#ffffff;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0E2440;padding:32px 16px;">
+    <tr><td align="center">
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#1E4170;border:1px solid rgba(212,175,55,0.2);border-radius:14px;overflow:hidden;">
+        <tr><td align="center" style="padding:36px 32px 24px;background:#16345A;border-bottom:1px solid rgba(212,175,55,0.2);">
+          <img src="https://argusrecruit.com/logo.png" alt="ArgusRecruit" width="64" style="display:block;height:64px;width:auto;">
+          <div style="margin-top:14px;font-size:11px;letter-spacing:2.5px;color:#D4AF37;text-transform:uppercase;font-weight:700;">Many Eyes. One Purpose.</div>
+        </td></tr>
+        <tr><td align="center" style="padding:30px 32px 0;">
+          <div style="display:inline-block;font-size:10px;letter-spacing:4px;color:#D4AF37;text-transform:uppercase;font-weight:700;padding:6px 16px;border:1px solid rgba(212,175,55,0.4);border-radius:999px;">${c.eyebrow}</div>
+        </td></tr>
+        <tr><td align="center" style="padding:18px 32px 0;">
+          <h1 style="margin:0;font-size:24px;font-weight:700;letter-spacing:0.5px;color:#ffffff;text-transform:none;line-height:1.25;">${c.h1}</h1>
+        </td></tr>
+        <tr><td style="padding:28px 36px 18px;color:rgba(255,255,255,0.85);font-size:15px;line-height:1.75;">
+          <p style="margin:0 0 16px;">${c.greeting}</p>
+          ${paragraphs}
+        </td></tr>
+        <tr><td align="center" style="padding:10px 32px 32px;">
+          <a href="https://argusrecruit.com/jobs/" style="display:inline-block;background:#D4AF37;color:#0E2440;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:13px 28px;border-radius:999px;text-decoration:none;">Browse All Open Roles</a>
+        </td></tr>
+        <tr><td style="padding:0 32px 28px;color:rgba(255,255,255,0.7);font-size:13px;line-height:1.6;text-align:center;font-style:italic;">— ${c.team}</td></tr>
+        <tr><td style="padding:22px 32px;background:#0E2440;border-top:1px solid rgba(212,175,55,0.15);text-align:center;">
+          <div style="color:rgba(255,255,255,0.55);font-size:12px;line-height:1.65;">
+            <a href="https://argusrecruit.com" style="color:#D4AF37;text-decoration:none;">argusrecruit.com</a>
+            &nbsp;·&nbsp;
+            <a href="mailto:contact@argusrecruit.com" style="color:#D4AF37;text-decoration:none;">contact@argusrecruit.com</a>
+          </div>
+          <div style="margin-top:12px;color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:1px;text-transform:uppercase;">© 2026 ArgusRecruit · Yerevan, Armenia</div>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body></html>`;
 }
