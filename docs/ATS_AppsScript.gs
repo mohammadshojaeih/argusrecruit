@@ -1136,11 +1136,20 @@ function doPost(e) {
 }
 
 function handleTelegramUpdate_(update) {
+  // Callback queries — inline-button taps
+  if (update.callback_query) {
+    const cq = update.callback_query;
+    if (cq.from && cq.from.id !== TG_ADMIN_CHAT_ID) {
+      tgAnswerCallback_(cq.id, 'Not authorized.');
+      return;
+    }
+    handleCallbackQuery_(cq);
+    return;
+  }
   const msg = update.message || update.edited_message;
   if (!msg) return;
   const chatId = msg.chat && msg.chat.id;
   const fromId = msg.from && msg.from.id;
-  // Only respond to Mohammad
   if (fromId !== TG_ADMIN_CHAT_ID) return;
 
   if (msg.text) handleTgText_(chatId, msg.text.trim());
@@ -1154,10 +1163,41 @@ function tgSend_(chatId, text, extra) {
     parse_mode: 'HTML',
     disable_web_page_preview: true
   }, extra || {});
-  UrlFetchApp.fetch('https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage', {
+  const res = UrlFetchApp.fetch('https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage', {
     method: 'post',
     contentType: 'application/json',
     payload: JSON.stringify(payload),
+    muteHttpExceptions: true
+  });
+  try { return JSON.parse(res.getContentText()); } catch (_) { return null; }
+}
+
+function tgSendKb_(chatId, text, keyboard) {
+  return tgSend_(chatId, text, { reply_markup: { inline_keyboard: keyboard } });
+}
+
+function tgEdit_(chatId, messageId, text, keyboard) {
+  const payload = {
+    chat_id: chatId,
+    message_id: messageId,
+    text: text,
+    parse_mode: 'HTML',
+    disable_web_page_preview: true
+  };
+  if (keyboard) payload.reply_markup = { inline_keyboard: keyboard };
+  UrlFetchApp.fetch('https://api.telegram.org/bot' + TG_BOT_TOKEN + '/editMessageText', {
+    method: 'post',
+    contentType: 'application/json',
+    payload: JSON.stringify(payload),
+    muteHttpExceptions: true
+  });
+}
+
+function tgAnswerCallback_(callbackId, text) {
+  UrlFetchApp.fetch('https://api.telegram.org/bot' + TG_BOT_TOKEN + '/answerCallbackQuery', {
+    method: 'post',
+    contentType: 'application/json',
+    payload: JSON.stringify({ callback_query_id: callbackId, text: text || '' }),
     muteHttpExceptions: true
   });
 }
@@ -1176,20 +1216,166 @@ function tgClearState_(chatId) {
   PropertiesService.getUserProperties().deleteProperty('tg_state_' + chatId);
 }
 
+function showHomeMenu_(chatId) {
+  tgSendKb_(chatId,
+    '<b>ArgusRecruit Intake Bot</b>\n\nPick a job, choose how the candidate reached you, then send their CV — I\'ll read it, show what I found, and ask you to confirm.',
+    [
+      [{ text: '📋 Pick a job', callback_data: 'pickjob' }],
+      [{ text: '🔍 State', callback_data: 'state' }, { text: '🆘 Help', callback_data: 'help' }]
+    ]
+  );
+}
+
+function showJobsKb_(chatId, messageId) {
+  const jobs = listActiveJobs_();
+  if (jobs.length === 0) {
+    const text = 'No active job folders found in Drive root.';
+    if (messageId) tgEdit_(chatId, messageId, text, [[{ text: '↩️ Back', callback_data: 'home' }]]);
+    else tgSendKb_(chatId, text, [[{ text: '↩️ Back', callback_data: 'home' }]]);
+    return;
+  }
+  const rows = jobs.map(j => [{
+    text: `${j.jobId} — ${j.jobTitle}`,
+    callback_data: 'job:' + j.jobId
+  }]);
+  rows.push([{ text: '↩️ Back', callback_data: 'home' }]);
+  const text = '<b>Pick a job:</b>';
+  if (messageId) tgEdit_(chatId, messageId, text, rows);
+  else tgSendKb_(chatId, text, rows);
+}
+
+function showSourcesKb_(chatId, messageId, jobId, jobTitle) {
+  const sources = SOURCES.filter(s => s !== 'web-apply');
+  const rows = sources.map(s => [{
+    text: s,
+    callback_data: 'src:' + jobId + '|' + s
+  }]);
+  rows.push([{ text: '↩️ Back to jobs', callback_data: 'pickjob' }]);
+  const text = `<b>Job:</b> <code>${jobId}</code> — ${escHtml_(jobTitle)}\n\nHow did you find this candidate?`;
+  if (messageId) tgEdit_(chatId, messageId, text, rows);
+  else tgSendKb_(chatId, text, rows);
+}
+
+function showReadyKb_(chatId, messageId, jobId, jobTitle, source) {
+  const text =
+    `✅ <b>Ready.</b>\n\n` +
+    `Job: <code>${jobId}</code> — ${escHtml_(jobTitle)}\n` +
+    `Source: <code>${source}</code>\n\n` +
+    `Now <b>send or forward</b> the candidate's CV (PDF, DOC, DOCX).`;
+  const kb = [[
+    { text: '🔄 Change job', callback_data: 'pickjob' },
+    { text: '↩️ Cancel', callback_data: 'home' }
+  ]];
+  if (messageId) tgEdit_(chatId, messageId, text, kb);
+  else tgSendKb_(chatId, text, kb);
+}
+
+function handleCallbackQuery_(cq) {
+  const chatId = cq.message && cq.message.chat && cq.message.chat.id;
+  const messageId = cq.message && cq.message.message_id;
+  const data = cq.data || '';
+  tgAnswerCallback_(cq.id);
+
+  if (data === 'home') {
+    tgEdit_(chatId, messageId,
+      '<b>ArgusRecruit Intake Bot</b>\n\nPick a job, choose how the candidate reached you, then send their CV.',
+      [
+        [{ text: '📋 Pick a job', callback_data: 'pickjob' }],
+        [{ text: '🔍 State', callback_data: 'state' }, { text: '🆘 Help', callback_data: 'help' }]
+      ]
+    );
+    return;
+  }
+  if (data === 'pickjob') { showJobsKb_(chatId, messageId); return; }
+  if (data === 'help') {
+    tgEdit_(chatId, messageId,
+      '<b>Help</b>\n\n1. Tap <b>Pick a job</b> and choose the role.\n2. Choose how the candidate reached you.\n3. Send or forward the CV (PDF/DOC/DOCX).\n4. I\'ll read it, show what I found, and you can <b>Confirm</b> or <b>Cancel</b>.\n\nYou can also type <code>/start</code> anytime to get back to the home menu.',
+      [[{ text: '↩️ Back', callback_data: 'home' }]]
+    );
+    return;
+  }
+  if (data === 'state') {
+    const st = tgState_(chatId);
+    tgEdit_(chatId, messageId,
+      'Current state:\n' +
+      'job: ' + (st.jobId || '—') + '\n' +
+      'title: ' + (st.jobTitle || '—') + '\n' +
+      'source: ' + (st.source || '—') + '\n' +
+      'pending: ' + (st.pending ? 'yes' : 'no'),
+      [[{ text: '↩️ Back', callback_data: 'home' }]]
+    );
+    return;
+  }
+  if (data.indexOf('job:') === 0) {
+    const jobId = data.slice(4);
+    const jobs = listActiveJobs_();
+    const job = jobs.find(j => j.jobId === jobId);
+    if (!job) { tgEdit_(chatId, messageId, 'Job not found.', [[{ text: '↩️ Back', callback_data: 'pickjob' }]]); return; }
+    showSourcesKb_(chatId, messageId, job.jobId, job.jobTitle);
+    return;
+  }
+  if (data.indexOf('src:') === 0) {
+    const rest = data.slice(4);
+    const sep = rest.indexOf('|');
+    const jobId = rest.slice(0, sep);
+    const source = rest.slice(sep + 1);
+    const jobs = listActiveJobs_();
+    const job = jobs.find(j => j.jobId === jobId);
+    if (!job) { tgEdit_(chatId, messageId, 'Job not found.', [[{ text: '↩️ Back', callback_data: 'pickjob' }]]); return; }
+    tgSaveState_(chatId, { jobId: job.jobId, jobTitle: job.jobTitle, source: source });
+    showReadyKb_(chatId, messageId, job.jobId, job.jobTitle, source);
+    return;
+  }
+  if (data === 'confirm') {
+    const st = tgState_(chatId);
+    if (!st.pending) { tgEdit_(chatId, messageId, 'Nothing pending. Pick a job and send a CV first.', [[{ text: '↩️ Back', callback_data: 'home' }]]); return; }
+    let res;
+    try { res = submitIntake_(st.pending); }
+    catch (err) { res = { ok: false, error: String(err) }; }
+    if (res.ok) {
+      tgEdit_(chatId, messageId,
+        '✅ Added <b>' + escHtml_(res.name) + '</b> → <code>' + res.jobId + '</code>.',
+        [[
+          { text: '➕ Another to same job', callback_data: 'again:' + st.jobId + '|' + (st.source || 'sourced-other') },
+          { text: '🏠 Home', callback_data: 'home' }
+        ]]
+      );
+    } else {
+      tgEdit_(chatId, messageId,
+        '⚠ Save failed: ' + escHtml_(res.error || 'unknown'),
+        [[{ text: '↩️ Back', callback_data: 'home' }]]
+      );
+    }
+    const after = tgState_(chatId);
+    delete after.pending;
+    tgSaveState_(chatId, after);
+    return;
+  }
+  if (data === 'cancel') {
+    const st = tgState_(chatId);
+    delete st.pending;
+    tgSaveState_(chatId, st);
+    tgEdit_(chatId, messageId, 'Cancelled. The CV was not added.',
+      [[{ text: '🏠 Home', callback_data: 'home' }]]);
+    return;
+  }
+  if (data.indexOf('again:') === 0) {
+    const rest = data.slice(6);
+    const sep = rest.indexOf('|');
+    const jobId = rest.slice(0, sep);
+    const source = rest.slice(sep + 1);
+    const jobs = listActiveJobs_();
+    const job = jobs.find(j => j.jobId === jobId);
+    if (!job) { tgEdit_(chatId, messageId, 'Job not found.', [[{ text: '↩️ Back', callback_data: 'pickjob' }]]); return; }
+    tgSaveState_(chatId, { jobId: job.jobId, jobTitle: job.jobTitle, source: source });
+    showReadyKb_(chatId, messageId, job.jobId, job.jobTitle, source);
+    return;
+  }
+}
+
 function handleTgText_(chatId, text) {
   if (text === '/start' || text === '/help') {
-    tgSend_(chatId,
-      '<b>ArgusRecruit Intake Bot</b>\n\n' +
-      'How to use:\n' +
-      '1. <code>/jobs</code> — list active jobs\n' +
-      '2. <code>/job AR-PYT01 sourced-telegram</code> — set the next CV\'s job + source\n' +
-      '3. Send/forward the candidate\'s CV (PDF, DOC, DOCX)\n' +
-      '4. I\'ll read it, show what I found, and ask you to confirm\n\n' +
-      'Commands:\n' +
-      '<code>/cancel</code> — clear pending CV\n' +
-      '<code>/confirm</code> — confirm the last-parsed CV and add to ATS\n' +
-      '<code>/state</code> — show current job/source setting'
-    );
+    showHomeMenu_(chatId);
     return;
   }
   if (text === '/jobs') {
@@ -1294,14 +1480,19 @@ function handleTgDocument_(chatId, document, msg) {
   };
   tgSaveState_(chatId, Object.assign({}, state, { pending }));
 
-  tgSend_(chatId,
+  tgSendKb_(chatId,
     '<b>Found in CV:</b>\n' +
     '👤 Name: <code>' + escHtml_(fields.name || '?') + '</code>\n' +
     '✉ Email: <code>' + escHtml_(fields.email || '—') + '</code>\n' +
     '📱 Phone: <code>' + escHtml_(fields.phone || '—') + '</code>\n' +
     '🔗 LinkedIn: <code>' + escHtml_(fields.linkedin || '—') + '</code>\n' +
-    '📁 Job: <code>' + state.jobId + '</code> — ' + escHtml_(state.jobTitle) + '\n\n' +
-    'Send <code>/confirm</code> to add, or <code>/cancel</code> to drop.'
+    '📁 Job: <code>' + state.jobId + '</code> — ' + escHtml_(state.jobTitle) + '\n' +
+    '📥 Source: <code>' + (state.source || 'sourced-other') + '</code>',
+    [[
+      { text: '✅ Confirm', callback_data: 'confirm' },
+      { text: '🔄 Change job', callback_data: 'pickjob' },
+      { text: '❌ Cancel', callback_data: 'cancel' }
+    ]]
   );
 }
 
