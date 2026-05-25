@@ -34,7 +34,7 @@ const PROCESSED_LBL  = 'ats-processed';
 const SEARCH_QUERY   = 'subject:"[Application" has:attachment -label:ats-processed newer_than:90d';
 
 // Telegram intake bot — see installTelegramWebhook() for setup
-const TG_BOT_TOKEN     = '8281695325:AAG_dkUNaa3WYXlFU17-2U-RExm9z89qOA4'; // @Sonicbot_bot
+const TG_BOT_TOKEN     = '8706377970:AAEtKkn1Cl68PSmX65wFtFMJAL3XFHaegeo'; // @ArgusIntakeBot
 const TG_ADMIN_CHAT_ID = 814437645;  // Mohammad — only this account is allowed to use the intake bot
 
 const SOURCES = [
