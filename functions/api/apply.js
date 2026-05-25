@@ -14,7 +14,7 @@ export async function onRequestPost(context) {
     const jobTitle = (form.get('jobTitle') || '').toString().slice(0, 300);
     const lang = (form.get('lang') || 'en').toString();
 
-    if (!name || !email || !jobTitle) {
+    if (!name || !email || !phone || !jobTitle) {
       return json({ ok: false, error: 'Missing required fields' }, 400);
     }
 
