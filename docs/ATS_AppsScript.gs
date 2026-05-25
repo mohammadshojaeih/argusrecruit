@@ -363,19 +363,33 @@ function getSetting_(key) {
 // SHEET PROVISIONING (run once from the editor)
 // ──────────────────────────────────────────────────────────────────────
 
+/**
+ * setup() is IDEMPOTENT and SAFE TO RE-RUN.
+ * It only creates missing sheets / sets headers, dropdowns, formatting.
+ * It NEVER deletes existing rows.
+ *
+ * For destructive operations use:
+ *   - resetTemplatesOnly()  → wipes only Email Templates sheet and re-seeds it
+ *   - resetApplications_DANGER() → wipes Applications data (requires manual edit to enable)
+ */
 function setup() {
   const ss = SpreadsheetApp.getActive();
 
-  // 1. Applications sheet
+  // ── 1. Applications sheet (non-destructive) ────────────────────────
   let app = ss.getSheetByName(APP_SHEET);
+  const isNewApp = !app;
   if (!app) app = ss.insertSheet(APP_SHEET);
-  app.clear();
-  app.getRange(1, 1, 1, 17).setValues([[
-    'Date Applied', 'Job ID', 'Job Title', 'Source',
-    'Name', 'Email', 'Phone', 'LinkedIn', 'Lang',
-    'Stage', 'CV', 'Notes', '# Other Apps',
-    'Last Change', 'History', 'Last Known Stage (auto)', 'File ID (auto)'
-  ]]);
+
+  // Only write headers if this is a brand new sheet OR the headers are missing.
+  const firstCell = app.getRange(1, 1).getValue();
+  if (isNewApp || !firstCell) {
+    app.getRange(1, 1, 1, 17).setValues([[
+      'Date Applied', 'Job ID', 'Job Title', 'Source',
+      'Name', 'Email', 'Phone', 'LinkedIn', 'Lang',
+      'Stage', 'CV', 'Notes', '# Other Apps',
+      'Last Change', 'History', 'Last Known Stage (auto)', 'File ID (auto)'
+    ]]);
+  }
   app.setFrozenRows(1);
   app.getRange('A1:Q1').setFontWeight('bold').setBackground('#0E2440').setFontColor('#FFFFFF');
   app.setColumnWidth(1, 100); app.setColumnWidth(2, 80); app.setColumnWidth(3, 180);
@@ -407,7 +421,53 @@ function setup() {
     .build();
   app.setConditionalFormatRules([condRule]);
 
-  // 2. Email Templates sheet
+  // ── 2. Email Templates sheet (non-destructive) ─────────────────────
+  let tpl = ss.getSheetByName(TPL_SHEET);
+  const isNewTpl = !tpl;
+  if (!tpl) tpl = ss.insertSheet(TPL_SHEET);
+  if (isNewTpl || !tpl.getRange(1, 1).getValue()) {
+    tpl.getRange(1, 1, 1, 7).setValues([[
+      'Key', 'en', 'en (body)', 'ru', 'ru (body)', 'hy', 'hy (body)'
+    ]]);
+    const rowsTpl = stageTemplates_();
+    tpl.getRange(2, 1, rowsTpl.length, 7).setValues(rowsTpl);
+    tpl.setRowHeights(2, rowsTpl.length, 90);
+  }
+  tpl.setFrozenRows(1);
+  tpl.getRange('A1:G1').setFontWeight('bold').setBackground('#0E2440').setFontColor('#FFFFFF');
+  tpl.setColumnWidth(1, 110);
+  for (let c = 2; c <= 7; c++) tpl.setColumnWidth(c, 300);
+
+  // ── 3. Settings sheet (non-destructive) ────────────────────────────
+  let cfg = ss.getSheetByName(CFG_SHEET);
+  const isNewCfg = !cfg;
+  if (!cfg) cfg = ss.insertSheet(CFG_SHEET);
+  if (isNewCfg || !cfg.getRange(1, 1).getValue()) {
+    cfg.getRange(1, 1, 1, 2).setValues([['Setting', 'Value']]);
+    cfg.getRange(2, 1, 5, 2).setValues([
+      ['Send Emails Enabled', 'TRUE'],
+      ['From Name',           'ArgusRecruit'],
+      ['Reply To',            'contact@argusrecruit.com'],
+      ['Root Folder ID',      ROOT_FOLDER_ID],
+      ['Trigger Interval',    'every 5 minutes (set via Triggers panel)']
+    ]);
+  }
+  cfg.getRange('A1:B1').setFontWeight('bold').setBackground('#0E2440').setFontColor('#FFFFFF');
+  cfg.setColumnWidth(1, 200);
+  cfg.setColumnWidth(2, 400);
+
+  ss.toast('ATS structure verified. Existing data was preserved.', 'Setup complete', 6);
+}
+
+
+/** Wipes and re-seeds ONLY the Email Templates sheet. Safe — Applications data is untouched. */
+function resetTemplatesOnly() {
+  const ss = SpreadsheetApp.getActive();
+  const ui = SpreadsheetApp.getUi();
+  const resp = ui.alert('Reset Email Templates?',
+    'This will replace the Email Templates sheet with the latest branded defaults.\nApplications data is NOT touched.\n\nContinue?',
+    ui.ButtonSet.YES_NO);
+  if (resp !== ui.Button.YES) return;
   let tpl = ss.getSheetByName(TPL_SHEET);
   if (!tpl) tpl = ss.insertSheet(TPL_SHEET);
   tpl.clear();
@@ -416,30 +476,12 @@ function setup() {
   ]]);
   tpl.setFrozenRows(1);
   tpl.getRange('A1:G1').setFontWeight('bold').setBackground('#0E2440').setFontColor('#FFFFFF');
-  // (Body cells hold full HTML — branded ArgusRecruit template per stage/language.)
   const rowsTpl = stageTemplates_();
   tpl.getRange(2, 1, rowsTpl.length, 7).setValues(rowsTpl);
   tpl.setColumnWidth(1, 110);
   for (let c = 2; c <= 7; c++) tpl.setColumnWidth(c, 300);
   tpl.setRowHeights(2, rowsTpl.length, 90);
-
-  // 3. Settings sheet
-  let cfg = ss.getSheetByName(CFG_SHEET);
-  if (!cfg) cfg = ss.insertSheet(CFG_SHEET);
-  cfg.clear();
-  cfg.getRange(1, 1, 1, 2).setValues([['Setting', 'Value']]);
-  cfg.getRange('A1:B1').setFontWeight('bold').setBackground('#0E2440').setFontColor('#FFFFFF');
-  cfg.getRange(2, 1, 5, 2).setValues([
-    ['Send Emails Enabled', 'TRUE'],
-    ['From Name',           'ArgusRecruit'],
-    ['Reply To',            'contact@argusrecruit.com'],
-    ['Root Folder ID',      ROOT_FOLDER_ID],
-    ['Trigger Interval',    'every 5 minutes (set via Triggers panel)']
-  ]);
-  cfg.setColumnWidth(1, 200);
-  cfg.setColumnWidth(2, 400);
-
-  SpreadsheetApp.getActive().toast('ATS provisioned. Now set a time-driven trigger on `tick` (every 5 minutes).', 'Setup complete', 8);
+  ss.toast('Email Templates reset.', 'Done', 4);
 }
 
 
@@ -451,9 +493,10 @@ function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu('ATS')
     .addItem('Sync now', 'tick')
-    .addItem('Run setup (first time only)', 'setup')
+    .addItem('Verify setup (safe to re-run)', 'setup')
     .addSeparator()
     .addItem('Show intake form URL', 'showIntakeUrl')
+    .addItem('Reset email templates only', 'resetTemplatesOnly')
     .addToUi();
 }
 
