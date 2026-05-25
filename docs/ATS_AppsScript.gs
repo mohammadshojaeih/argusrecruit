@@ -817,7 +817,7 @@ function stageTemplates_() {
           h1: 'Thanks — we\'re looking at your profile.',
           greeting: 'Hi {name},',
           body: [
-            'Thank you for applying to <strong style="color:#D4AF37;">{jobTitle}</strong> at ArgusRecruit. A senior recruiter is now reviewing your application personally.',
+            'Thank you for applying to <strong style="color:#D4AF37;">{jobTitle}</strong> at ArgusRecruit. Our team is now carefully reviewing your application, and we\'ll get back to you soon.',
             'If your background matches the role, we will be in touch within 1–3 business days. If we don\'t see a fit for this specific role, your profile will stay in our network and we may reach out about future openings that better match your background.'
           ],
           team: 'The ArgusRecruit Team'
@@ -828,7 +828,7 @@ function stageTemplates_() {
           h1: 'Спасибо — мы рассматриваем ваш профиль.',
           greeting: 'Здравствуйте, {name},',
           body: [
-            'Спасибо за вашу заявку на роль <strong style="color:#D4AF37;">{jobTitle}</strong>. Старший рекрутер лично рассматривает ваш профиль.',
+            'Спасибо за вашу заявку на роль <strong style="color:#D4AF37;">{jobTitle}</strong>. Наша команда тщательно рассматривает ваш профиль и свяжется с вами в ближайшее время.',
             'Если ваш опыт подходит роли, мы свяжемся с вами в течение 1–3 рабочих дней. Если совпадения для этой конкретной роли не будет, мы сохраним ваш профиль в нашей сети и можем связаться с вами по поводу будущих вакансий.'
           ],
           team: 'Команда ArgusRecruit'
@@ -839,7 +839,7 @@ function stageTemplates_() {
           h1: 'Շնորհակալություն — մենք ուսումնասիրում ենք ձեր պրոֆիլը:',
           greeting: 'Բարև, {name},',
           body: [
-            '<strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի համար դիմելու համար շնորհակալություն: Ավագ ռեկրուտերը այժմ անձամբ ուսումնասիրում է ձեր փորձառությունը:',
+            '<strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի համար դիմելու համար շնորհակալություն: Մեր թիմը մանրակրկիտ ուսումնասիրում է ձեր դիմումը և շուտով կկապվենք ձեզ հետ:',
             'Համապատասխան լինելու դեպքում մենք կկապվենք ձեզ հետ 1–3 աշխատանքային օրվա ընթացքում: Հակառակ դեպքում ձեր պրոֆիլը կպահպանվի մեր ցանցում ապագա հնարավորությունների համար:'
           ],
           team: 'ArgusRecruit-ի թիմը'
