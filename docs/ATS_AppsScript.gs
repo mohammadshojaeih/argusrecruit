@@ -238,85 +238,9 @@ function processStageChanges_() {
 
 function parseAtsPayload_(msg) {
   const html = msg.getBody();
-
-  // 1. New format — structured JSON block
-  const payloadMatch = html.match(/ATS_PAYLOAD_START([\s\S]*?)ATS_PAYLOAD_END/);
-  if (payloadMatch) {
-    try { return JSON.parse(payloadMatch[1].trim()); } catch (_) { /* fall through */ }
-  }
-
-  // 2. New subject format [Application <jobId>] <title> — <name>
-  const subj = msg.getSubject();
-  const newSubj = subj.match(/^\s*\[Application\s+([^\]\s]+)\]\s+(.+?)\s+[—\-–]\s+(.+?)\s*$/);
-
-  // 3. Old subject format [Application] <title> — <name>  (legacy)
-  const oldSubj = subj.match(/^\s*\[Application\]\s+(.+?)\s+[—\-–]\s+(.+?)\s*$/);
-
-  if (!newSubj && !oldSubj) return null;
-
-  // Helper: pull a field's value from the HTML body of the admin email
-  const fieldRx = (label) => {
-    const re = new RegExp(
-      '<strong>\\s*' + label + '\\s*:\\s*</strong>([\\s\\S]*?)</p>',
-      'i'
-    );
-    const m = html.match(re);
-    if (!m) return '';
-    // Strip remaining HTML and the leading dash/em-dash markers used for empty values.
-    return m[1].replace(/<a[^>]*>([\s\S]*?)<\/a>/g, '$1')
-               .replace(/<[^>]+>/g, '')
-               .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
-               .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
-               .trim()
-               .replace(/^—\s*$/, '');
-  };
-
-  // Pull the slug/jobId out of the Role line: "Senior QA Engineer (slug: AR-STE01)"
-  // or "Senior QA Engineer (jobId: AR-STE01)" depending on apply.js version.
-  let jobId    = newSubj ? newSubj[1].trim() : '';
-  let jobTitle = newSubj ? newSubj[2].trim() : (oldSubj ? oldSubj[1].trim() : '');
-  let name     = newSubj ? newSubj[3].trim() : (oldSubj ? oldSubj[2].trim() : '');
-
-  const roleField = fieldRx('Role');
-  if (!jobId && roleField) {
-    const slugMatch = roleField.match(/\((?:slug|jobId)\s*:\s*([^)]+)\)/i);
-    if (slugMatch) jobId = slugMatch[1].trim();
-  }
-
-  // Fallbacks: derive jobId from jobTitle for the most common titles we know.
-  if (!jobId) {
-    jobId = inferJobIdFromTitle_(jobTitle);
-  }
-
-  const email    = fieldRx('Email') || msg.getReplyTo() || msg.getFrom() || '';
-  const phone    = fieldRx('Phone');
-  const linkedin = fieldRx('LinkedIn');
-  const lang     = (fieldRx('Language') || 'en').toLowerCase();
-
-  return {
-    jobId,
-    jobTitle,
-    name,
-    email,
-    phone,
-    linkedin,
-    lang,
-    source: 'web-apply',
-    submittedAt: msg.getDate().toISOString()
-  };
-}
-
-// Quick lookup for legacy emails that didn't carry an explicit jobId.
-function inferJobIdFromTitle_(title) {
-  if (!title) return '';
-  const map = {
-    'senior qa engineer':       'AR-STE01',
-    'senior test engineer':     'AR-STE01',
-    'senior python developer':  'AR-PYT01',
-    'senior angular developer': 'AR-ANG01',
-    'senior product designer':  'AR-DES01'
-  };
-  return map[title.toLowerCase().trim()] || 'AR-UNKNOWN';
+  const m = html.match(/ATS_PAYLOAD_START([\s\S]*?)ATS_PAYLOAD_END/);
+  if (!m) return null;
+  try { return JSON.parse(m[1].trim()); } catch (_) { return null; }
 }
 
 function findOrCreateFolder_(parent, name) {
