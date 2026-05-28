@@ -65,6 +65,18 @@ const faqs = [
     .svc-metric-text .label { color: rgba(255,255,255,0.75); font-size: 13px; line-height: 1.4; }
 
     .svc-services { padding: 90px 32px; background: var(--navy); }
+    .svc-operations { padding: 90px 32px; background: linear-gradient(180deg, #08182b 0%, var(--navy) 100%); }
+    .svc-operations-inner { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 50px; align-items: start; }
+    .svc-operations-content { min-width: 0; }
+    .svc-operations-content .eyebrow { margin-bottom: 18px; }
+    .svc-operations-content h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(24px, 2.8vw, 34px); font-weight: 600; line-height: 1.2; letter-spacing: 1.5px; text-transform: uppercase; color: var(--white); }
+    .svc-operations-content h2 .accent { color: var(--primary-gold); }
+    .svc-operations-photo { position: sticky; top: 110px; border-radius: 16px; overflow: hidden; aspect-ratio: 4/5; border: 1px solid rgba(212,175,55,0.2); box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
+    .svc-operations-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .svc-operations-photo .badge { position: absolute; bottom: 24px; left: 24px; right: 24px; background: rgba(14,36,64,0.85); border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; }
+    .svc-operations-photo .badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary-gold); }
+    .svc-operations-photo .badge .text { color: var(--white); font-size: 13px; font-weight: 500; }
+    .svc-operations-photo .badge .text span { color: var(--primary-gold); font-weight: 600; }
     .svc-services-layout { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 50px; align-items: start; }
     .svc-photo { position: sticky; top: 110px; border-radius: 16px; overflow: hidden; aspect-ratio: 4/5; border: 1px solid rgba(212,175,55,0.2); box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
     .svc-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -204,7 +216,8 @@ const faqs = [
 @media (max-width: 720px) { .svc-industry-card h4, .svc-industry-card p { overflow-wrap: anywhere; word-break: break-word; } .svc-industry-card h4 { font-size: 13px !important; letter-spacing: 0.5px !important; } .svc-industry-card p { font-size: 12px !important; } }
     @media (max-width: 960px) {
       .svc-metrics-inner, .svc-industries-grid, .svc-clients-grid { grid-template-columns: repeat(2, 1fr); }
-      .svc-services-layout, .svc-global-grid, .svc-contact-grid { grid-template-columns: 1fr; gap: 32px; }
+      .svc-services-layout, .svc-operations-inner, .svc-global-grid, .svc-contact-grid { grid-template-columns: 1fr; gap: 32px; }
+      .svc-photo, .svc-operations-photo { position: relative; aspect-ratio: 16/9; max-height: 380px; top: auto; }
       .svc-photo { position: relative; aspect-ratio: 16/9; max-height: 380px; top: auto; }
       .svc-why-grid, .svc-process-grid { grid-template-columns: 1fr 1fr; }
       .svc-why-banner { aspect-ratio: 16/9; }
@@ -212,7 +225,7 @@ const faqs = [
     }
     @media (max-width: 600px) {
       .svc-hero { padding: 130px 20px 70px; }
-      .svc-section, .svc-services, .svc-clients, .svc-why, .svc-global, .svc-quote, .svc-process, .svc-faq, .svc-contact, .svc-metrics { padding-left: 20px; padding-right: 20px; }
+      .svc-section, .svc-services, .svc-operations, .svc-clients, .svc-why, .svc-global, .svc-quote, .svc-process, .svc-faq, .svc-contact, .svc-metrics { padding-left: 20px; padding-right: 20px; }
       .svc-metrics-inner, .svc-why-grid, .svc-process-grid { grid-template-columns: 1fr; } .svc-clients-grid { grid-template-columns: minmax(0,1fr) minmax(0,1fr) !important; gap: 12px !important; } .svc-client { min-width: 0; padding: 18px 12px !important; min-height: 130px; } .svc-industries-grid { grid-template-columns: minmax(0,1fr) minmax(0,1fr) !important; gap: 10px; } .svc-industry-card { min-width: 0; padding: 18px 14px !important; }
       .svc-why-banner-overlay { padding: 18px; }
     }
@@ -248,7 +261,7 @@ const faqs = [
         <div class="badge"><span class="dot"></span><div class="text"><span>Доверяют лидеры</span> по всему миру</div></div>
       </div>
       <div class="svc-services-content">
-        <span class="eyebrow">Услуги</span>
+        <span class="eyebrow">Услуги поиска</span>
         <h2>Много глаз, одно обещание — <span class="accent">правильный найм.</span></h2>
         <p class="svc-lede"><span class="accent">Правильный найм</span> не находится в стопке резюме. К нему приходят через сеть, разговор и острый взгляд.</p>
         <div class="svc-tiers">
@@ -271,6 +284,40 @@ const faqs = [
           <div class="svc-feature"><div class="svc-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div class="svc-feature-text"><strong>Гарантия замены</strong><span>Если размещение не сработает, заново проводим поиск.</span></div></div>
           <div class="svc-feature"><div class="svc-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div><div class="svc-feature-text"><strong>Старший рекрутер, единая точка контакта</strong><span>Лично ведётся старшим рекрутером.</span></div></div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="svc-operations">
+    <div class="svc-operations-inner">
+      <div class="svc-operations-content">
+        <span class="eyebrow">Управление талантами</span>
+        <h2>Engineering Studio — <span class="accent">ваша команда, построенная в Ереване.</span></h2>
+        <p class="svc-lede">Когда нужен не просто один найм, а целая инженерная команда — уже нанятая, оснащённая и работающая — мы строим её и управляем ею из нашего хаба в Ереване. Вы управляете задачами; мы — всем остальным.</p>
+        <div class="svc-tiers svc-tiers-ops">
+          <div class="svc-tier">
+            <div class="svc-tier-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4 8 4v14"/><path d="M9 9h.01"/><path d="M9 12h.01"/><path d="M9 15h.01"/><path d="M9 18h.01"/></svg></div>
+            <div><h3>Найм</h3><p>Мы ищем, отбираем и трудоустраиваем инженеров по вашим требованиям и процессу. Единоразовая комиссия за размещение.</p></div>
+          </div>
+          <div class="svc-tier">
+            <div class="svc-tier-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg></div>
+            <div><h3>Найм + Работодатель по контракту (EOR)</h3><p>Мы становимся юридическим работодателем. Контракты, зарплата, налоги, льготы — ежемесячно.</p></div>
+          </div>
+          <div class="svc-tier">
+            <div class="svc-tier-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/></svg></div>
+            <div><h3>Полностью управляемая команда</h3><p>Рекрутмент + трудоустройство + офис в Ереване, IT, оборудование, HR на месте. Слаженная команда на одной площадке.</p></div>
+          </div>
+        </div>
+        <div class="svc-features">
+          <div class="svc-feature"><div class="svc-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div class="svc-feature-text"><strong>Senior-инженеры — на 60–70% дешевле Западной Европы</strong><span>Ориентировочная зарплата от $3,500 / мес. для инженера уровня senior (5+ лет опыта).</span></div></div>
+          <div class="svc-feature"><div class="svc-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="svc-feature-text"><strong>От брифа до работающей команды за 4 недели</strong><span>30-минутный бриф в понедельник. Работающая команда в том же месяце.</span></div></div>
+          <div class="svc-feature"><div class="svc-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><div class="svc-feature-text"><strong>Один партнёр. Один счёт.</strong><span>Поиск, контракты, зарплата, офис, оборудование, HR — в одном ежемесячном отчёте.</span></div></div>
+          <div class="svc-feature"><div class="svc-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 11l-3-3-3 3"/><path d="M19 8v11"/></svg></div><div class="svc-feature-text"><strong>Защита через замену</strong><span>Бесплатная замена в первые 90 дней — по любой причине.</span></div></div>
+        </div>
+      </div>
+      <div class="svc-operations-photo">
+        <img src="/photo-engineering-studio.jpg" alt="ArgusRecruit Engineering Studio в Ереване">
+        <div class="badge"><span class="dot"></span><div class="text"><span>Инженерные команды</span> в Ереване</div></div>
       </div>
     </div>
   </section>
