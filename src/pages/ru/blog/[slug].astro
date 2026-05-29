@@ -1,5 +1,6 @@
 ---
 import { getPosts } from '../../../lib/sanity.js';
+import { toHTML } from '@portabletext/to-html';
 import SiteHead from '../../../components/SiteHead.astro';
 import SharedCSS from '../../../components/SharedCSS.astro';
 import SiteNav from '../../../components/SiteNav.astro';
@@ -10,6 +11,7 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
+const bodyHtml = Array.isArray(post.body) ? toHTML(post.body) : (post.body || '');
 ---
 <!DOCTYPE html>
 <html lang="ru">
@@ -43,7 +45,7 @@ const { post } = Astro.props;
       <div class="meta">{new Date(post.publishedAt).toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'})}</div>
       <div class="cover"><img src={post.cover} alt="" /></div>
     </header>
-    <div class="post-body" set:html={post.body}></div>
+    <div class="post-body" set:html={bodyHtml}></div>
   </article>
 
   <footer>© 2026 ArgusRecruit · <a href="/ru/">Back to home</a> · <a href="/ru/blog/">All posts</a> · <a href="/privacy/" style="color:var(--primary-gold)">Privacy</a></footer>
