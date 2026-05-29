@@ -4,7 +4,7 @@
 
 <style type="text/css">
 path { fill: #1B3B6F; stroke: #0B1F3D; stroke-width: 0.3; transition: fill 0.3s; }
-#GB, #CA, #AE, #AM { fill: #D4AF37; }
+#GB, #CA, #AE, #OM, #AM { fill: #D4AF37; }
 .city-label { font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 600; fill: #D4AF37; pointer-events: none; }
 .city-label-bg { fill: rgba(8, 30, 62, 0.85); }
 </style>
@@ -241,5 +241,14 @@ path { fill: #1B3B6F; stroke: #0B1F3D; stroke-width: 0.3; transition: fill 0.3s;
       </circle>
       <rect x="548" y="332" width="59" height="16" rx="3" class="city-label-bg" />
       <text x="588" y="344" text-anchor="end" class="city-label">YEREVAN</text>
+    </g>
+    <g class="city-marker">
+      <circle cx="657" cy="408" r="5" fill="#D4AF37"/>
+      <circle cx="657" cy="408" r="5" fill="none" stroke="#D4AF37" stroke-width="1.8" opacity="0.9">
+        <animate attributeName="r" from="5" to="22" dur="2.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" from="0.9" to="0" dur="2.5s" repeatCount="indefinite"/>
+      </circle>
+      <rect x="666" y="411" width="55" height="16" rx="3" class="city-label-bg" />
+      <text x="668" y="423" text-anchor="start" class="city-label">MUSCAT</text>
     </g>
 </svg>
