@@ -15,6 +15,7 @@ const { title = 'ArgusRecruit — Executive Search & Headhunting', description =
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
 <link rel="apple-touch-icon" sizes="512x512" href="/favicon-512.png">
 
+<link rel="canonical" href={Astro.site + Astro.url.pathname.replace(/\/+$/, '/')}>
 <link rel="alternate" hreflang="en" href={Astro.site + (Astro.url.pathname.replace(/^\/(ru|hy)\//, '/'))}>
 <link rel="alternate" hreflang="ru" href={Astro.site + '/ru' + (Astro.url.pathname.replace(/^\/(ru|hy)/, '') || '/')}>
 <link rel="alternate" hreflang="hy" href={Astro.site + '/hy' + (Astro.url.pathname.replace(/^\/(ru|hy)/, '') || '/')}>
