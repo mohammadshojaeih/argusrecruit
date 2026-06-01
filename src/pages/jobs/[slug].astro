@@ -36,15 +36,23 @@ const jobLd = {
     "sameAs": "https://argusrecruit.com",
     "logo": "https://argusrecruit.com/logo.png"
   },
-  "jobLocation": (job.workplaceType === 'remote') ? undefined : {
-    "@type": "Place",
-    "address": {
-      "@type": "PostalAddress",
-      ...(job.locationCity && { "addressLocality": job.locationCity }),
-      ...(job.locationCountry && { "addressCountry": job.locationCountry })
+  ...(job.workplaceType !== 'remote' && {
+    "jobLocation": {
+      "@type": "Place",
+      "address": {
+        "@type": "PostalAddress",
+        ...(job.locationCity && { "addressLocality": job.locationCity }),
+        ...(job.locationCountry && { "addressCountry": job.locationCountry })
+      }
     }
-  },
-  ...(job.workplaceType === 'remote' && { "jobLocationType": "TELECOMMUTE" }),
+  }),
+  ...(job.workplaceType === 'remote' && {
+    "jobLocationType": "TELECOMMUTE",
+    "applicantLocationRequirements": {
+      "@type": "Country",
+      "name": job.locationCountry || "Worldwide"
+    }
+  }),
   ...(salaryText && job.salaryMin && job.salaryMax && {
     "baseSalary": {
       "@type": "MonetaryAmount",
