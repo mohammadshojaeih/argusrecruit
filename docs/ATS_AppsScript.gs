@@ -91,9 +91,14 @@ const COL = {
   otherApps:   13,  // M  (auto formula)
   lastChange:  14,  // N
   history:     15,  // O
-  lastStage:   16,  // P  (hidden — script uses to detect changes)
-  fileId:      17   // Q  (hidden — CV file ID for moves)
+  rating:      16,  // P  ← DROPDOWN, 1–5 stars (manual)
+  followUp:    17,  // Q  ← DATE, next candidate follow-up (manual)
+  lastStage:   18,  // R  (hidden — script uses to detect changes)
+  fileId:      19   // S  (hidden — CV file ID for moves)
 };
+
+// Resume rating dropdown options (1–5 stars).
+const RATINGS = ['★', '★★', '★★★', '★★★★', '★★★★★'];
 
 
 // ──────────────────────────────────────────────────────────────────────
@@ -183,8 +188,10 @@ function processInbox_() {
         '',                                          // M will become formula below
         new Date(),                                  // N last change
         'created → 00-New',                          // O history
-        '00-New',                                    // P lastStage
-        file.getId()                                 // Q fileId
+        '',                                          // P rating (manual)
+        '',                                          // Q follow-up (manual)
+        '00-New',                                    // R lastStage
+        file.getId()                                 // S fileId
       ];
       sheet.appendRow(row);
       const r = sheet.getLastRow();
@@ -426,21 +433,23 @@ function setup() {
   // Only write headers if this is a brand new sheet OR the headers are missing.
   const firstCell = app.getRange(1, 1).getValue();
   if (isNewApp || !firstCell) {
-    app.getRange(1, 1, 1, 17).setValues([[
+    app.getRange(1, 1, 1, 19).setValues([[
       'Date Applied', 'Job ID', 'Job Title', 'Source',
       'Name', 'Email', 'Phone', 'LinkedIn', 'Lang',
       'Stage', 'CV', 'Notes', '# Other Apps',
-      'Last Change', 'History', 'Last Known Stage (auto)', 'File ID (auto)'
+      'Last Change', 'History', 'Rating', 'Follow-up',
+      'Last Known Stage (auto)', 'File ID (auto)'
     ]]);
   }
   app.setFrozenRows(1);
-  app.getRange('A1:Q1').setFontWeight('bold').setBackground('#0E2440').setFontColor('#FFFFFF');
+  app.getRange('A1:S1').setFontWeight('bold').setBackground('#0E2440').setFontColor('#FFFFFF');
   app.setColumnWidth(1, 100); app.setColumnWidth(2, 80); app.setColumnWidth(3, 180);
   app.setColumnWidth(4, 90); app.setColumnWidth(5, 140); app.setColumnWidth(6, 200);
   app.setColumnWidth(7, 110); app.setColumnWidth(8, 200); app.setColumnWidth(9, 60);
   app.setColumnWidth(10, 180); app.setColumnWidth(11, 60); app.setColumnWidth(12, 200);
   app.setColumnWidth(13, 80); app.setColumnWidth(14, 110); app.setColumnWidth(15, 280);
-  app.hideColumns(16, 2);
+  app.setColumnWidth(COL.rating, 90); app.setColumnWidth(COL.followUp, 110);
+  app.hideColumns(COL.lastStage, 2);
 
   // Stage validation
   const stageRule = SpreadsheetApp.newDataValidation()
@@ -456,13 +465,37 @@ function setup() {
     .build();
   app.getRange(2, COL.source, 1000, 1).setDataValidation(sourceRule);
 
+  // Rating validation (1–5 stars dropdown)
+  const ratingRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(RATINGS, true)
+    .setAllowInvalid(false)
+    .build();
+  app.getRange(2, COL.rating, 1000, 1)
+    .setDataValidation(ratingRule)
+    .setHorizontalAlignment('center');
+
+  // Follow-up date column — calendar picker + date display format
+  const dateRule = SpreadsheetApp.newDataValidation()
+    .requireDate()
+    .setAllowInvalid(false)
+    .build();
+  app.getRange(2, COL.followUp, 1000, 1)
+    .setDataValidation(dateRule)
+    .setNumberFormat('yyyy-mm-dd');
+
   // Highlight rows where # Other Apps > 0
   const condRule = SpreadsheetApp.newConditionalFormatRule()
     .whenFormulaSatisfied('=$M2>0')
     .setBackground('#FFF7E0')
-    .setRanges([app.getRange(2, 1, 1000, 17)])
+    .setRanges([app.getRange(2, 1, 1000, 19)])
     .build();
-  app.setConditionalFormatRules([condRule]);
+  // Highlight follow-ups that are due (date today or earlier, and not empty)
+  const dueRule = SpreadsheetApp.newConditionalFormatRule()
+    .whenFormulaSatisfied('=AND($Q2<>"", $Q2<=TODAY())')
+    .setBackground('#FCE4E4')
+    .setRanges([app.getRange(2, COL.followUp, 1000, 1)])
+    .build();
+  app.setConditionalFormatRules([condRule, dueRule]);
 
   // ── 2. Email Templates sheet (non-destructive) ─────────────────────
   let tpl = ss.getSheetByName(TPL_SHEET);
@@ -841,6 +874,8 @@ function submitIntake_(payload) {
       '',
       new Date(),
       'created (' + (payload.source || 'manual') + ') → ' + initialStage,
+      '',              // rating (manual)
+      '',              // follow-up (manual)
       initialStage,
       fileId
     ];
