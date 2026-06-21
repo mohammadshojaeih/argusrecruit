@@ -396,7 +396,7 @@ function getRootFolder_() {
   if (ROOT_FOLDER_ID) {
     try { return DriveApp.getFolderById(ROOT_FOLDER_ID); } catch (_) {}
   }
-  const folder = DriveApp.createFolder('ArgusRecruit ATS — Candidates');
+  const folder = DriveApp.createFolder('Resumes');
   setSetting_('Root Folder ID', folder.getId());
   return folder;
 }
