@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://argusrecruit.com/sitemap.xml
+Sitemap: https://argusrecruit.com/sitemap-index.xml

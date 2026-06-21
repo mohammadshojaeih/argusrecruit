@@ -10,9 +10,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^4.16.0",
+    "@astrojs/sitemap": "^3.2.1",
+    "@portabletext/to-html": "^2.0.13",
     "@sanity/client": "^6.22.0",
-    "@portabletext/to-html": "^2.0.13"
-  },
-  "devDependencies": {}
+    "astro": "^4.16.0"
+  }
 }
