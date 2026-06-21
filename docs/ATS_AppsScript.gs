@@ -23,8 +23,12 @@
  */
 
 // ──────────────────────────────────────────────────────────────────────
-// CONFIG (edit ROOT_FOLDER_ID; the script will use the active spreadsheet)
+// CONFIG
 // ──────────────────────────────────────────────────────────────────────
+// ROOT_FOLDER_ID is the ORIGINAL account's CV folder, kept only as a
+// fallback. When you run setup() in a fresh Google account, it auto-creates
+// a candidates folder and records its ID in the Settings sheet (see
+// getRootFolder_), so you do NOT need to edit this to migrate accounts.
 
 const ROOT_FOLDER_ID = '1Ssla0RAD7XXY81o3R2TV5r1_UQRbUhL4';
 const APP_SHEET      = 'Applications';
@@ -112,7 +116,7 @@ function processInbox_() {
   if (threads.length === 0) return;
 
   const sheet = SpreadsheetApp.getActive().getSheetByName(APP_SHEET);
-  const root = DriveApp.getFolderById(ROOT_FOLDER_ID);
+  const root = getRootFolder_();
 
   for (const thread of threads) {
     try {
@@ -202,7 +206,7 @@ function processInbox_() {
 
 function processStageChanges_() {
   const sheet = SpreadsheetApp.getActive().getSheetByName(APP_SHEET);
-  const root = DriveApp.getFolderById(ROOT_FOLDER_ID);
+  const root = getRootFolder_();
   const lastRow = sheet.getLastRow();
   if (lastRow < 2) return;
   const data = sheet.getRange(2, 1, lastRow - 1, COL.fileId).getValues();
@@ -348,7 +352,7 @@ function sendStageEmail_(templateKey, lang, ctx) {
   GmailApp.sendEmail(ctx.email, fill(subjectTpl), '', {
     htmlBody: fill(bodyTpl),
     name: getSetting_('From Name') || 'ArgusRecruit',
-    replyTo: getSetting_('Reply To') || 'contact@argusrecruit.com'
+    replyTo: getSetting_('Reply To') || 'headhunter@argusrecruit.com'
   });
 }
 
@@ -360,6 +364,41 @@ function getSetting_(key) {
     if ((row[0] || '').toString().trim() === key) return row[1];
   }
   return null;
+}
+
+function setSetting_(key, value) {
+  const sh = SpreadsheetApp.getActive().getSheetByName(CFG_SHEET);
+  if (!sh) return;
+  const data = sh.getDataRange().getValues();
+  for (let i = 0; i < data.length; i++) {
+    if ((data[i][0] || '').toString().trim() === key) {
+      sh.getRange(i + 1, 2).setValue(value);
+      return;
+    }
+  }
+  sh.appendRow([key, value]);
+}
+
+/**
+ * Resolve the Drive folder where candidate CVs live, scoped to the account
+ * the script runs under.
+ *   1. Use the ID recorded in the Settings sheet (written by setup()).
+ *   2. Else use the ROOT_FOLDER_ID constant (the original account's folder).
+ *   3. Else — a fresh account where neither is accessible — create a folder
+ *      and remember its ID, so a brand-new Google account works with no
+ *      manual folder-ID juggling.
+ */
+function getRootFolder_() {
+  const stored = getSetting_('Root Folder ID');
+  if (stored) {
+    try { return DriveApp.getFolderById(String(stored).trim()); } catch (_) {}
+  }
+  if (ROOT_FOLDER_ID) {
+    try { return DriveApp.getFolderById(ROOT_FOLDER_ID); } catch (_) {}
+  }
+  const folder = DriveApp.createFolder('ArgusRecruit ATS — Candidates');
+  setSetting_('Root Folder ID', folder.getId());
+  return folder;
 }
 
 
@@ -451,14 +490,24 @@ function setup() {
     cfg.getRange(2, 1, 5, 2).setValues([
       ['Send Emails Enabled', 'TRUE'],
       ['From Name',           'ArgusRecruit'],
-      ['Reply To',            'contact@argusrecruit.com'],
-      ['Root Folder ID',      ROOT_FOLDER_ID],
+      ['Reply To',            'headhunter@argusrecruit.com'],
+      ['Root Folder ID',      ''],   // auto-filled below by getRootFolder_()
       ['Trigger Interval',    'every 5 minutes (set via Triggers panel)']
     ]);
   }
   cfg.getRange('A1:B1').setFontWeight('bold').setBackground('#0E2440').setFontColor('#FFFFFF');
   cfg.setColumnWidth(1, 200);
   cfg.setColumnWidth(2, 400);
+
+  // ── 4. Ensure THIS account has an accessible CV root folder ────────
+  //    On a fresh Google account the constant ROOT_FOLDER_ID is not
+  //    accessible, so this creates the folder and records its real ID in
+  //    Settings. On the original account it just re-confirms the existing one.
+  try {
+    setSetting_('Root Folder ID', getRootFolder_().getId());
+  } catch (e) {
+    console.error('Root folder provisioning failed: ' + e);
+  }
 
   ss.toast('ATS structure verified. Existing data was preserved.', 'Setup complete', 6);
 }
@@ -584,7 +633,7 @@ function doGet() {
 }
 
 function listActiveJobs_() {
-  const root = DriveApp.getFolderById(ROOT_FOLDER_ID);
+  const root = getRootFolder_();
   const folders = root.getFolders();
   const jobs = [];
   while (folders.hasNext()) {
@@ -755,7 +804,7 @@ function submitIntake_(payload) {
     const sheet = SpreadsheetApp.getActive().getSheetByName(APP_SHEET);
     if (!sheet) return { ok: false, error: 'Applications sheet not found. Run setup() first.' };
 
-    const root = DriveApp.getFolderById(ROOT_FOLDER_ID);
+    const root = getRootFolder_();
     const jobFolder = findOrCreateFolder_(root, `${jobId} - ${jobTitle}`);
 
     // Determine initial stage:
