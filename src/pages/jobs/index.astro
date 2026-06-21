@@ -5,7 +5,7 @@ import SiteHead from '../../components/SiteHead.astro';
 import SharedCSS from '../../components/SharedCSS.astro';
 import SiteNav from '../../components/SiteNav.astro';
 
-const jobs = await getJobs('en');
+const jobs = await getJobs('en', { includeClosed: true });
 const departments = [...new Set(jobs.map(j => j.department).filter(Boolean))];
 const workplaceTypes = [...new Set(jobs.map(j => j.workplaceType).filter(Boolean))];
 ---
@@ -107,14 +107,14 @@ const workplaceTypes = [...new Set(jobs.map(j => j.workplaceType).filter(Boolean
 
     <div class="jobs-list" id="jobsList">
       {jobs.map(j => (
-        <a class={`job-card${j.featured ? ' featured' : ''}${j.isExpired ? ' expired' : ''}`}
+        <a class={`job-card${j.featured ? ' featured' : ''}${j.isClosed ? ' expired' : ''}`}
            href={`/jobs/${j.slug}/`}
            data-department={j.department || ''}
            data-workplace={j.workplaceType || ''}
            data-search={[j.title, ...(j.tags||[]), j.department, j.locationCity, j.locationCountry].filter(Boolean).join(' ').toLowerCase()}>
           <div class="job-top">
             <div>
-              <h3>{j.title}{j.isExpired && <span class="expired-pill">Expired</span>}</h3>
+              <h3>{j.title}{j.isClosed && <span class="expired-pill">{j.status === 'closed' ? 'Closed' : 'Expired'}</span>}</h3>
               <div class="job-meta-row">
                 {j.department && <span class="gold">{j.department}</span>}
                 {j.employmentType && <span>· {fmtEmploymentType(j.employmentType)}</span>}

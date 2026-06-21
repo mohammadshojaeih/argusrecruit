@@ -97,8 +97,10 @@ function computeEffectiveExpiry(job) {
 export async function getJobs(lang = 'en', { includeClosed = false } = {}) {
   if (!sanityClient) return [];
   try {
-    const statusFilter = includeClosed ? `&& status != "hidden"` : `&& status != "hidden"`;
-    const query = `*[_type=="job" ${statusFilter} && (language=="${lang}" || !defined(language))] | order(featured desc, publishedAt desc) {
+    const statusFilter = includeClosed
+      ? `&& status != "hidden"`
+      : `&& status != "hidden" && status != "closed"`;
+    const query = `*[_type=="job" ${statusFilter} && (language=="${lang}" || !defined(language))] | order(publishedAt desc) {
       _id, jobId, title, slug, status, featured, department, employmentType, workplaceType,
       locationCity, locationCountry, salaryMin, salaryMax, salaryCurrency, salaryNegotiable,
       relocationPackage,
@@ -108,12 +110,19 @@ export async function getJobs(lang = 'en', { includeClosed = false } = {}) {
     const jobs = await sanityClient.fetch(query);
     if (!jobs) return [];
     const now = Date.now();
-    return jobs.map(j => {
+    const mapped = jobs.map(j => {
       const effectiveExpiry = computeEffectiveExpiry(j);
       const isExpired = effectiveExpiry ? (new Date(effectiveExpiry).getTime() < now) : false;
+      const isClosed = j.status === 'closed' || isExpired;
       const ref = j.jobId || j.slug?.current || j.slug;
-      return { ...j, slug: ref, jobId: j.jobId || ref, effectiveExpiry, isExpired };
+      return { ...j, slug: ref, jobId: j.jobId || ref, effectiveExpiry, isExpired, isClosed, featured: isClosed ? false : j.featured };
     });
+    mapped.sort((a, b) => {
+      if (a.isClosed !== b.isClosed) return a.isClosed ? 1 : -1;
+      if (a.featured !== b.featured) return a.featured ? -1 : 1;
+      return new Date(b.publishedAt) - new Date(a.publishedAt);
+    });
+    return mapped;
   } catch (e) {
     console.error('Sanity job fetch failed:', e.message);
     return [];
