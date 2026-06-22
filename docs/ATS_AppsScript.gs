@@ -1,5 +1,5 @@
 /**
- * ArgusRecruit ATS — Apps Script
+ * ArgusRecruit ATS \u2014 Apps Script
  *
  * What it does
  * ------------
@@ -13,11 +13,11 @@
  *    - sends the candidate the email template for that stage (3 languages)
  *    - logs the change in History
  * 4. Duplicates: if a candidate re-applies for a job they're already on,
- *    the new CV replaces the old (active stages only — skip if Rejected).
+ *    the new CV replaces the old (active stages only \u2014 skip if Rejected).
  *
  * One-time setup
  * --------------
- * Just call `setup()` from the editor — it provisions the Sheet (Applications,
+ * Just call `setup()` from the editor \u2014 it provisions the Sheet (Applications,
  * Email Templates, Settings, History) with dropdowns, formulas, and conditional
  * formatting. Then add a time-trigger on `tick` every 5 minutes.
  */
@@ -37,9 +37,9 @@ const CFG_SHEET      = 'Settings';
 const PROCESSED_LBL  = 'ats-processed';
 const SEARCH_QUERY   = 'subject:"[Application" has:attachment -label:ats-processed newer_than:90d';
 
-// Telegram intake bot — see installTelegramWebhook() for setup
+// Telegram intake bot \u2014 see installTelegramWebhook() for setup
 const TG_BOT_TOKEN     = '8706377970:AAEtKkn1Cl68PSmX65wFtFMJAL3XFHaegeo'; // @ArgusIntakeBot
-const TG_ADMIN_CHAT_ID = 814437645;  // Mohammad — only this account is allowed to use the intake bot
+const TG_ADMIN_CHAT_ID = 814437645;  // Mohammad \u2014 only this account is allowed to use the intake bot
 
 const SOURCES = [
   'web-apply',
@@ -53,15 +53,15 @@ const SOURCES = [
 const STAGES = [
   '00-New',
   '00-Pre-Contact',
-  '01-Queued · Reviewed',
+  '01-Queued \u00B7 Reviewed',
   '01-Reviewed',
-  '02-Queued · Shortlist',
+  '02-Queued \u00B7 Shortlist',
   '02-Shortlist',
-  '03-Queued · Interview',
+  '03-Queued \u00B7 Interview',
   '03-Interview',
-  '04-Queued · Offer',
+  '04-Queued \u00B7 Offer',
   '04-Offer',
-  '99-Queued · Reject',
+  '99-Queued \u00B7 Reject',
   '99-Rejected'
 ];
 
@@ -85,24 +85,24 @@ const COL = {
   phone:       7,   // G
   linkedin:    8,   // H
   lang:        9,   // I
-  stage:       10,  // J  ← DROPDOWN, the user edits this
+  stage:       10,  // J  \u2190 DROPDOWN, the user edits this
   cvLink:      11,  // K
   notes:       12,  // L
   otherApps:   13,  // M  (auto formula)
   lastChange:  14,  // N
   history:     15,  // O
-  rating:      16,  // P  ← DROPDOWN, 1–5 stars (manual)
-  followUp:    17,  // Q  ← DATE, next candidate follow-up (manual)
-  lastStage:   18,  // R  (hidden — script uses to detect changes)
-  fileId:      19   // S  (hidden — CV file ID for moves)
+  rating:      16,  // P  \u2190 DROPDOWN, 1\u20135 stars (manual)
+  followUp:    17,  // Q  \u2190 DATE, next candidate follow-up (manual)
+  lastStage:   18,  // R  (hidden \u2014 script uses to detect changes)
+  fileId:      19   // S  (hidden \u2014 CV file ID for moves)
 };
 
-// Resume rating dropdown options (1–5 stars).
-const RATINGS = ['★', '★★', '★★★', '★★★★', '★★★★★'];
+// Resume rating dropdown options (1\u20135 stars).
+const RATINGS = ['\u2605', '\u2605\u2605', '\u2605\u2605\u2605', '\u2605\u2605\u2605\u2605', '\u2605\u2605\u2605\u2605\u2605'];
 
 
 // ----------------------------------------------------------------------
-// MAIN ENTRY — run via 5-minute trigger
+// MAIN ENTRY \u2014 run via 5-minute trigger
 // ----------------------------------------------------------------------
 
 function tick() {
@@ -112,7 +112,7 @@ function tick() {
 
 
 // ----------------------------------------------------------------------
-// STEP 1 — Process new application emails
+// STEP 1 \u2014 Process new application emails
 // ----------------------------------------------------------------------
 
 function processInbox_() {
@@ -163,7 +163,7 @@ function processInbox_() {
         sheet.getRange(existing, COL.cvLink).setValue('=HYPERLINK("' + newFile.getUrl() + '","Open")');
         sheet.getRange(existing, COL.fileId).setValue(newFile.getId());
         sheet.getRange(existing, COL.lastChange).setValue(new Date());
-        appendHistory_(sheet, existing, `CV re-uploaded → ${stage}`);
+        appendHistory_(sheet, existing, `CV re-uploaded \u2192 ${stage}`);
         thread.addLabel(label); thread.markRead(); thread.moveToArchive();
         continue;
       }
@@ -187,7 +187,7 @@ function processInbox_() {
         '',                                          // L notes
         '',                                          // M will become formula below
         new Date(),                                  // N last change
-        'created → 00-New',                          // O history
+        'created \u2192 00-New',                          // O history
         '',                                          // P rating (manual)
         '',                                          // Q follow-up (manual)
         '00-New',                                    // R lastStage
@@ -208,7 +208,7 @@ function processInbox_() {
 
 
 // ----------------------------------------------------------------------
-// STEP 2 — Detect Stage changes and react (move file + send email)
+// STEP 2 \u2014 Detect Stage changes and react (move file + send email)
 // ----------------------------------------------------------------------
 
 function processStageChanges_() {
@@ -248,7 +248,7 @@ function processStageChanges_() {
       }
       sheet.getRange(row, COL.lastStage).setValue(currentStage);
       sheet.getRange(row, COL.lastChange).setValue(new Date());
-      appendHistory_(sheet, row, `${lastStage || '?'} → ${currentStage}`);
+      appendHistory_(sheet, row, `${lastStage || '?'} \u2192 ${currentStage}`);
     } catch (e) {
       console.error(`Row ${row} stage transition failed: ${e}`);
     }
@@ -305,7 +305,7 @@ function findRowByEmailAndJob_(sheet, email, jobId) {
 
 function sanitizeSegment_(s) {
   return String(s || '')
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .normalize('NFD').replace(/[\u0300-\u036F]/g, '')
     .replace(/[^A-Za-z0-9 ]+/g, '')
     .trim().replace(/\s+/g, '_').slice(0, 60) || 'unknown';
 }
@@ -391,7 +391,7 @@ function setSetting_(key, value) {
  * the script runs under.
  *   1. Use the ID recorded in the Settings sheet (written by setup()).
  *   2. Else use the ROOT_FOLDER_ID constant (the original account's folder).
- *   3. Else — a fresh account where neither is accessible — create a folder
+ *   3. Else \u2014 a fresh account where neither is accessible \u2014 create a folder
  *      and remember its ID, so a brand-new Google account works with no
  *      manual folder-ID juggling.
  */
@@ -419,8 +419,8 @@ function getRootFolder_() {
  * It NEVER deletes existing rows.
  *
  * For destructive operations use:
- *   - resetTemplatesOnly()  → wipes only Email Templates sheet and re-seeds it
- *   - resetApplications_DANGER() → wipes Applications data (requires manual edit to enable)
+ *   - resetTemplatesOnly()  \u2192 wipes only Email Templates sheet and re-seeds it
+ *   - resetApplications_DANGER() \u2192 wipes Applications data (requires manual edit to enable)
  */
 function setup() {
   const ss = SpreadsheetApp.getActive();
@@ -465,7 +465,7 @@ function setup() {
     .build();
   app.getRange(2, COL.source, 1000, 1).setDataValidation(sourceRule);
 
-  // Rating validation (1–5 stars dropdown)
+  // Rating validation (1\u20135 stars dropdown)
   const ratingRule = SpreadsheetApp.newDataValidation()
     .requireValueInList(RATINGS, true)
     .setAllowInvalid(false)
@@ -474,7 +474,7 @@ function setup() {
     .setDataValidation(ratingRule)
     .setHorizontalAlignment('center');
 
-  // Follow-up date column — calendar picker + date display format
+  // Follow-up date column \u2014 calendar picker + date display format
   const dateRule = SpreadsheetApp.newDataValidation()
     .requireDate()
     .setAllowInvalid(false)
@@ -546,7 +546,7 @@ function setup() {
 }
 
 
-/** Wipes and re-seeds ONLY the Email Templates sheet. Safe — Applications data is untouched. */
+/** Wipes and re-seeds ONLY the Email Templates sheet. Safe \u2014 Applications data is untouched. */
 function resetTemplatesOnly() {
   const ss = SpreadsheetApp.getActive();
   const ui = SpreadsheetApp.getUi();
@@ -572,7 +572,7 @@ function resetTemplatesOnly() {
 
 
 // ----------------------------------------------------------------------
-// CUSTOM MENU — for manual ops
+// CUSTOM MENU \u2014 for manual ops
 // ----------------------------------------------------------------------
 
 function onOpen() {
@@ -593,8 +593,8 @@ function onOpen() {
 
 /**
  * Preview the email template under the currently-selected cell.
- * Usage: open Email Templates sheet → click any body cell (en, ru, hy columns)
- *        → ATS menu → "Preview selected email template".
+ * Usage: open Email Templates sheet \u2192 click any body cell (en, ru, hy columns)
+ *        \u2192 ATS menu \u2192 "Preview selected email template".
  * Renders the cell's HTML with sample placeholders filled in.
  */
 function previewSelectedTemplate() {
@@ -642,7 +642,7 @@ function showIntakeUrl() {
   if (!url) {
     ui.alert('Deploy first',
       'You need to deploy the script as a Web app.\n\n' +
-      '1. In the Apps Script editor: Deploy → New deployment\n' +
+      '1. In the Apps Script editor: Deploy \u2192 New deployment\n' +
       '2. Type: Web app\n' +
       '3. Execute as: Me (you)\n' +
       '4. Who has access: Anyone with the link  (or Anyone within your domain)\n' +
@@ -661,7 +661,7 @@ function showIntakeUrl() {
 
 function doGet() {
   return HtmlService.createHtmlOutput(intakeFormHtml_())
-    .setTitle('ArgusRecruit · Add Candidate')
+    .setTitle('ArgusRecruit \u00B7 Add Candidate')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 
@@ -681,7 +681,7 @@ function listActiveJobs_() {
 function intakeFormHtml_() {
   const jobs = listActiveJobs_();
   const jobOptions = jobs.map(j =>
-    `<option value="${j.jobId}|${j.jobTitle}">${j.jobId} — ${j.jobTitle}</option>`
+    `<option value="${j.jobId}|${j.jobTitle}">${j.jobId} \u2014 ${j.jobTitle}</option>`
   ).join('');
   const sourceOptions = SOURCES
     .filter(s => s !== 'web-apply') // can't be web-apply from here
@@ -690,7 +690,7 @@ function intakeFormHtml_() {
   return `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Add candidate · ArgusRecruit ATS</title>
+<title>Add candidate \u00B7 ArgusRecruit ATS</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24/build/css/intlTelInput.css">
 <style>.iti { width: 100%; }</style>
 <style>
@@ -723,7 +723,7 @@ function intakeFormHtml_() {
   <form id="f">
     <label class="req">Job</label>
     <select name="job" required>
-      <option value="">— select a job —</option>
+      <option value="">\u2014 select a job \u2014</option>
       ${jobOptions}
     </select>
     <label class="req">Source</label>
@@ -736,7 +736,7 @@ function intakeFormHtml_() {
     <input name="phone" type="tel" maxlength="60">
     <label>LinkedIn URL</label>
     <input name="linkedin" type="url" maxlength="300">
-    <label>CV file (optional — PDF, DOC, DOCX, max 10MB)</label>
+    <label>CV file (optional \u2014 PDF, DOC, DOCX, max 10MB)</label>
     <input name="cv" type="file" accept=".pdf,.doc,.docx,.odt,.rtf">
     <label>Lang for outgoing emails</label>
     <select name="lang"><option value="en">English</option><option value="ru">Russian</option><option value="hy">Armenian</option></select>
@@ -775,7 +775,7 @@ form.addEventListener('submit', async (e) => {
     }
     phoneE164 = iti.getNumber();
   }
-  submitBtn.disabled = true; submitBtn.textContent = 'Saving…';
+  submitBtn.disabled = true; submitBtn.textContent = 'Saving\u2026';
 
   const f = new FormData(form);
   const cv = f.get('cv');
@@ -809,17 +809,17 @@ form.addEventListener('submit', async (e) => {
     .withSuccessHandler(r => {
       if (r.ok) {
         msg.className = 'msg ok';
-        msg.textContent = '✓ Added: ' + r.name + ' → ' + r.jobId;
+        msg.textContent = '\u2713 Added: ' + r.name + ' \u2192 ' + r.jobId;
         form.reset();
       } else {
         msg.className = 'msg err';
-        msg.textContent = '⚠ ' + (r.error || 'Could not save.');
+        msg.textContent = '\u26A0 ' + (r.error || 'Could not save.');
       }
       submitBtn.disabled = false; submitBtn.textContent = 'Add candidate';
     })
     .withFailureHandler(err => {
       msg.className = 'msg err';
-      msg.textContent = '⚠ ' + err.message;
+      msg.textContent = '\u26A0 ' + err.message;
       submitBtn.disabled = false; submitBtn.textContent = 'Add candidate';
     })
     .submitIntake_(payload);
@@ -841,8 +841,8 @@ function submitIntake_(payload) {
     const jobFolder = findOrCreateFolder_(root, `${jobId} - ${jobTitle}`);
 
     // Determine initial stage:
-    //   if no CV at all → 00-Pre-Contact
-    //   else            → 00-New
+    //   if no CV at all \u2192 00-Pre-Contact
+    //   else            \u2192 00-New
     const hasCv = payload.cvData && payload.cvName;
     const initialStage = hasCv ? '00-New' : '00-Pre-Contact';
     const stageFolder = findOrCreateFolder_(jobFolder, initialStage);
@@ -873,7 +873,7 @@ function submitIntake_(payload) {
       payload.notes || '',
       '',
       new Date(),
-      'created (' + (payload.source || 'manual') + ') → ' + initialStage,
+      'created (' + (payload.source || 'manual') + ') \u2192 ' + initialStage,
       '',              // rating (manual)
       '',              // follow-up (manual)
       initialStage,
@@ -895,7 +895,7 @@ function submitIntake_(payload) {
 // ----------------------------------------------------------------------
 //   Each cell stores a complete HTML document with ArgusRecruit branding
 //   (navy + gold). Placeholders: {name}, {jobTitle}, {jobId}.
-//   To edit copy: open Email Templates sheet and change the text — the
+//   To edit copy: open Email Templates sheet and change the text \u2014 the
 //   HTML structure is in the cell, edit between the tags.
 
 function stageTemplates_() {
@@ -904,37 +904,37 @@ function stageTemplates_() {
       key: 'reviewed',
       copy: {
         en: {
-          subject: 'Your application is being reviewed — {jobTitle}',
-          eyebrow: '• Application Under Review •',
-          h1: 'Thanks — we\'re looking at your profile.',
+          subject: 'Your application is being reviewed \u2014 {jobTitle}',
+          eyebrow: '\u2022 Application Under Review \u2022',
+          h1: 'Thanks \u2014 we\'re looking at your profile.',
           greeting: 'Hi {name},',
           body: [
             'Thank you for applying to <strong style="color:#D4AF37;">{jobTitle}</strong> at ArgusRecruit. Our team is now carefully reviewing your application, and we\'ll get back to you soon.',
-            'If your background matches the role, we will be in touch within 1–3 business days. If we don\'t see a fit for this specific role, your profile will stay in our network and we may reach out about future openings that better match your background.'
+            'If your background matches the role, we will be in touch within 1\u20133 business days. If we don\'t see a fit for this specific role, your profile will stay in our network and we may reach out about future openings that better match your background.'
           ],
           team: 'The ArgusRecruit Team'
         },
         ru: {
-          subject: 'Ваша заявка на рассмотрении — {jobTitle}',
-          eyebrow: '• Заявка рассматривается •',
-          h1: 'Спасибо — мы рассматриваем ваш профиль.',
-          greeting: 'Здравствуйте, {name},',
+          subject: '\u0412\u0430\u0448\u0430 \u0437\u0430\u044F\u0432\u043A\u0430 \u043D\u0430 \u0440\u0430\u0441\u0441\u043C\u043E\u0442\u0440\u0435\u043D\u0438\u0438 \u2014 {jobTitle}',
+          eyebrow: '\u2022 \u0417\u0430\u044F\u0432\u043A\u0430 \u0440\u0430\u0441\u0441\u043C\u0430\u0442\u0440\u0438\u0432\u0430\u0435\u0442\u0441\u044F \u2022',
+          h1: '\u0421\u043F\u0430\u0441\u0438\u0431\u043E \u2014 \u043C\u044B \u0440\u0430\u0441\u0441\u043C\u0430\u0442\u0440\u0438\u0432\u0430\u0435\u043C \u0432\u0430\u0448 \u043F\u0440\u043E\u0444\u0438\u043B\u044C.',
+          greeting: '\u0417\u0434\u0440\u0430\u0432\u0441\u0442\u0432\u0443\u0439\u0442\u0435, {name},',
           body: [
-            'Спасибо за вашу заявку на роль <strong style="color:#D4AF37;">{jobTitle}</strong>. Наша команда тщательно рассматривает ваш профиль и свяжется с вами в ближайшее время.',
-            'Если ваш опыт подходит роли, мы свяжемся с вами в течение 1–3 рабочих дней. Если совпадения для этой конкретной роли не будет, мы сохраним ваш профиль в нашей сети и можем связаться с вами по поводу будущих вакансий.'
+            '\u0421\u043F\u0430\u0441\u0438\u0431\u043E \u0437\u0430 \u0432\u0430\u0448\u0443 \u0437\u0430\u044F\u0432\u043A\u0443 \u043D\u0430 \u0440\u043E\u043B\u044C <strong style="color:#D4AF37;">{jobTitle}</strong>. \u041D\u0430\u0448\u0430 \u043A\u043E\u043C\u0430\u043D\u0434\u0430 \u0442\u0449\u0430\u0442\u0435\u043B\u044C\u043D\u043E \u0440\u0430\u0441\u0441\u043C\u0430\u0442\u0440\u0438\u0432\u0430\u0435\u0442 \u0432\u0430\u0448 \u043F\u0440\u043E\u0444\u0438\u043B\u044C \u0438 \u0441\u0432\u044F\u0436\u0435\u0442\u0441\u044F \u0441 \u0432\u0430\u043C\u0438 \u0432 \u0431\u043B\u0438\u0436\u0430\u0439\u0448\u0435\u0435 \u0432\u0440\u0435\u043C\u044F.',
+            '\u0415\u0441\u043B\u0438 \u0432\u0430\u0448 \u043E\u043F\u044B\u0442 \u043F\u043E\u0434\u0445\u043E\u0434\u0438\u0442 \u0440\u043E\u043B\u0438, \u043C\u044B \u0441\u0432\u044F\u0436\u0435\u043C\u0441\u044F \u0441 \u0432\u0430\u043C\u0438 \u0432 \u0442\u0435\u0447\u0435\u043D\u0438\u0435 1\u20133 \u0440\u0430\u0431\u043E\u0447\u0438\u0445 \u0434\u043D\u0435\u0439. \u0415\u0441\u043B\u0438 \u0441\u043E\u0432\u043F\u0430\u0434\u0435\u043D\u0438\u044F \u0434\u043B\u044F \u044D\u0442\u043E\u0439 \u043A\u043E\u043D\u043A\u0440\u0435\u0442\u043D\u043E\u0439 \u0440\u043E\u043B\u0438 \u043D\u0435 \u0431\u0443\u0434\u0435\u0442, \u043C\u044B \u0441\u043E\u0445\u0440\u0430\u043D\u0438\u043C \u0432\u0430\u0448 \u043F\u0440\u043E\u0444\u0438\u043B\u044C \u0432 \u043D\u0430\u0448\u0435\u0439 \u0441\u0435\u0442\u0438 \u0438 \u043C\u043E\u0436\u0435\u043C \u0441\u0432\u044F\u0437\u0430\u0442\u044C\u0441\u044F \u0441 \u0432\u0430\u043C\u0438 \u043F\u043E \u043F\u043E\u0432\u043E\u0434\u0443 \u0431\u0443\u0434\u0443\u0449\u0438\u0445 \u0432\u0430\u043A\u0430\u043D\u0441\u0438\u0439.'
           ],
-          team: 'Команда ArgusRecruit'
+          team: '\u041A\u043E\u043C\u0430\u043D\u0434\u0430 ArgusRecruit'
         },
         hy: {
-          subject: 'Ձեր դիմումը քննարկվում է — {jobTitle}',
-          eyebrow: '• Դիմումը քննարկման փուլում •',
-          h1: 'Շնորհակալություն — մենք ուսումնասիրում ենք ձեր պրոֆիլը:',
-          greeting: 'Բարև, {name},',
+          subject: '\u0541\u0565\u0580 \u0564\u056B\u0574\u0578\u0582\u0574\u0568 \u0584\u0576\u0576\u0561\u0580\u056F\u057E\u0578\u0582\u0574 \u0567 \u2014 {jobTitle}',
+          eyebrow: '\u2022 \u0534\u056B\u0574\u0578\u0582\u0574\u0568 \u0584\u0576\u0576\u0561\u0580\u056F\u0574\u0561\u0576 \u0583\u0578\u0582\u056C\u0578\u0582\u0574 \u2022',
+          h1: '\u0547\u0576\u0578\u0580\u0570\u0561\u056F\u0561\u056C\u0578\u0582\u0569\u0575\u0578\u0582\u0576 \u2014 \u0574\u0565\u0576\u0584 \u0578\u0582\u057D\u0578\u0582\u0574\u0576\u0561\u057D\u056B\u0580\u0578\u0582\u0574 \u0565\u0576\u0584 \u0571\u0565\u0580 \u057A\u0580\u0578\u0586\u056B\u056C\u0568:',
+          greeting: '\u0532\u0561\u0580\u0587, {name},',
           body: [
-            '<strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի համար դիմելու համար շնորհակալություն: Մեր թիմը մանրակրկիտ ուսումնասիրում է ձեր դիմումը և շուտով կկապվենք ձեզ հետ:',
-            'Համապատասխան լինելու դեպքում մենք կկապվենք ձեզ հետ 1–3 աշխատանքային օրվա ընթացքում: Հակառակ դեպքում ձեր պրոֆիլը կպահպանվի մեր ցանցում ապագա հնարավորությունների համար:'
+            '<strong style="color:#D4AF37;">{jobTitle}</strong> \u057A\u0561\u0577\u057F\u0578\u0576\u056B \u0570\u0561\u0574\u0561\u0580 \u0564\u056B\u0574\u0565\u056C\u0578\u0582 \u0570\u0561\u0574\u0561\u0580 \u0577\u0576\u0578\u0580\u0570\u0561\u056F\u0561\u056C\u0578\u0582\u0569\u0575\u0578\u0582\u0576: \u0544\u0565\u0580 \u0569\u056B\u0574\u0568 \u0574\u0561\u0576\u0580\u0561\u056F\u0580\u056F\u056B\u057F \u0578\u0582\u057D\u0578\u0582\u0574\u0576\u0561\u057D\u056B\u0580\u0578\u0582\u0574 \u0567 \u0571\u0565\u0580 \u0564\u056B\u0574\u0578\u0582\u0574\u0568 \u0587 \u0577\u0578\u0582\u057F\u0578\u057E \u056F\u056F\u0561\u057A\u057E\u0565\u0576\u0584 \u0571\u0565\u0566 \u0570\u0565\u057F:',
+            '\u0540\u0561\u0574\u0561\u057A\u0561\u057F\u0561\u057D\u056D\u0561\u0576 \u056C\u056B\u0576\u0565\u056C\u0578\u0582 \u0564\u0565\u057A\u0584\u0578\u0582\u0574 \u0574\u0565\u0576\u0584 \u056F\u056F\u0561\u057A\u057E\u0565\u0576\u0584 \u0571\u0565\u0566 \u0570\u0565\u057F 1\u20133 \u0561\u0577\u056D\u0561\u057F\u0561\u0576\u0584\u0561\u0575\u056B\u0576 \u0585\u0580\u057E\u0561 \u0568\u0576\u0569\u0561\u0581\u0584\u0578\u0582\u0574: \u0540\u0561\u056F\u0561\u057C\u0561\u056F \u0564\u0565\u057A\u0584\u0578\u0582\u0574 \u0571\u0565\u0580 \u057A\u0580\u0578\u0586\u056B\u056C\u0568 \u056F\u057A\u0561\u0570\u057A\u0561\u0576\u057E\u056B \u0574\u0565\u0580 \u0581\u0561\u0576\u0581\u0578\u0582\u0574 \u0561\u057A\u0561\u0563\u0561 \u0570\u0576\u0561\u0580\u0561\u057E\u0578\u0580\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0576\u0565\u0580\u056B \u0570\u0561\u0574\u0561\u0580:'
           ],
-          team: 'ArgusRecruit-ի թիմը'
+          team: 'ArgusRecruit-\u056B \u0569\u056B\u0574\u0568'
         }
       }
     },
@@ -942,37 +942,37 @@ function stageTemplates_() {
       key: 'shortlist',
       copy: {
         en: {
-          subject: 'You\'ve been shortlisted — {jobTitle}',
-          eyebrow: '• Shortlisted •',
+          subject: 'You\'ve been shortlisted \u2014 {jobTitle}',
+          eyebrow: '\u2022 Shortlisted \u2022',
           h1: 'You\'re on the shortlist.',
           greeting: 'Hi {name},',
           body: [
-            'Great news — you have been shortlisted for the <strong style="color:#D4AF37;">{jobTitle}</strong> role. Our client will now review your profile directly.',
+            'Great news \u2014 you have been shortlisted for the <strong style="color:#D4AF37;">{jobTitle}</strong> role. Our client will now review your profile directly.',
             'We\'ll get back to you with the next steps within a few business days. In the meantime, please keep your calendar flexible for the coming week in case interview slots are offered.'
           ],
           team: 'The ArgusRecruit Team'
         },
         ru: {
-          subject: 'Вы в шорт-листе — {jobTitle}',
-          eyebrow: '• В шорт-листе •',
-          h1: 'Вы попали в шорт-лист.',
-          greeting: 'Здравствуйте, {name},',
+          subject: '\u0412\u044B \u0432 \u0448\u043E\u0440\u0442-\u043B\u0438\u0441\u0442\u0435 \u2014 {jobTitle}',
+          eyebrow: '\u2022 \u0412 \u0448\u043E\u0440\u0442-\u043B\u0438\u0441\u0442\u0435 \u2022',
+          h1: '\u0412\u044B \u043F\u043E\u043F\u0430\u043B\u0438 \u0432 \u0448\u043E\u0440\u0442-\u043B\u0438\u0441\u0442.',
+          greeting: '\u0417\u0434\u0440\u0430\u0432\u0441\u0442\u0432\u0443\u0439\u0442\u0435, {name},',
           body: [
-            'Хорошие новости — вы вошли в шорт-лист по позиции <strong style="color:#D4AF37;">{jobTitle}</strong>. Клиент сейчас рассматривает ваш профиль.',
-            'Мы свяжемся с вами по следующим шагам в течение нескольких рабочих дней. Постарайтесь оставить календарь гибким на следующую неделю — возможны слоты для собеседования.'
+            '\u0425\u043E\u0440\u043E\u0448\u0438\u0435 \u043D\u043E\u0432\u043E\u0441\u0442\u0438 \u2014 \u0432\u044B \u0432\u043E\u0448\u043B\u0438 \u0432 \u0448\u043E\u0440\u0442-\u043B\u0438\u0441\u0442 \u043F\u043E \u043F\u043E\u0437\u0438\u0446\u0438\u0438 <strong style="color:#D4AF37;">{jobTitle}</strong>. \u041A\u043B\u0438\u0435\u043D\u0442 \u0441\u0435\u0439\u0447\u0430\u0441 \u0440\u0430\u0441\u0441\u043C\u0430\u0442\u0440\u0438\u0432\u0430\u0435\u0442 \u0432\u0430\u0448 \u043F\u0440\u043E\u0444\u0438\u043B\u044C.',
+            '\u041C\u044B \u0441\u0432\u044F\u0436\u0435\u043C\u0441\u044F \u0441 \u0432\u0430\u043C\u0438 \u043F\u043E \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0438\u043C \u0448\u0430\u0433\u0430\u043C \u0432 \u0442\u0435\u0447\u0435\u043D\u0438\u0435 \u043D\u0435\u0441\u043A\u043E\u043B\u044C\u043A\u0438\u0445 \u0440\u0430\u0431\u043E\u0447\u0438\u0445 \u0434\u043D\u0435\u0439. \u041F\u043E\u0441\u0442\u0430\u0440\u0430\u0439\u0442\u0435\u0441\u044C \u043E\u0441\u0442\u0430\u0432\u0438\u0442\u044C \u043A\u0430\u043B\u0435\u043D\u0434\u0430\u0440\u044C \u0433\u0438\u0431\u043A\u0438\u043C \u043D\u0430 \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0443\u044E \u043D\u0435\u0434\u0435\u043B\u044E \u2014 \u0432\u043E\u0437\u043C\u043E\u0436\u043D\u044B \u0441\u043B\u043E\u0442\u044B \u0434\u043B\u044F \u0441\u043E\u0431\u0435\u0441\u0435\u0434\u043E\u0432\u0430\u043D\u0438\u044F.'
           ],
-          team: 'Команда ArgusRecruit'
+          team: '\u041A\u043E\u043C\u0430\u043D\u0434\u0430 ArgusRecruit'
         },
         hy: {
-          subject: 'Դուք ընտրվել եք կարճ ցուցակում — {jobTitle}',
-          eyebrow: '• Կարճ ցուցակում •',
-          h1: 'Դուք կարճ ցուցակում եք:',
-          greeting: 'Բարև, {name},',
+          subject: '\u0534\u0578\u0582\u0584 \u0568\u0576\u057F\u0580\u057E\u0565\u056C \u0565\u0584 \u056F\u0561\u0580\u0573 \u0581\u0578\u0582\u0581\u0561\u056F\u0578\u0582\u0574 \u2014 {jobTitle}',
+          eyebrow: '\u2022 \u053F\u0561\u0580\u0573 \u0581\u0578\u0582\u0581\u0561\u056F\u0578\u0582\u0574 \u2022',
+          h1: '\u0534\u0578\u0582\u0584 \u056F\u0561\u0580\u0573 \u0581\u0578\u0582\u0581\u0561\u056F\u0578\u0582\u0574 \u0565\u0584:',
+          greeting: '\u0532\u0561\u0580\u0587, {name},',
           body: [
-            'Հաճելի լուր — դուք ընտրվել եք <strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի կարճ ցուցակում: Մեր հաճախորդն այժմ ուղղակիորեն ուսումնասիրում է ձեր պրոֆիլը:',
-            'Մենք կտեղեկացնենք ձեզ հաջորդ քայլերի մասին մի քանի աշխատանքային օրվա ընթացքում: Խնդրում ենք պահել ձեր օրացույցը ճկուն հաջորդ շաբաթվա համար:'
+            '\u0540\u0561\u0573\u0565\u056C\u056B \u056C\u0578\u0582\u0580 \u2014 \u0564\u0578\u0582\u0584 \u0568\u0576\u057F\u0580\u057E\u0565\u056C \u0565\u0584 <strong style="color:#D4AF37;">{jobTitle}</strong> \u057A\u0561\u0577\u057F\u0578\u0576\u056B \u056F\u0561\u0580\u0573 \u0581\u0578\u0582\u0581\u0561\u056F\u0578\u0582\u0574: \u0544\u0565\u0580 \u0570\u0561\u0573\u0561\u056D\u0578\u0580\u0564\u0576 \u0561\u0575\u056A\u0574 \u0578\u0582\u0572\u0572\u0561\u056F\u056B\u0578\u0580\u0565\u0576 \u0578\u0582\u057D\u0578\u0582\u0574\u0576\u0561\u057D\u056B\u0580\u0578\u0582\u0574 \u0567 \u0571\u0565\u0580 \u057A\u0580\u0578\u0586\u056B\u056C\u0568:',
+            '\u0544\u0565\u0576\u0584 \u056F\u057F\u0565\u0572\u0565\u056F\u0561\u0581\u0576\u0565\u0576\u0584 \u0571\u0565\u0566 \u0570\u0561\u057B\u0578\u0580\u0564 \u0584\u0561\u0575\u056C\u0565\u0580\u056B \u0574\u0561\u057D\u056B\u0576 \u0574\u056B \u0584\u0561\u0576\u056B \u0561\u0577\u056D\u0561\u057F\u0561\u0576\u0584\u0561\u0575\u056B\u0576 \u0585\u0580\u057E\u0561 \u0568\u0576\u0569\u0561\u0581\u0584\u0578\u0582\u0574: \u053D\u0576\u0564\u0580\u0578\u0582\u0574 \u0565\u0576\u0584 \u057A\u0561\u0570\u0565\u056C \u0571\u0565\u0580 \u0585\u0580\u0561\u0581\u0578\u0582\u0575\u0581\u0568 \u0573\u056F\u0578\u0582\u0576 \u0570\u0561\u057B\u0578\u0580\u0564 \u0577\u0561\u0562\u0561\u0569\u057E\u0561 \u0570\u0561\u0574\u0561\u0580:'
           ],
-          team: 'ArgusRecruit-ի թիմը'
+          team: 'ArgusRecruit-\u056B \u0569\u056B\u0574\u0568'
         }
       }
     },
@@ -980,9 +980,9 @@ function stageTemplates_() {
       key: 'interview',
       copy: {
         en: {
-          subject: 'Employer has approved your profile — {jobTitle}',
-          eyebrow: '• Employer Approved •',
-          h1: 'Good news — the employer wants to interview you.',
+          subject: 'Employer has approved your profile \u2014 {jobTitle}',
+          eyebrow: '\u2022 Employer Approved \u2022',
+          h1: 'Good news \u2014 the employer wants to interview you.',
           greeting: 'Hi {name},',
           body: [
             'After reviewing your profile, the employer has approved you for the next stage of the <strong style="color:#D4AF37;">{jobTitle}</strong> hiring process.',
@@ -991,26 +991,26 @@ function stageTemplates_() {
           team: 'The ArgusRecruit Team'
         },
         ru: {
-          subject: 'Работодатель одобрил ваш профиль — {jobTitle}',
-          eyebrow: '• Одобрено работодателем •',
-          h1: 'Хорошие новости — работодатель хочет провести с вами интервью.',
-          greeting: 'Здравствуйте, {name},',
+          subject: '\u0420\u0430\u0431\u043E\u0442\u043E\u0434\u0430\u0442\u0435\u043B\u044C \u043E\u0434\u043E\u0431\u0440\u0438\u043B \u0432\u0430\u0448 \u043F\u0440\u043E\u0444\u0438\u043B\u044C \u2014 {jobTitle}',
+          eyebrow: '\u2022 \u041E\u0434\u043E\u0431\u0440\u0435\u043D\u043E \u0440\u0430\u0431\u043E\u0442\u043E\u0434\u0430\u0442\u0435\u043B\u0435\u043C \u2022',
+          h1: '\u0425\u043E\u0440\u043E\u0448\u0438\u0435 \u043D\u043E\u0432\u043E\u0441\u0442\u0438 \u2014 \u0440\u0430\u0431\u043E\u0442\u043E\u0434\u0430\u0442\u0435\u043B\u044C \u0445\u043E\u0447\u0435\u0442 \u043F\u0440\u043E\u0432\u0435\u0441\u0442\u0438 \u0441 \u0432\u0430\u043C\u0438 \u0438\u043D\u0442\u0435\u0440\u0432\u044C\u044E.',
+          greeting: '\u0417\u0434\u0440\u0430\u0432\u0441\u0442\u0432\u0443\u0439\u0442\u0435, {name},',
           body: [
-            'После рассмотрения вашего профиля работодатель одобрил вашу кандидатуру для следующего этапа отбора на роль <strong style="color:#D4AF37;">{jobTitle}</strong>.',
-            'В ближайшие несколько дней работодатель напрямую согласует с вами время интервью. Постарайтесь оставить календарь гибким на ближайшую неделю.'
+            '\u041F\u043E\u0441\u043B\u0435 \u0440\u0430\u0441\u0441\u043C\u043E\u0442\u0440\u0435\u043D\u0438\u044F \u0432\u0430\u0448\u0435\u0433\u043E \u043F\u0440\u043E\u0444\u0438\u043B\u044F \u0440\u0430\u0431\u043E\u0442\u043E\u0434\u0430\u0442\u0435\u043B\u044C \u043E\u0434\u043E\u0431\u0440\u0438\u043B \u0432\u0430\u0448\u0443 \u043A\u0430\u043D\u0434\u0438\u0434\u0430\u0442\u0443\u0440\u0443 \u0434\u043B\u044F \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0435\u0433\u043E \u044D\u0442\u0430\u043F\u0430 \u043E\u0442\u0431\u043E\u0440\u0430 \u043D\u0430 \u0440\u043E\u043B\u044C <strong style="color:#D4AF37;">{jobTitle}</strong>.',
+            '\u0412 \u0431\u043B\u0438\u0436\u0430\u0439\u0448\u0438\u0435 \u043D\u0435\u0441\u043A\u043E\u043B\u044C\u043A\u043E \u0434\u043D\u0435\u0439 \u0440\u0430\u0431\u043E\u0442\u043E\u0434\u0430\u0442\u0435\u043B\u044C \u043D\u0430\u043F\u0440\u044F\u043C\u0443\u044E \u0441\u043E\u0433\u043B\u0430\u0441\u0443\u0435\u0442 \u0441 \u0432\u0430\u043C\u0438 \u0432\u0440\u0435\u043C\u044F \u0438\u043D\u0442\u0435\u0440\u0432\u044C\u044E. \u041F\u043E\u0441\u0442\u0430\u0440\u0430\u0439\u0442\u0435\u0441\u044C \u043E\u0441\u0442\u0430\u0432\u0438\u0442\u044C \u043A\u0430\u043B\u0435\u043D\u0434\u0430\u0440\u044C \u0433\u0438\u0431\u043A\u0438\u043C \u043D\u0430 \u0431\u043B\u0438\u0436\u0430\u0439\u0448\u0443\u044E \u043D\u0435\u0434\u0435\u043B\u044E.'
           ],
-          team: 'Команда ArgusRecruit'
+          team: '\u041A\u043E\u043C\u0430\u043D\u0434\u0430 ArgusRecruit'
         },
         hy: {
-          subject: 'Գործատուն հաստատել է ձեր պրոֆիլը — {jobTitle}',
-          eyebrow: '• Հաստատված է գործատուի կողմից •',
-          h1: 'Հաճելի լուր — գործատուն ցանկանում է հարցազրույց վերցնել ձեզ հետ:',
-          greeting: 'Բարև, {name},',
+          subject: '\u0533\u0578\u0580\u056E\u0561\u057F\u0578\u0582\u0576 \u0570\u0561\u057D\u057F\u0561\u057F\u0565\u056C \u0567 \u0571\u0565\u0580 \u057A\u0580\u0578\u0586\u056B\u056C\u0568 \u2014 {jobTitle}',
+          eyebrow: '\u2022 \u0540\u0561\u057D\u057F\u0561\u057F\u057E\u0561\u056E \u0567 \u0563\u0578\u0580\u056E\u0561\u057F\u0578\u0582\u056B \u056F\u0578\u0572\u0574\u056B\u0581 \u2022',
+          h1: '\u0540\u0561\u0573\u0565\u056C\u056B \u056C\u0578\u0582\u0580 \u2014 \u0563\u0578\u0580\u056E\u0561\u057F\u0578\u0582\u0576 \u0581\u0561\u0576\u056F\u0561\u0576\u0578\u0582\u0574 \u0567 \u0570\u0561\u0580\u0581\u0561\u0566\u0580\u0578\u0582\u0575\u0581 \u057E\u0565\u0580\u0581\u0576\u0565\u056C \u0571\u0565\u0566 \u0570\u0565\u057F:',
+          greeting: '\u0532\u0561\u0580\u0587, {name},',
           body: [
-            'Ձեր պրոֆիլը ուսումնասիրելուց հետո գործատուն հաստատել է ձեր թեկնածությունը <strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի հաջորդ փուլի համար:',
-            'Հաջորդ մի քանի օրվա ընթացքում գործատուն ուղղակիորեն կհամակարգի ձեզ հետ՝ հարցազրույցը պլանավորելու համար: Խնդրում ենք պահել ձեր օրացույցը ճկուն:'
+            '\u0541\u0565\u0580 \u057A\u0580\u0578\u0586\u056B\u056C\u0568 \u0578\u0582\u057D\u0578\u0582\u0574\u0576\u0561\u057D\u056B\u0580\u0565\u056C\u0578\u0582\u0581 \u0570\u0565\u057F\u0578 \u0563\u0578\u0580\u056E\u0561\u057F\u0578\u0582\u0576 \u0570\u0561\u057D\u057F\u0561\u057F\u0565\u056C \u0567 \u0571\u0565\u0580 \u0569\u0565\u056F\u0576\u0561\u056E\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0568 <strong style="color:#D4AF37;">{jobTitle}</strong> \u057A\u0561\u0577\u057F\u0578\u0576\u056B \u0570\u0561\u057B\u0578\u0580\u0564 \u0583\u0578\u0582\u056C\u056B \u0570\u0561\u0574\u0561\u0580:',
+            '\u0540\u0561\u057B\u0578\u0580\u0564 \u0574\u056B \u0584\u0561\u0576\u056B \u0585\u0580\u057E\u0561 \u0568\u0576\u0569\u0561\u0581\u0584\u0578\u0582\u0574 \u0563\u0578\u0580\u056E\u0561\u057F\u0578\u0582\u0576 \u0578\u0582\u0572\u0572\u0561\u056F\u056B\u0578\u0580\u0565\u0576 \u056F\u0570\u0561\u0574\u0561\u056F\u0561\u0580\u0563\u056B \u0571\u0565\u0566 \u0570\u0565\u057F\u055D \u0570\u0561\u0580\u0581\u0561\u0566\u0580\u0578\u0582\u0575\u0581\u0568 \u057A\u056C\u0561\u0576\u0561\u057E\u0578\u0580\u0565\u056C\u0578\u0582 \u0570\u0561\u0574\u0561\u0580: \u053D\u0576\u0564\u0580\u0578\u0582\u0574 \u0565\u0576\u0584 \u057A\u0561\u0570\u0565\u056C \u0571\u0565\u0580 \u0585\u0580\u0561\u0581\u0578\u0582\u0575\u0581\u0568 \u0573\u056F\u0578\u0582\u0576:'
           ],
-          team: 'ArgusRecruit-ի թիմը'
+          team: 'ArgusRecruit-\u056B \u0569\u056B\u0574\u0568'
         }
       }
     },
@@ -1018,37 +1018,37 @@ function stageTemplates_() {
       key: 'offer',
       copy: {
         en: {
-          subject: 'An offer is on its way — {jobTitle}',
-          eyebrow: '• Offer Incoming •',
-          h1: 'Excellent — an offer is being prepared.',
+          subject: 'An offer is on its way \u2014 {jobTitle}',
+          eyebrow: '\u2022 Offer Incoming \u2022',
+          h1: 'Excellent \u2014 an offer is being prepared.',
           greeting: 'Hi {name},',
           body: [
-            'Excellent news — the employer has approved you for a formal offer on the <strong style="color:#D4AF37;">{jobTitle}</strong> role.',
-            'Please wait to receive the formal offer — our team or the employer will share it with you soon. It will cover the package, relocation, and start date.'
+            'Excellent news \u2014 the employer has approved you for a formal offer on the <strong style="color:#D4AF37;">{jobTitle}</strong> role.',
+            'Please wait to receive the formal offer \u2014 our team or the employer will share it with you soon. It will cover the package, relocation, and start date.'
           ],
           team: 'The ArgusRecruit Team'
         },
         ru: {
-          subject: 'Оффер скоро у вас — {jobTitle}',
-          eyebrow: '• Оффер скоро •',
-          h1: 'Отлично — оффер готовится.',
-          greeting: 'Здравствуйте, {name},',
+          subject: '\u041E\u0444\u0444\u0435\u0440 \u0441\u043A\u043E\u0440\u043E \u0443 \u0432\u0430\u0441 \u2014 {jobTitle}',
+          eyebrow: '\u2022 \u041E\u0444\u0444\u0435\u0440 \u0441\u043A\u043E\u0440\u043E \u2022',
+          h1: '\u041E\u0442\u043B\u0438\u0447\u043D\u043E \u2014 \u043E\u0444\u0444\u0435\u0440 \u0433\u043E\u0442\u043E\u0432\u0438\u0442\u0441\u044F.',
+          greeting: '\u0417\u0434\u0440\u0430\u0432\u0441\u0442\u0432\u0443\u0439\u0442\u0435, {name},',
           body: [
-            'Отличные новости — работодатель одобрил вашу кандидатуру и готовит официальный оффер по роли <strong style="color:#D4AF37;">{jobTitle}</strong>.',
-            'Пожалуйста, ожидайте официального оффера — наша команда или работодатель свяжутся с вами в ближайшее время. Оффер охватит пакет, релокацию и дату выхода.'
+            '\u041E\u0442\u043B\u0438\u0447\u043D\u044B\u0435 \u043D\u043E\u0432\u043E\u0441\u0442\u0438 \u2014 \u0440\u0430\u0431\u043E\u0442\u043E\u0434\u0430\u0442\u0435\u043B\u044C \u043E\u0434\u043E\u0431\u0440\u0438\u043B \u0432\u0430\u0448\u0443 \u043A\u0430\u043D\u0434\u0438\u0434\u0430\u0442\u0443\u0440\u0443 \u0438 \u0433\u043E\u0442\u043E\u0432\u0438\u0442 \u043E\u0444\u0438\u0446\u0438\u0430\u043B\u044C\u043D\u044B\u0439 \u043E\u0444\u0444\u0435\u0440 \u043F\u043E \u0440\u043E\u043B\u0438 <strong style="color:#D4AF37;">{jobTitle}</strong>.',
+            '\u041F\u043E\u0436\u0430\u043B\u0443\u0439\u0441\u0442\u0430, \u043E\u0436\u0438\u0434\u0430\u0439\u0442\u0435 \u043E\u0444\u0438\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0433\u043E \u043E\u0444\u0444\u0435\u0440\u0430 \u2014 \u043D\u0430\u0448\u0430 \u043A\u043E\u043C\u0430\u043D\u0434\u0430 \u0438\u043B\u0438 \u0440\u0430\u0431\u043E\u0442\u043E\u0434\u0430\u0442\u0435\u043B\u044C \u0441\u0432\u044F\u0436\u0443\u0442\u0441\u044F \u0441 \u0432\u0430\u043C\u0438 \u0432 \u0431\u043B\u0438\u0436\u0430\u0439\u0448\u0435\u0435 \u0432\u0440\u0435\u043C\u044F. \u041E\u0444\u0444\u0435\u0440 \u043E\u0445\u0432\u0430\u0442\u0438\u0442 \u043F\u0430\u043A\u0435\u0442, \u0440\u0435\u043B\u043E\u043A\u0430\u0446\u0438\u044E \u0438 \u0434\u0430\u0442\u0443 \u0432\u044B\u0445\u043E\u0434\u0430.'
           ],
-          team: 'Команда ArgusRecruit'
+          team: '\u041A\u043E\u043C\u0430\u043D\u0434\u0430 ArgusRecruit'
         },
         hy: {
-          subject: 'Առաջարկը ձեր ճանապարհին է — {jobTitle}',
-          eyebrow: '• Մոտալուտ առաջարկ •',
-          h1: 'Հիանալի — առաջարկը պատրաստվում է:',
-          greeting: 'Բարև, {name},',
+          subject: '\u0531\u057C\u0561\u057B\u0561\u0580\u056F\u0568 \u0571\u0565\u0580 \u0573\u0561\u0576\u0561\u057A\u0561\u0580\u0570\u056B\u0576 \u0567 \u2014 {jobTitle}',
+          eyebrow: '\u2022 \u0544\u0578\u057F\u0561\u056C\u0578\u0582\u057F \u0561\u057C\u0561\u057B\u0561\u0580\u056F \u2022',
+          h1: '\u0540\u056B\u0561\u0576\u0561\u056C\u056B \u2014 \u0561\u057C\u0561\u057B\u0561\u0580\u056F\u0568 \u057A\u0561\u057F\u0580\u0561\u057D\u057F\u057E\u0578\u0582\u0574 \u0567:',
+          greeting: '\u0532\u0561\u0580\u0587, {name},',
           body: [
-            'Գերազանց լուր — գործատուն հաստատել է ձեր թեկնածությունը <strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի համար և պատրաստում է պաշտոնական առաջարկը:',
-            'Խնդրում ենք սպասել պաշտոնական առաջարկին — մեր թիմը կամ գործատուն շուտով կկապվեն ձեզ հետ: Առաջարկը կներառի փաթեթը, տեղափոխումը և մեկնարկի օրը:'
+            '\u0533\u0565\u0580\u0561\u0566\u0561\u0576\u0581 \u056C\u0578\u0582\u0580 \u2014 \u0563\u0578\u0580\u056E\u0561\u057F\u0578\u0582\u0576 \u0570\u0561\u057D\u057F\u0561\u057F\u0565\u056C \u0567 \u0571\u0565\u0580 \u0569\u0565\u056F\u0576\u0561\u056E\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0568 <strong style="color:#D4AF37;">{jobTitle}</strong> \u057A\u0561\u0577\u057F\u0578\u0576\u056B \u0570\u0561\u0574\u0561\u0580 \u0587 \u057A\u0561\u057F\u0580\u0561\u057D\u057F\u0578\u0582\u0574 \u0567 \u057A\u0561\u0577\u057F\u0578\u0576\u0561\u056F\u0561\u0576 \u0561\u057C\u0561\u057B\u0561\u0580\u056F\u0568:',
+            '\u053D\u0576\u0564\u0580\u0578\u0582\u0574 \u0565\u0576\u0584 \u057D\u057A\u0561\u057D\u0565\u056C \u057A\u0561\u0577\u057F\u0578\u0576\u0561\u056F\u0561\u0576 \u0561\u057C\u0561\u057B\u0561\u0580\u056F\u056B\u0576 \u2014 \u0574\u0565\u0580 \u0569\u056B\u0574\u0568 \u056F\u0561\u0574 \u0563\u0578\u0580\u056E\u0561\u057F\u0578\u0582\u0576 \u0577\u0578\u0582\u057F\u0578\u057E \u056F\u056F\u0561\u057A\u057E\u0565\u0576 \u0571\u0565\u0566 \u0570\u0565\u057F: \u0531\u057C\u0561\u057B\u0561\u0580\u056F\u0568 \u056F\u0576\u0565\u0580\u0561\u057C\u056B \u0583\u0561\u0569\u0565\u0569\u0568, \u057F\u0565\u0572\u0561\u0583\u0578\u056D\u0578\u0582\u0574\u0568 \u0587 \u0574\u0565\u056F\u0576\u0561\u0580\u056F\u056B \u0585\u0580\u0568:'
           ],
-          team: 'ArgusRecruit-ի թիմը'
+          team: 'ArgusRecruit-\u056B \u0569\u056B\u0574\u0568'
         }
       }
     },
@@ -1057,39 +1057,39 @@ function stageTemplates_() {
       copy: {
         en: {
           subject: 'Update on your {jobTitle} application',
-          eyebrow: '• Application Update •',
+          eyebrow: '\u2022 Application Update \u2022',
           h1: 'Update on your application.',
           greeting: 'Hi {name},',
           body: [
             'Thank you again for your interest in the <strong style="color:#D4AF37;">{jobTitle}</strong> role and for the time you put into your application.',
-            'After careful consideration, we will not be moving forward with your candidacy for this specific role. This was not an easy decision — the bar was very high and the final shortlist was small.',
+            'After careful consideration, we will not be moving forward with your candidacy for this specific role. This was not an easy decision \u2014 the bar was very high and the final shortlist was small.',
             'Your profile will stay in our network. If we see future roles that better match your background, we will reach out. Wishing you the very best in your search.'
           ],
           team: 'The ArgusRecruit Team'
         },
         ru: {
-          subject: 'Обновление по вашей заявке на {jobTitle}',
-          eyebrow: '• Обновление по заявке •',
-          h1: 'Обновление по вашей заявке.',
-          greeting: 'Здравствуйте, {name},',
+          subject: '\u041E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0435 \u043F\u043E \u0432\u0430\u0448\u0435\u0439 \u0437\u0430\u044F\u0432\u043A\u0435 \u043D\u0430 {jobTitle}',
+          eyebrow: '\u2022 \u041E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0435 \u043F\u043E \u0437\u0430\u044F\u0432\u043A\u0435 \u2022',
+          h1: '\u041E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0435 \u043F\u043E \u0432\u0430\u0448\u0435\u0439 \u0437\u0430\u044F\u0432\u043A\u0435.',
+          greeting: '\u0417\u0434\u0440\u0430\u0432\u0441\u0442\u0432\u0443\u0439\u0442\u0435, {name},',
           body: [
-            'Спасибо за интерес к роли <strong style="color:#D4AF37;">{jobTitle}</strong> и за время, потраченное на заявку.',
-            'После тщательного рассмотрения мы решили не продолжать рассмотрение вашей кандидатуры по этой конкретной позиции. Это было непростое решение — конкурс был очень высокий, и финальный шорт-лист небольшой.',
-            'Ваш профиль останется в нашей сети. Если у нас появятся будущие роли, которые лучше подходят вам, мы свяжемся. Желаем удачи в поиске.'
+            '\u0421\u043F\u0430\u0441\u0438\u0431\u043E \u0437\u0430 \u0438\u043D\u0442\u0435\u0440\u0435\u0441 \u043A \u0440\u043E\u043B\u0438 <strong style="color:#D4AF37;">{jobTitle}</strong> \u0438 \u0437\u0430 \u0432\u0440\u0435\u043C\u044F, \u043F\u043E\u0442\u0440\u0430\u0447\u0435\u043D\u043D\u043E\u0435 \u043D\u0430 \u0437\u0430\u044F\u0432\u043A\u0443.',
+            '\u041F\u043E\u0441\u043B\u0435 \u0442\u0449\u0430\u0442\u0435\u043B\u044C\u043D\u043E\u0433\u043E \u0440\u0430\u0441\u0441\u043C\u043E\u0442\u0440\u0435\u043D\u0438\u044F \u043C\u044B \u0440\u0435\u0448\u0438\u043B\u0438 \u043D\u0435 \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0430\u0442\u044C \u0440\u0430\u0441\u0441\u043C\u043E\u0442\u0440\u0435\u043D\u0438\u0435 \u0432\u0430\u0448\u0435\u0439 \u043A\u0430\u043D\u0434\u0438\u0434\u0430\u0442\u0443\u0440\u044B \u043F\u043E \u044D\u0442\u043E\u0439 \u043A\u043E\u043D\u043A\u0440\u0435\u0442\u043D\u043E\u0439 \u043F\u043E\u0437\u0438\u0446\u0438\u0438. \u042D\u0442\u043E \u0431\u044B\u043B\u043E \u043D\u0435\u043F\u0440\u043E\u0441\u0442\u043E\u0435 \u0440\u0435\u0448\u0435\u043D\u0438\u0435 \u2014 \u043A\u043E\u043D\u043A\u0443\u0440\u0441 \u0431\u044B\u043B \u043E\u0447\u0435\u043D\u044C \u0432\u044B\u0441\u043E\u043A\u0438\u0439, \u0438 \u0444\u0438\u043D\u0430\u043B\u044C\u043D\u044B\u0439 \u0448\u043E\u0440\u0442-\u043B\u0438\u0441\u0442 \u043D\u0435\u0431\u043E\u043B\u044C\u0448\u043E\u0439.',
+            '\u0412\u0430\u0448 \u043F\u0440\u043E\u0444\u0438\u043B\u044C \u043E\u0441\u0442\u0430\u043D\u0435\u0442\u0441\u044F \u0432 \u043D\u0430\u0448\u0435\u0439 \u0441\u0435\u0442\u0438. \u0415\u0441\u043B\u0438 \u0443 \u043D\u0430\u0441 \u043F\u043E\u044F\u0432\u044F\u0442\u0441\u044F \u0431\u0443\u0434\u0443\u0449\u0438\u0435 \u0440\u043E\u043B\u0438, \u043A\u043E\u0442\u043E\u0440\u044B\u0435 \u043B\u0443\u0447\u0448\u0435 \u043F\u043E\u0434\u0445\u043E\u0434\u044F\u0442 \u0432\u0430\u043C, \u043C\u044B \u0441\u0432\u044F\u0436\u0435\u043C\u0441\u044F. \u0416\u0435\u043B\u0430\u0435\u043C \u0443\u0434\u0430\u0447\u0438 \u0432 \u043F\u043E\u0438\u0441\u043A\u0435.'
           ],
-          team: 'Команда ArgusRecruit'
+          team: '\u041A\u043E\u043C\u0430\u043D\u0434\u0430 ArgusRecruit'
         },
         hy: {
-          subject: 'Թարմացում {jobTitle} պաշտոնի դիմումի վերաբերյալ',
-          eyebrow: '• Դիմումի թարմացում •',
-          h1: 'Թարմացում ձեր դիմումի վերաբերյալ:',
-          greeting: 'Բարև, {name},',
+          subject: '\u0539\u0561\u0580\u0574\u0561\u0581\u0578\u0582\u0574 {jobTitle} \u057A\u0561\u0577\u057F\u0578\u0576\u056B \u0564\u056B\u0574\u0578\u0582\u0574\u056B \u057E\u0565\u0580\u0561\u0562\u0565\u0580\u0575\u0561\u056C',
+          eyebrow: '\u2022 \u0534\u056B\u0574\u0578\u0582\u0574\u056B \u0569\u0561\u0580\u0574\u0561\u0581\u0578\u0582\u0574 \u2022',
+          h1: '\u0539\u0561\u0580\u0574\u0561\u0581\u0578\u0582\u0574 \u0571\u0565\u0580 \u0564\u056B\u0574\u0578\u0582\u0574\u056B \u057E\u0565\u0580\u0561\u0562\u0565\u0580\u0575\u0561\u056C:',
+          greeting: '\u0532\u0561\u0580\u0587, {name},',
           body: [
-            'Կրկին շնորհակալություն <strong style="color:#D4AF37;">{jobTitle}</strong> պաշտոնի նկատմամբ ձեր հետաքրքրության և դիմումի վրա ծախսված ժամանակի համար:',
-            'Մանրակրկիտ դիտարկումից հետո մենք որոշել ենք չշարունակել ձեր թեկնածությունը այս կոնկրետ դերի համար: Սա հեշտ որոշում չէր — մրցակցությունը շատ բարձր էր:',
-            'Ձեր պրոֆիլը կպահպանվի մեր ցանցում: Ապագայում ավելի համապատասխան դերեր ունենալու դեպքում մենք կկապվենք ձեզ հետ: Բարեմաղթանքներով ձեր որոնման մեջ:'
+            '\u053F\u0580\u056F\u056B\u0576 \u0577\u0576\u0578\u0580\u0570\u0561\u056F\u0561\u056C\u0578\u0582\u0569\u0575\u0578\u0582\u0576 <strong style="color:#D4AF37;">{jobTitle}</strong> \u057A\u0561\u0577\u057F\u0578\u0576\u056B \u0576\u056F\u0561\u057F\u0574\u0561\u0574\u0562 \u0571\u0565\u0580 \u0570\u0565\u057F\u0561\u0584\u0580\u0584\u0580\u0578\u0582\u0569\u0575\u0561\u0576 \u0587 \u0564\u056B\u0574\u0578\u0582\u0574\u056B \u057E\u0580\u0561 \u056E\u0561\u056D\u057D\u057E\u0561\u056E \u056A\u0561\u0574\u0561\u0576\u0561\u056F\u056B \u0570\u0561\u0574\u0561\u0580:',
+            '\u0544\u0561\u0576\u0580\u0561\u056F\u0580\u056F\u056B\u057F \u0564\u056B\u057F\u0561\u0580\u056F\u0578\u0582\u0574\u056B\u0581 \u0570\u0565\u057F\u0578 \u0574\u0565\u0576\u0584 \u0578\u0580\u0578\u0577\u0565\u056C \u0565\u0576\u0584 \u0579\u0577\u0561\u0580\u0578\u0582\u0576\u0561\u056F\u0565\u056C \u0571\u0565\u0580 \u0569\u0565\u056F\u0576\u0561\u056E\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0568 \u0561\u0575\u057D \u056F\u0578\u0576\u056F\u0580\u0565\u057F \u0564\u0565\u0580\u056B \u0570\u0561\u0574\u0561\u0580: \u054D\u0561 \u0570\u0565\u0577\u057F \u0578\u0580\u0578\u0577\u0578\u0582\u0574 \u0579\u0567\u0580 \u2014 \u0574\u0580\u0581\u0561\u056F\u0581\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0568 \u0577\u0561\u057F \u0562\u0561\u0580\u0571\u0580 \u0567\u0580:',
+            '\u0541\u0565\u0580 \u057A\u0580\u0578\u0586\u056B\u056C\u0568 \u056F\u057A\u0561\u0570\u057A\u0561\u0576\u057E\u056B \u0574\u0565\u0580 \u0581\u0561\u0576\u0581\u0578\u0582\u0574: \u0531\u057A\u0561\u0563\u0561\u0575\u0578\u0582\u0574 \u0561\u057E\u0565\u056C\u056B \u0570\u0561\u0574\u0561\u057A\u0561\u057F\u0561\u057D\u056D\u0561\u0576 \u0564\u0565\u0580\u0565\u0580 \u0578\u0582\u0576\u0565\u0576\u0561\u056C\u0578\u0582 \u0564\u0565\u057A\u0584\u0578\u0582\u0574 \u0574\u0565\u0576\u0584 \u056F\u056F\u0561\u057A\u057E\u0565\u0576\u0584 \u0571\u0565\u0566 \u0570\u0565\u057F: \u0532\u0561\u0580\u0565\u0574\u0561\u0572\u0569\u0561\u0576\u0584\u0576\u0565\u0580\u0578\u057E \u0571\u0565\u0580 \u0578\u0580\u0578\u0576\u0574\u0561\u0576 \u0574\u0565\u057B:'
           ],
-          team: 'ArgusRecruit-ի թիմը'
+          team: 'ArgusRecruit-\u056B \u0569\u056B\u0574\u0568'
         }
       }
     }
@@ -1108,8 +1108,8 @@ function stageTemplates_() {
 
 const CTA_TEXT = {
   en: 'Browse All Open Roles',
-  ru: 'Все открытые вакансии',
-  hy: 'Բոլոր բաց դերերը'
+  ru: '\u0412\u0441\u0435 \u043E\u0442\u043A\u0440\u044B\u0442\u044B\u0435 \u0432\u0430\u043A\u0430\u043D\u0441\u0438\u0438',
+  hy: '\u0532\u0578\u056C\u0578\u0580 \u0562\u0561\u0581 \u0564\u0565\u0580\u0565\u0580\u0568'
 };
 const CTA_URL = {
   en: 'https://argusrecruit.com/jobs/',
@@ -1147,14 +1147,14 @@ function brandedEmailHtml_(c, lang) {
         <tr><td align="center" style="padding:10px 32px 32px;">
           <a href="${ctaUrl}" style="display:inline-block;background:#D4AF37;color:#0E2440;font-weight:700;font-size:13px;letter-spacing:1px;padding:13px 28px;border-radius:999px;text-decoration:none;">${ctaText}</a>
         </td></tr>
-        <tr><td style="padding:0 32px 28px;color:rgba(255,255,255,0.7);font-size:13px;line-height:1.6;text-align:center;font-style:italic;">— ${c.team}</td></tr>
+        <tr><td style="padding:0 32px 28px;color:rgba(255,255,255,0.7);font-size:13px;line-height:1.6;text-align:center;font-style:italic;">\u2014 ${c.team}</td></tr>
         <tr><td style="padding:22px 32px;background:#0E2440;border-top:1px solid rgba(212,175,55,0.15);text-align:center;">
           <div style="color:rgba(255,255,255,0.55);font-size:12px;line-height:1.65;">
             <a href="https://argusrecruit.com" style="color:#D4AF37;text-decoration:none;">argusrecruit.com</a>
-            &nbsp;·&nbsp;
+            &nbsp;\u00B7&nbsp;
             <a href="mailto:contact@argusrecruit.com" style="color:#D4AF37;text-decoration:none;">contact@argusrecruit.com</a>
           </div>
-          <div style="margin-top:12px;color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:1px;text-transform:uppercase;">© 2026 ArgusRecruit · Yerevan, Armenia</div>
+          <div style="margin-top:12px;color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:1px;text-transform:uppercase;">\u00A9 2026 ArgusRecruit \u00B7 Yerevan, Armenia</div>
         </td></tr>
       </table>
     </td></tr>
@@ -1167,9 +1167,9 @@ function brandedEmailHtml_(c, lang) {
 // TELEGRAM INTAKE BOT
 //
 // Setup (one-time, run installTelegramWebhook() after deployment):
-//   1. Deploy this script as a Web App (Deploy → New deployment).
+//   1. Deploy this script as a Web App (Deploy \u2192 New deployment).
 //      Execute as: Me. Who has access: Anyone (so Telegram can POST).
-//   2. Run installTelegramWebhook() once — it tells Telegram to send all
+//   2. Run installTelegramWebhook() once \u2014 it tells Telegram to send all
 //      bot updates to this web app.
 //   3. Open DM with @Sonicbot_bot, type /start, then forward a CV.
 //
@@ -1178,7 +1178,7 @@ function brandedEmailHtml_(c, lang) {
 //
 // Drive OCR: the bot converts each PDF to a temporary Google Doc to read
 // the text. This uses the Drive Advanced Service which is automatically
-// available — no manual enable needed.
+// available \u2014 no manual enable needed.
 // ----------------------------------------------------------------------
 
 function installTelegramWebhook() {
@@ -1220,7 +1220,7 @@ function doPost(e) {
 }
 
 function handleTelegramUpdate_(update) {
-  // Callback queries — inline-button taps
+  // Callback queries \u2014 inline-button taps
   if (update.callback_query) {
     const cq = update.callback_query;
     if (cq.from && cq.from.id !== TG_ADMIN_CHAT_ID) {
@@ -1302,10 +1302,10 @@ function tgClearState_(chatId) {
 
 function showHomeMenu_(chatId) {
   tgSendKb_(chatId,
-    '<b>ArgusRecruit Intake Bot</b>\n\nPick a job, choose how the candidate reached you, then send their CV — I\'ll read it, show what I found, and ask you to confirm.',
+    '<b>ArgusRecruit Intake Bot</b>\n\nPick a job, choose how the candidate reached you, then send their CV \u2014 I\'ll read it, show what I found, and ask you to confirm.',
     [
-      [{ text: '📋 Pick a job', callback_data: 'pickjob' }],
-      [{ text: '🔍 State', callback_data: 'state' }, { text: '🆘 Help', callback_data: 'help' }]
+      [{ text: '\uD83D\uDCCB Pick a job', callback_data: 'pickjob' }],
+      [{ text: '\uD83D\uDD0D State', callback_data: 'state' }, { text: '\uD83C\uDD98 Help', callback_data: 'help' }]
     ]
   );
 }
@@ -1314,15 +1314,15 @@ function showJobsKb_(chatId, messageId) {
   const jobs = listActiveJobs_();
   if (jobs.length === 0) {
     const text = 'No active job folders found in Drive root.';
-    if (messageId) tgEdit_(chatId, messageId, text, [[{ text: '↩️ Back', callback_data: 'home' }]]);
-    else tgSendKb_(chatId, text, [[{ text: '↩️ Back', callback_data: 'home' }]]);
+    if (messageId) tgEdit_(chatId, messageId, text, [[{ text: '\u21A9\uFE0F Back', callback_data: 'home' }]]);
+    else tgSendKb_(chatId, text, [[{ text: '\u21A9\uFE0F Back', callback_data: 'home' }]]);
     return;
   }
   const rows = jobs.map(j => [{
-    text: `${j.jobId} — ${j.jobTitle}`,
+    text: `${j.jobId} \u2014 ${j.jobTitle}`,
     callback_data: 'job:' + j.jobId
   }]);
-  rows.push([{ text: '↩️ Back', callback_data: 'home' }]);
+  rows.push([{ text: '\u21A9\uFE0F Back', callback_data: 'home' }]);
   const text = '<b>Pick a job:</b>';
   if (messageId) tgEdit_(chatId, messageId, text, rows);
   else tgSendKb_(chatId, text, rows);
@@ -1334,21 +1334,21 @@ function showSourcesKb_(chatId, messageId, jobId, jobTitle) {
     text: s,
     callback_data: 'src:' + jobId + '|' + s
   }]);
-  rows.push([{ text: '↩️ Back to jobs', callback_data: 'pickjob' }]);
-  const text = `<b>Job:</b> <code>${jobId}</code> — ${escHtml_(jobTitle)}\n\nHow did you find this candidate?`;
+  rows.push([{ text: '\u21A9\uFE0F Back to jobs', callback_data: 'pickjob' }]);
+  const text = `<b>Job:</b> <code>${jobId}</code> \u2014 ${escHtml_(jobTitle)}\n\nHow did you find this candidate?`;
   if (messageId) tgEdit_(chatId, messageId, text, rows);
   else tgSendKb_(chatId, text, rows);
 }
 
 function showReadyKb_(chatId, messageId, jobId, jobTitle, source) {
   const text =
-    `✅ <b>Ready.</b>\n\n` +
-    `Job: <code>${jobId}</code> — ${escHtml_(jobTitle)}\n` +
+    `\u2705 <b>Ready.</b>\n\n` +
+    `Job: <code>${jobId}</code> \u2014 ${escHtml_(jobTitle)}\n` +
     `Source: <code>${source}</code>\n\n` +
     `Now <b>send or forward</b> the candidate's CV (PDF, DOC, DOCX).`;
   const kb = [[
-    { text: '🔄 Change job', callback_data: 'pickjob' },
-    { text: '↩️ Cancel', callback_data: 'home' }
+    { text: '\uD83D\uDD04 Change job', callback_data: 'pickjob' },
+    { text: '\u21A9\uFE0F Cancel', callback_data: 'home' }
   ]];
   if (messageId) tgEdit_(chatId, messageId, text, kb);
   else tgSendKb_(chatId, text, kb);
@@ -1364,8 +1364,8 @@ function handleCallbackQuery_(cq) {
     tgEdit_(chatId, messageId,
       '<b>ArgusRecruit Intake Bot</b>\n\nPick a job, choose how the candidate reached you, then send their CV.',
       [
-        [{ text: '📋 Pick a job', callback_data: 'pickjob' }],
-        [{ text: '🔍 State', callback_data: 'state' }, { text: '🆘 Help', callback_data: 'help' }]
+        [{ text: '\uD83D\uDCCB Pick a job', callback_data: 'pickjob' }],
+        [{ text: '\uD83D\uDD0D State', callback_data: 'state' }, { text: '\uD83C\uDD98 Help', callback_data: 'help' }]
       ]
     );
     return;
@@ -1374,7 +1374,7 @@ function handleCallbackQuery_(cq) {
   if (data === 'help') {
     tgEdit_(chatId, messageId,
       '<b>Help</b>\n\n1. Tap <b>Pick a job</b> and choose the role.\n2. Choose how the candidate reached you.\n3. Send or forward the CV (PDF/DOC/DOCX).\n4. I\'ll read it, show what I found, and you can <b>Confirm</b> or <b>Cancel</b>.\n\nYou can also type <code>/start</code> anytime to get back to the home menu.',
-      [[{ text: '↩️ Back', callback_data: 'home' }]]
+      [[{ text: '\u21A9\uFE0F Back', callback_data: 'home' }]]
     );
     return;
   }
@@ -1382,11 +1382,11 @@ function handleCallbackQuery_(cq) {
     const st = tgState_(chatId);
     tgEdit_(chatId, messageId,
       'Current state:\n' +
-      'job: ' + (st.jobId || '—') + '\n' +
-      'title: ' + (st.jobTitle || '—') + '\n' +
-      'source: ' + (st.source || '—') + '\n' +
+      'job: ' + (st.jobId || '\u2014') + '\n' +
+      'title: ' + (st.jobTitle || '\u2014') + '\n' +
+      'source: ' + (st.source || '\u2014') + '\n' +
       'pending: ' + (st.pending ? 'yes' : 'no'),
-      [[{ text: '↩️ Back', callback_data: 'home' }]]
+      [[{ text: '\u21A9\uFE0F Back', callback_data: 'home' }]]
     );
     return;
   }
@@ -1394,7 +1394,7 @@ function handleCallbackQuery_(cq) {
     const jobId = data.slice(4);
     const jobs = listActiveJobs_();
     const job = jobs.find(j => j.jobId === jobId);
-    if (!job) { tgEdit_(chatId, messageId, 'Job not found.', [[{ text: '↩️ Back', callback_data: 'pickjob' }]]); return; }
+    if (!job) { tgEdit_(chatId, messageId, 'Job not found.', [[{ text: '\u21A9\uFE0F Back', callback_data: 'pickjob' }]]); return; }
     showSourcesKb_(chatId, messageId, job.jobId, job.jobTitle);
     return;
   }
@@ -1405,29 +1405,29 @@ function handleCallbackQuery_(cq) {
     const source = rest.slice(sep + 1);
     const jobs = listActiveJobs_();
     const job = jobs.find(j => j.jobId === jobId);
-    if (!job) { tgEdit_(chatId, messageId, 'Job not found.', [[{ text: '↩️ Back', callback_data: 'pickjob' }]]); return; }
+    if (!job) { tgEdit_(chatId, messageId, 'Job not found.', [[{ text: '\u21A9\uFE0F Back', callback_data: 'pickjob' }]]); return; }
     tgSaveState_(chatId, { jobId: job.jobId, jobTitle: job.jobTitle, source: source });
     showReadyKb_(chatId, messageId, job.jobId, job.jobTitle, source);
     return;
   }
   if (data === 'confirm') {
     const st = tgState_(chatId);
-    if (!st.pending) { tgEdit_(chatId, messageId, 'Nothing pending. Pick a job and send a CV first.', [[{ text: '↩️ Back', callback_data: 'home' }]]); return; }
+    if (!st.pending) { tgEdit_(chatId, messageId, 'Nothing pending. Pick a job and send a CV first.', [[{ text: '\u21A9\uFE0F Back', callback_data: 'home' }]]); return; }
     let res;
     try { res = submitIntake_(st.pending); }
     catch (err) { res = { ok: false, error: String(err) }; }
     if (res.ok) {
       tgEdit_(chatId, messageId,
-        '✅ Added <b>' + escHtml_(res.name) + '</b> → <code>' + res.jobId + '</code>.',
+        '\u2705 Added <b>' + escHtml_(res.name) + '</b> \u2192 <code>' + res.jobId + '</code>.',
         [[
-          { text: '➕ Another to same job', callback_data: 'again:' + st.jobId + '|' + (st.source || 'sourced-other') },
-          { text: '🏠 Home', callback_data: 'home' }
+          { text: '\u2795 Another to same job', callback_data: 'again:' + st.jobId + '|' + (st.source || 'sourced-other') },
+          { text: '\uD83C\uDFE0 Home', callback_data: 'home' }
         ]]
       );
     } else {
       tgEdit_(chatId, messageId,
-        '⚠ Save failed: ' + escHtml_(res.error || 'unknown'),
-        [[{ text: '↩️ Back', callback_data: 'home' }]]
+        '\u26A0 Save failed: ' + escHtml_(res.error || 'unknown'),
+        [[{ text: '\u21A9\uFE0F Back', callback_data: 'home' }]]
       );
     }
     const after = tgState_(chatId);
@@ -1440,7 +1440,7 @@ function handleCallbackQuery_(cq) {
     delete st.pending;
     tgSaveState_(chatId, st);
     tgEdit_(chatId, messageId, 'Cancelled. The CV was not added.',
-      [[{ text: '🏠 Home', callback_data: 'home' }]]);
+      [[{ text: '\uD83C\uDFE0 Home', callback_data: 'home' }]]);
     return;
   }
   if (data.indexOf('again:') === 0) {
@@ -1450,7 +1450,7 @@ function handleCallbackQuery_(cq) {
     const source = rest.slice(sep + 1);
     const jobs = listActiveJobs_();
     const job = jobs.find(j => j.jobId === jobId);
-    if (!job) { tgEdit_(chatId, messageId, 'Job not found.', [[{ text: '↩️ Back', callback_data: 'pickjob' }]]); return; }
+    if (!job) { tgEdit_(chatId, messageId, 'Job not found.', [[{ text: '\u21A9\uFE0F Back', callback_data: 'pickjob' }]]); return; }
     tgSaveState_(chatId, { jobId: job.jobId, jobTitle: job.jobTitle, source: source });
     showReadyKb_(chatId, messageId, job.jobId, job.jobTitle, source);
     return;
@@ -1465,7 +1465,7 @@ function handleTgText_(chatId, text) {
   if (text === '/jobs') {
     const jobs = listActiveJobs_();
     if (jobs.length === 0) { tgSend_(chatId, 'No active job folders found in Drive root.'); return; }
-    const list = jobs.map(j => `• <code>${j.jobId}</code> — ${j.jobTitle}`).join('\n');
+    const list = jobs.map(j => `\u2022 <code>${j.jobId}</code> \u2014 ${j.jobTitle}`).join('\n');
     tgSend_(chatId, '<b>Active jobs:</b>\n' + list);
     return;
   }
@@ -1473,15 +1473,15 @@ function handleTgText_(chatId, text) {
     const st = tgState_(chatId);
     tgSend_(chatId,
       'Current state:\n' +
-      '<code>job</code>: ' + (st.jobId || '—') + '\n' +
-      '<code>source</code>: ' + (st.source || '—') + '\n' +
+      '<code>job</code>: ' + (st.jobId || '\u2014') + '\n' +
+      '<code>source</code>: ' + (st.source || '\u2014') + '\n' +
       '<code>pending</code>: ' + (st.pending ? 'yes' : 'no')
     );
     return;
   }
   if (text === '/cancel') {
     tgClearState_(chatId);
-    tgSend_(chatId, '✓ Cleared. Set a new job with <code>/job AR-XXX source</code>.');
+    tgSend_(chatId, '\u2713 Cleared. Set a new job with <code>/job AR-XXX source</code>.');
     return;
   }
   if (text === '/confirm') {
@@ -1490,12 +1490,12 @@ function handleTgText_(chatId, text) {
     try {
       const res = submitIntake_(st.pending);
       if (res.ok) {
-        tgSend_(chatId, '✅ Added <b>' + escHtml_(res.name) + '</b> → <code>' + res.jobId + '</code>.\nReady for next — send another CV or <code>/cancel</code>.');
+        tgSend_(chatId, '\u2705 Added <b>' + escHtml_(res.name) + '</b> \u2192 <code>' + res.jobId + '</code>.\nReady for next \u2014 send another CV or <code>/cancel</code>.');
       } else {
-        tgSend_(chatId, '⚠ Save failed: ' + escHtml_(res.error || 'unknown'));
+        tgSend_(chatId, '\u26A0 Save failed: ' + escHtml_(res.error || 'unknown'));
       }
     } catch (err) {
-      tgSend_(chatId, '⚠ Error: ' + escHtml_(String(err)));
+      tgSend_(chatId, '\u26A0 Error: ' + escHtml_(String(err)));
     }
     const after = tgState_(chatId);
     delete after.pending;
@@ -1511,12 +1511,12 @@ function handleTgText_(chatId, text) {
     const jobs = listActiveJobs_();
     const job = jobs.find(j => j.jobId.toLowerCase() === jobId.toLowerCase());
     if (!job) {
-      tgSend_(chatId, '⚠ No job folder for <code>' + escHtml_(jobId) + '</code>. Use /jobs to see available IDs.');
+      tgSend_(chatId, '\u26A0 No job folder for <code>' + escHtml_(jobId) + '</code>. Use /jobs to see available IDs.');
       return;
     }
     tgSaveState_(chatId, { jobId: job.jobId, jobTitle: job.jobTitle, source: source });
     tgSend_(chatId,
-      '✓ Set: <code>' + job.jobId + '</code> — ' + escHtml_(job.jobTitle) +
+      '\u2713 Set: <code>' + job.jobId + '</code> \u2014 ' + escHtml_(job.jobTitle) +
       '\nSource: <code>' + source + '</code>\n\nNow send/forward the CV.'
     );
     return;
@@ -1527,15 +1527,15 @@ function handleTgText_(chatId, text) {
 function handleTgDocument_(chatId, document, msg) {
   const state = tgState_(chatId);
   if (!state.jobId) {
-    tgSend_(chatId, '⚠ Set a job first: <code>/job AR-XXX source</code>');
+    tgSend_(chatId, '\u26A0 Set a job first: <code>/job AR-XXX source</code>');
     return;
   }
   const filename = document.file_name || 'cv.pdf';
   if (!/\.(pdf|docx?|odt|rtf)$/i.test(filename)) {
-    tgSend_(chatId, '⚠ Unsupported file type. Send PDF, DOC, or DOCX.');
+    tgSend_(chatId, '\u26A0 Unsupported file type. Send PDF, DOC, or DOCX.');
     return;
   }
-  tgSend_(chatId, '⏳ Reading <code>' + escHtml_(filename) + '</code>…');
+  tgSend_(chatId, '\u23F3 Reading <code>' + escHtml_(filename) + '</code>\u2026');
 
   let cvText = '';
   let blob = null;
@@ -1543,7 +1543,7 @@ function handleTgDocument_(chatId, document, msg) {
     blob = tgDownloadFile_(document.file_id);
     cvText = extractTextFromCv_(blob, filename);
   } catch (err) {
-    tgSend_(chatId, '⚠ Could not read file: ' + escHtml_(String(err)));
+    tgSend_(chatId, '\u26A0 Could not read file: ' + escHtml_(String(err)));
     return;
   }
 
@@ -1566,16 +1566,16 @@ function handleTgDocument_(chatId, document, msg) {
 
   tgSendKb_(chatId,
     '<b>Found in CV:</b>\n' +
-    '👤 Name: <code>' + escHtml_(fields.name || '?') + '</code>\n' +
-    '✉ Email: <code>' + escHtml_(fields.email || '—') + '</code>\n' +
-    '📱 Phone: <code>' + escHtml_(fields.phone || '—') + '</code>\n' +
-    '🔗 LinkedIn: <code>' + escHtml_(fields.linkedin || '—') + '</code>\n' +
-    '📁 Job: <code>' + state.jobId + '</code> — ' + escHtml_(state.jobTitle) + '\n' +
-    '📥 Source: <code>' + (state.source || 'sourced-other') + '</code>',
+    '\uD83D\uDC64 Name: <code>' + escHtml_(fields.name || '?') + '</code>\n' +
+    '\u2709 Email: <code>' + escHtml_(fields.email || '\u2014') + '</code>\n' +
+    '\uD83D\uDCF1 Phone: <code>' + escHtml_(fields.phone || '\u2014') + '</code>\n' +
+    '\uD83D\uDD17 LinkedIn: <code>' + escHtml_(fields.linkedin || '\u2014') + '</code>\n' +
+    '\uD83D\uDCC1 Job: <code>' + state.jobId + '</code> \u2014 ' + escHtml_(state.jobTitle) + '\n' +
+    '\uD83D\uDCE5 Source: <code>' + (state.source || 'sourced-other') + '</code>',
     [[
-      { text: '✅ Confirm', callback_data: 'confirm' },
-      { text: '🔄 Change job', callback_data: 'pickjob' },
-      { text: '❌ Cancel', callback_data: 'cancel' }
+      { text: '\u2705 Confirm', callback_data: 'confirm' },
+      { text: '\uD83D\uDD04 Change job', callback_data: 'pickjob' },
+      { text: '\u274C Cancel', callback_data: 'cancel' }
     ]]
   );
 }
@@ -1594,7 +1594,7 @@ function tgDownloadFile_(fileId) {
 
 function extractTextFromCv_(blob, filename) {
   // For PDFs: copy to Drive with OCR conversion to a Google Doc, then read text.
-  // For DOC/DOCX/ODT/RTF: same — Drive can convert them.
+  // For DOC/DOCX/ODT/RTF: same \u2014 Drive can convert them.
   const file = DriveApp.createFile(blob);
   let text = '';
   try {
@@ -1610,7 +1610,7 @@ function extractTextFromCv_(blob, filename) {
       DriveApp.getFileById(copy.id).setTrashed(true);
     } else {
       // Fallback: try a direct Doc open. Will fail for PDFs but works for DOC/DOCX uploads.
-      throw new Error('Drive Advanced Service not available. Enable it in Apps Script: Services → Drive API.');
+      throw new Error('Drive Advanced Service not available. Enable it in Apps Script: Services \u2192 Drive API.');
     }
   } finally {
     file.setTrashed(true);
@@ -1623,7 +1623,7 @@ function extractCandidateFields_(text, msg) {
   // Email
   const emailMatch = text.match(/[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}/i);
   const email = emailMatch ? emailMatch[0].toLowerCase() : '';
-  // Phone — pick the longest "+? digit sequence with separators" candidate
+  // Phone \u2014 pick the longest "+? digit sequence with separators" candidate
   const phoneCandidates = text.match(/\+?\d[\d\s\-().]{7,18}\d/g) || [];
   const phone = phoneCandidates
     .map(s => s.replace(/[^\d+]/g, ''))
@@ -1632,7 +1632,7 @@ function extractCandidateFields_(text, msg) {
   // LinkedIn
   const liMatch = text.match(/(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/[\w\-_%]+/i);
   const linkedin = liMatch ? ('https://' + liMatch[0].replace(/^https?:\/\//, '')) : '';
-  // Name — heuristic: first non-empty line that's 2–4 words, mostly letters, not all upper
+  // Name \u2014 heuristic: first non-empty line that's 2\u20134 words, mostly letters, not all upper
   let name = '';
   const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean).slice(0, 25);
   for (const line of lines) {
@@ -1640,7 +1640,7 @@ function extractCandidateFields_(text, msg) {
     if (/@|http|linkedin|cv|resume|curriculum/i.test(line)) continue;
     const words = line.split(/\s+/);
     if (words.length < 2 || words.length > 4) continue;
-    if (!/^[A-Za-z'\-À-ſԱ-Ֆա-և\s]+$/.test(line)) continue;
+    if (!/^[A-Za-z'\-\u00C0-\u017F\u0531-\u0556\u0561-\u0587\s]+$/.test(line)) continue;
     if (line === line.toUpperCase() && line.length > 6) continue;
     name = line.replace(/\s+/g, ' ').trim();
     break;
