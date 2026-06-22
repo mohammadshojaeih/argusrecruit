@@ -440,6 +440,15 @@ function setup() {
       'Last Change', 'History', 'Rating', 'Follow-up',
       'Last Known Stage (auto)', 'File ID (auto)'
     ]]);
+  } else {
+    // UPGRADE an existing sheet created before Rating/Follow-up existed.
+    // Insert the two columns after History (15) so the hidden auto columns
+    // (Last Known Stage, File ID) and their data shift right intact.
+    const hdr = app.getRange(1, 1, 1, app.getLastColumn()).getValues()[0];
+    if (hdr.indexOf('Rating') === -1) {
+      app.insertColumnsAfter(15, 2);
+      app.getRange(1, 16, 1, 2).setValues([['Rating', 'Follow-up']]);
+    }
   }
   app.setFrozenRows(1);
   app.getRange('A1:S1').setFontWeight('bold').setBackground('#0E2440').setFontColor('#FFFFFF');
