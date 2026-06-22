@@ -2,7 +2,7 @@
  * ArgusRecruit ATS — Apps Script
  *
  * What it does
- * ────────────
+ * ------------
  * 1. Watches Gmail for [Application <jobId>] emails and adds each candidate
  *    as a row in the Applications sheet (auto-filling all fields from the
  *    structured payload in the email body).
@@ -16,15 +16,15 @@
  *    the new CV replaces the old (active stages only — skip if Rejected).
  *
  * One-time setup
- * ──────────────
+ * --------------
  * Just call `setup()` from the editor — it provisions the Sheet (Applications,
  * Email Templates, Settings, History) with dropdowns, formulas, and conditional
  * formatting. Then add a time-trigger on `tick` every 5 minutes.
  */
 
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 // CONFIG
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 // ROOT_FOLDER_ID is the ORIGINAL account's CV folder, kept only as a
 // fallback. When you run setup() in a fresh Google account, it auto-creates
 // a candidates folder and records its ID in the Settings sheet (see
@@ -101,9 +101,9 @@ const COL = {
 const RATINGS = ['★', '★★', '★★★', '★★★★', '★★★★★'];
 
 
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 // MAIN ENTRY — run via 5-minute trigger
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 
 function tick() {
   try { processInbox_(); } catch (e) { console.error('processInbox error: ' + e); }
@@ -111,9 +111,9 @@ function tick() {
 }
 
 
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 // STEP 1 — Process new application emails
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 
 function processInbox_() {
   const label = getOrCreateLabel_(PROCESSED_LBL);
@@ -207,9 +207,9 @@ function processInbox_() {
 }
 
 
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 // STEP 2 — Detect Stage changes and react (move file + send email)
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 
 function processStageChanges_() {
   const sheet = SpreadsheetApp.getActive().getSheetByName(APP_SHEET);
@@ -256,9 +256,9 @@ function processStageChanges_() {
 }
 
 
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 // PARSING + DRIVE HELPERS
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 
 function parseAtsPayload_(msg) {
   const html = msg.getBody();
@@ -327,9 +327,9 @@ function appendHistory_(sheet, row, entry) {
 }
 
 
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 // EMAIL SENDING
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 
 function sendStageEmail_(templateKey, lang, ctx) {
   const sheet = SpreadsheetApp.getActive().getSheetByName(TPL_SHEET);
@@ -409,9 +409,9 @@ function getRootFolder_() {
 }
 
 
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 // SHEET PROVISIONING (run once from the editor)
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 
 /**
  * setup() is IDEMPOTENT and SAFE TO RE-RUN.
@@ -425,7 +425,7 @@ function getRootFolder_() {
 function setup() {
   const ss = SpreadsheetApp.getActive();
 
-  // ── 1. Applications sheet (non-destructive) ────────────────────────
+  // -- 1. Applications sheet (non-destructive) ------------------------
   let app = ss.getSheetByName(APP_SHEET);
   const isNewApp = !app;
   if (!app) app = ss.insertSheet(APP_SHEET);
@@ -497,7 +497,7 @@ function setup() {
     .build();
   app.setConditionalFormatRules([condRule, dueRule]);
 
-  // ── 2. Email Templates sheet (non-destructive) ─────────────────────
+  // -- 2. Email Templates sheet (non-destructive) ---------------------
   let tpl = ss.getSheetByName(TPL_SHEET);
   const isNewTpl = !tpl;
   if (!tpl) tpl = ss.insertSheet(TPL_SHEET);
@@ -514,7 +514,7 @@ function setup() {
   tpl.setColumnWidth(1, 110);
   for (let c = 2; c <= 7; c++) tpl.setColumnWidth(c, 300);
 
-  // ── 3. Settings sheet (non-destructive) ────────────────────────────
+  // -- 3. Settings sheet (non-destructive) ----------------------------
   let cfg = ss.getSheetByName(CFG_SHEET);
   const isNewCfg = !cfg;
   if (!cfg) cfg = ss.insertSheet(CFG_SHEET);
@@ -532,7 +532,7 @@ function setup() {
   cfg.setColumnWidth(1, 200);
   cfg.setColumnWidth(2, 400);
 
-  // ── 4. Ensure THIS account has an accessible CV root folder ────────
+  // -- 4. Ensure THIS account has an accessible CV root folder --------
   //    On a fresh Google account the constant ROOT_FOLDER_ID is not
   //    accessible, so this creates the folder and records its real ID in
   //    Settings. On the original account it just re-confirms the existing one.
@@ -571,9 +571,9 @@ function resetTemplatesOnly() {
 }
 
 
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 // CUSTOM MENU — for manual ops
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 
 function onOpen() {
   SpreadsheetApp.getUi()
@@ -655,9 +655,9 @@ function showIntakeUrl() {
 }
 
 
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 // INTAKE FORM (Apps Script Web App)
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 
 function doGet() {
   return HtmlService.createHtmlOutput(intakeFormHtml_())
@@ -890,9 +890,9 @@ function submitIntake_(payload) {
   }
 }
 
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 // BRANDED EMAIL TEMPLATES
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 //   Each cell stores a complete HTML document with ArgusRecruit branding
 //   (navy + gold). Placeholders: {name}, {jobTitle}, {jobId}.
 //   To edit copy: open Email Templates sheet and change the text — the
@@ -1163,7 +1163,7 @@ function brandedEmailHtml_(c, lang) {
 }
 
 
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 // TELEGRAM INTAKE BOT
 //
 // Setup (one-time, run installTelegramWebhook() after deployment):
@@ -1179,7 +1179,7 @@ function brandedEmailHtml_(c, lang) {
 // Drive OCR: the bot converts each PDF to a temporary Google Doc to read
 // the text. This uses the Drive Advanced Service which is automatically
 // available — no manual enable needed.
-// ──────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------------
 
 function installTelegramWebhook() {
   const url = ScriptApp.getService().getUrl();
