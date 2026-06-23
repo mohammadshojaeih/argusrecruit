@@ -35,9 +35,20 @@ export async function onRequestPost(context) {
     if (!env.RESEND_API_KEY) return json({ ok: false, error: 'RESEND_API_KEY missing' }, 500);
     if (!env.RESEND_AUDIENCE_ID) return json({ ok: false, error: 'RESEND_AUDIENCE_ID missing' }, 500);
 
+    // 2. Don't email a link to a page that isn't built yet.
+    // Publishing fires this webhook instantly, but the static rebuild lags
+    // ~1-2 min, so an early click would hit the homepage fallback. Poll the
+    // live job page first; if it isn't up within ~20s, return 503 so Sanity
+    // retries the webhook later. We never send while the page is missing, so
+    // there's no double-send and the email only goes out once the link works.
+    const live = await waitForJobPageLive(jobId);
+    if (!live) {
+      return json({ ok: false, retry: true, reason: 'job page not deployed yet', jobId }, 503);
+    }
+
     const from = env.MAIL_FROM || 'ArgusRecruit <contact@argusrecruit.com>';
 
-    // 2. Create a broadcast
+    // 3. Create a broadcast
     const createRes = await fetch('https://api.resend.com/broadcasts', {
       method: 'POST',
       headers: {
@@ -58,7 +69,7 @@ export async function onRequestPost(context) {
     }
     const broadcastId = createBody.id;
 
-    // 3. Send the broadcast immediately
+    // 4. Send the broadcast immediately
     const sendRes = await fetch(`https://api.resend.com/broadcasts/${broadcastId}/send`, {
       method: 'POST',
       headers: {
@@ -83,6 +94,31 @@ function json(obj, status = 200) {
     status,
     headers: { 'Content-Type': 'application/json' }
   });
+}
+
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+// Poll the live job page until it has been built and deployed.
+// The static job page contains its own jobId (in the apply form + share links);
+// the homepage fallback never does, so jobId presence is a reliable "live" signal.
+// ~7 tries x 3s stays well under Sanity's ~30s webhook timeout.
+async function waitForJobPageLive(jobId, { attempts = 7, delayMs = 3000 } = {}) {
+  if (!jobId) return false;
+  const base = `https://argusrecruit.com/jobs/${encodeURIComponent(jobId)}/`;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      const res = await fetch(`${base}?_=${Date.now()}`, {
+        headers: { 'Cache-Control': 'no-cache' },
+        cf: { cacheTtl: 0, cacheEverything: false }
+      });
+      if (res.ok) {
+        const html = await res.text();
+        if (html.includes(jobId)) return true;
+      }
+    } catch (_) { /* transient — keep polling */ }
+    if (i < attempts - 1) await sleep(delayMs);
+  }
+  return false;
 }
 
 function esc(s) {
