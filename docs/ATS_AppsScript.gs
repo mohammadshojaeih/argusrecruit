@@ -76,22 +76,22 @@ const STAGE_EMAIL_TEMPLATE = {
 
 // Column indexes in the Applications sheet (1-based).
 const COL = {
-  date:        1,   // A
-  jobId:       2,   // B
-  jobTitle:    3,   // C
-  source:      4,   // D
-  name:        5,   // E
-  email:       6,   // F
-  phone:       7,   // G
-  linkedin:    8,   // H
-  lang:        9,   // I
+  date:        1,   // A  Date Applied
+  jobId:       2,   // B  Job ID
+  source:      3,   // C  Source
+  jobTitle:    4,   // D  Job Title
+  cvLink:      5,   // E  CV
+  name:        6,   // F  Name
+  phone:       7,   // G  Phone
+  linkedin:    8,   // H  LinkedIn
+  rating:      9,   // I  \u2190 DROPDOWN, 1\u20135 stars (manual)
   stage:       10,  // J  \u2190 DROPDOWN, the user edits this
-  cvLink:      11,  // K
-  notes:       12,  // L
-  otherApps:   13,  // M  (auto formula)
-  lastChange:  14,  // N
-  history:     15,  // O
-  rating:      16,  // P  \u2190 DROPDOWN, 1\u20135 stars (manual)
+  notes:       11,  // K  Notes
+  email:       12,  // L  Email
+  lang:        13,  // M  Lang
+  otherApps:   14,  // N  (auto formula)
+  lastChange:  15,  // O  Last Change
+  history:     16,  // P  History
   followUp:    17,  // Q  \u2190 DATE, next candidate follow-up (manual)
   lastStage:   18,  // R  (hidden \u2014 script uses to detect changes)
   fileId:      19   // S  (hidden \u2014 CV file ID for moves)
@@ -174,21 +174,21 @@ function processInbox_() {
 
       const row = [
         new Date(submittedAt || msg.getDate()),     // A date
-        jobId || '',                                 // B
-        jobTitle || '',                              // C
-        source || 'web-apply',                       // D
-        name || '',                                  // E
-        (email || '').toLowerCase(),                 // F
-        phone || '',                                 // G
-        linkedin || '',                              // H
-        lang || 'en',                                // I
+        jobId || '',                                 // B Job ID
+        source || 'web-apply',                       // C Source
+        jobTitle || '',                              // D Job Title
+        '=HYPERLINK("' + file.getUrl() + '","Open")', // E CV
+        name || '',                                  // F Name
+        phone || '',                                 // G Phone
+        linkedin || '',                              // H LinkedIn
+        '',                                          // I rating (manual)
         '00-New',                                    // J Stage
-        '=HYPERLINK("' + file.getUrl() + '","Open")', // K
-        '',                                          // L notes
-        '',                                          // M will become formula below
-        new Date(),                                  // N last change
-        'created \u2192 00-New',                          // O history
-        '',                                          // P rating (manual)
+        '',                                          // K notes
+        (email || '').toLowerCase(),                 // L Email
+        lang || 'en',                                // M Lang
+        '',                                          // N will become formula below
+        new Date(),                                  // O last change
+        'created \u2192 00-New',                          // P history
         '',                                          // Q follow-up (manual)
         '00-New',                                    // R lastStage
         file.getId()                                 // S fileId
@@ -196,7 +196,7 @@ function processInbox_() {
       sheet.appendRow(row);
       const r = sheet.getLastRow();
       sheet.getRange(r, COL.otherApps).setFormula(
-        `=IFERROR(COUNTIF($F$2:$F, $F${r})-1, 0)`
+        `=IFERROR(COUNTIF($L$2:$L, $L${r})-1, 0)`
       );
       thread.addLabel(label); thread.markRead(); thread.moveToArchive();
       console.log('Added: ' + name + ' / ' + jobId);
@@ -289,8 +289,6 @@ function findRowByEmailAndJob_(sheet, email, jobId) {
   if (!email) return null;
   const last = sheet.getLastRow();
   if (last < 2) return null;
-  const data = sheet.getRange(2, COL.email, last - 1, COL.jobId - COL.email + 6).getValues();
-  // We only need columns F (email) and B (jobId). Adjust by re-fetching range smartly.
   const emails = sheet.getRange(2, COL.email, last - 1, 1).getValues();
   const jobs   = sheet.getRange(2, COL.jobId, last - 1, 1).getValues();
   const target = (email || '').toLowerCase().trim();
@@ -430,34 +428,31 @@ function setup() {
   const isNewApp = !app;
   if (!app) app = ss.insertSheet(APP_SHEET);
 
-  // Only write headers if this is a brand new sheet OR the headers are missing.
+  // Write headers for a brand-new sheet, a header-less sheet, OR an existing
+  // sheet that has only headers and no data yet (safe to re-lay-out to the
+  // current column order). A sheet that already holds candidate rows is left
+  // untouched to avoid mislabeling columns — recreate it to adopt a new order.
+  const APP_HEADERS = [
+    'Date Applied', 'Job ID', 'Source', 'Job Title', 'CV',
+    'Name', 'Phone', 'LinkedIn', 'Rating', 'Stage',
+    'Notes', 'Email', 'Lang', '# Other Apps', 'Last Change',
+    'History', 'Follow-up', 'Last Known Stage (auto)', 'File ID (auto)'
+  ];
   const firstCell = app.getRange(1, 1).getValue();
-  if (isNewApp || !firstCell) {
-    app.getRange(1, 1, 1, 19).setValues([[
-      'Date Applied', 'Job ID', 'Job Title', 'Source',
-      'Name', 'Email', 'Phone', 'LinkedIn', 'Lang',
-      'Stage', 'CV', 'Notes', '# Other Apps',
-      'Last Change', 'History', 'Rating', 'Follow-up',
-      'Last Known Stage (auto)', 'File ID (auto)'
-    ]]);
-  } else {
-    // UPGRADE an existing sheet created before Rating/Follow-up existed.
-    // Insert the two columns after History (15) so the hidden auto columns
-    // (Last Known Stage, File ID) and their data shift right intact.
-    const hdr = app.getRange(1, 1, 1, app.getLastColumn()).getValues()[0];
-    if (hdr.indexOf('Rating') === -1) {
-      app.insertColumnsAfter(15, 2);
-      app.getRange(1, 16, 1, 2).setValues([['Rating', 'Follow-up']]);
-    }
+  if (isNewApp || !firstCell || app.getLastRow() <= 1) {
+    app.getRange(1, 1, 1, 19).setValues([APP_HEADERS]);
   }
   app.setFrozenRows(1);
   app.getRange('A1:S1').setFontWeight('bold').setBackground('#0E2440').setFontColor('#FFFFFF');
-  app.setColumnWidth(1, 100); app.setColumnWidth(2, 80); app.setColumnWidth(3, 180);
-  app.setColumnWidth(4, 90); app.setColumnWidth(5, 140); app.setColumnWidth(6, 200);
-  app.setColumnWidth(7, 110); app.setColumnWidth(8, 200); app.setColumnWidth(9, 60);
-  app.setColumnWidth(10, 180); app.setColumnWidth(11, 60); app.setColumnWidth(12, 200);
-  app.setColumnWidth(13, 80); app.setColumnWidth(14, 110); app.setColumnWidth(15, 280);
-  app.setColumnWidth(COL.rating, 90); app.setColumnWidth(COL.followUp, 110);
+  // Widths follow the new order: A date, B jobId, C source, D jobTitle, E CV,
+  // F name, G phone, H linkedin, I rating, J stage, K notes, L email, M lang,
+  // N #other, O last change, P history, Q follow-up.
+  app.setColumnWidth(1, 100); app.setColumnWidth(2, 80);  app.setColumnWidth(3, 90);
+  app.setColumnWidth(4, 180); app.setColumnWidth(5, 60);  app.setColumnWidth(6, 140);
+  app.setColumnWidth(7, 110); app.setColumnWidth(8, 200); app.setColumnWidth(9, 90);
+  app.setColumnWidth(10, 180); app.setColumnWidth(11, 200); app.setColumnWidth(12, 200);
+  app.setColumnWidth(13, 60); app.setColumnWidth(14, 110); app.setColumnWidth(15, 110);
+  app.setColumnWidth(16, 280); app.setColumnWidth(17, 110);
   app.hideColumns(COL.lastStage, 2);
 
   // Stage validation
@@ -492,9 +487,9 @@ function setup() {
     .setDataValidation(dateRule)
     .setNumberFormat('yyyy-mm-dd');
 
-  // Highlight rows where # Other Apps > 0
+  // Highlight rows where # Other Apps > 0  (column N in the new order)
   const condRule = SpreadsheetApp.newConditionalFormatRule()
-    .whenFormulaSatisfied('=$M2>0')
+    .whenFormulaSatisfied('=$N2>0')
     .setBackground('#FFF7E0')
     .setRanges([app.getRange(2, 1, 1000, 19)])
     .build();
@@ -868,30 +863,30 @@ function submitIntake_(payload) {
     }
 
     const row = [
-      new Date(),
-      jobId,
-      jobTitle,
-      payload.source || 'manual-intake',
-      payload.name,
-      (payload.email || '').toLowerCase(),
-      payload.phone || '',
-      payload.linkedin || '',
-      payload.lang || 'en',
-      initialStage,
-      cvHyperlink,
-      payload.notes || '',
-      '',
-      new Date(),
-      'created (' + (payload.source || 'manual') + ') \u2192 ' + initialStage,
-      '',              // rating (manual)
-      '',              // follow-up (manual)
-      initialStage,
-      fileId
+      new Date(),                                          // A Date Applied
+      jobId,                                               // B Job ID
+      payload.source || 'manual-intake',                   // C Source
+      jobTitle,                                            // D Job Title
+      cvHyperlink,                                         // E CV
+      payload.name,                                        // F Name
+      payload.phone || '',                                 // G Phone
+      payload.linkedin || '',                              // H LinkedIn
+      '',                                                  // I rating (manual)
+      initialStage,                                        // J Stage
+      payload.notes || '',                                 // K Notes
+      (payload.email || '').toLowerCase(),                 // L Email
+      payload.lang || 'en',                                // M Lang
+      '',                                                  // N otherApps (formula below)
+      new Date(),                                          // O Last Change
+      'created (' + (payload.source || 'manual') + ') \u2192 ' + initialStage, // P History
+      '',                                                  // Q follow-up (manual)
+      initialStage,                                        // R lastStage
+      fileId                                               // S fileId
     ];
     sheet.appendRow(row);
     const r = sheet.getLastRow();
     sheet.getRange(r, COL.otherApps).setFormula(
-      `=IFERROR(COUNTIF($F$2:$F, $F${r})-1, 0)`
+      `=IFERROR(COUNTIF($L$2:$L, $L${r})-1, 0)`
     );
     return { ok: true, name: payload.name, jobId: jobId };
   } catch (e) {
