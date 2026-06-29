@@ -575,6 +575,82 @@ function resetTemplatesOnly() {
 }
 
 
+/**
+ * One-time migration: reorder an EXISTING Applications sheet (with data) into
+ * the current column layout, carrying every column's data with it. Matches
+ * columns by header label, so it works whether the sheet is in the old 17- or
+ * 19-column order. A timestamped backup tab is created first. Safe to re-run —
+ * it no-ops once the columns are already in the new order.
+ */
+function reorderApplicationsColumns() {
+  const ss = SpreadsheetApp.getActive();
+  const ui = SpreadsheetApp.getUi();
+  const sh = ss.getSheetByName(APP_SHEET);
+  if (!sh) { ui.alert('No "' + APP_SHEET + '" sheet found.'); return; }
+
+  const NEW_HEADERS = [
+    'Date Applied', 'Job ID', 'Source', 'Job Title', 'CV',
+    'Name', 'Phone', 'LinkedIn', 'Rating', 'Stage',
+    'Notes', 'Email', 'Lang', '# Other Apps', 'Last Change',
+    'History', 'Follow-up', 'Last Known Stage (auto)', 'File ID (auto)'
+  ];
+
+  const lastRow = sh.getLastRow();
+  const lastCol = sh.getLastColumn();
+  const curHeaders = sh.getRange(1, 1, 1, lastCol).getValues()[0].map(h => String(h).trim());
+
+  if (curHeaders.length === NEW_HEADERS.length && NEW_HEADERS.every((h, i) => curHeaders[i] === h)) {
+    ui.alert('Columns are already in the new order. Nothing to do.');
+    return;
+  }
+
+  const resp = ui.alert('Reorder columns?',
+    'This rearranges the Applications columns into the new order, keeping each column\'s data with it. A backup tab is created first.\n\nContinue?',
+    ui.ButtonSet.YES_NO);
+  if (resp !== ui.Button.YES) return;
+
+  // Safety backup.
+  const stamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd HH:mm');
+  sh.copyTo(ss).setName('Applications (backup ' + stamp + ')');
+
+  // Read values + formulas so CV hyperlinks (and any other formulas) survive.
+  const values = sh.getRange(1, 1, lastRow, lastCol).getValues();
+  const formulas = sh.getRange(1, 1, lastRow, lastCol).getFormulas();
+  const cell = (r, c) => (formulas[r][c] !== '' ? formulas[r][c] : values[r][c]);
+
+  // For each target column, find its source by header label (-1 = not present).
+  const srcIndex = NEW_HEADERS.map(h => curHeaders.indexOf(h));
+
+  // Build the reordered matrix. # Other Apps is rebuilt later, so leave it blank.
+  const otherAppsTarget = NEW_HEADERS.indexOf('# Other Apps');
+  const out = [];
+  for (let r = 0; r < lastRow; r++) {
+    const row = [];
+    for (let c = 0; c < NEW_HEADERS.length; c++) {
+      const s = srcIndex[c];
+      row.push((c === otherAppsTarget || s === -1) ? '' : cell(r, s));
+    }
+    out.push(row);
+  }
+  out[0] = NEW_HEADERS.slice();
+
+  // Wipe old content/formats/validations, then write the reordered data.
+  sh.getRange(1, 1, sh.getMaxRows(), sh.getMaxColumns()).clearDataValidations();
+  sh.clear();
+  sh.getRange(1, 1, out.length, NEW_HEADERS.length).setValues(out);
+
+  // Re-apply headers styling, widths, dropdowns, date format, conditional formatting.
+  setup();
+
+  // Rebuild the # Other Apps formula per data row (now keyed off Email at column L).
+  for (let r = 2; r <= lastRow; r++) {
+    sh.getRange(r, COL.otherApps).setFormula(`=IFERROR(COUNTIF($L$2:$L, $L${r})-1, 0)`);
+  }
+
+  ss.toast('Columns reordered (' + (lastRow - 1) + ' rows). A backup tab was created.', 'Done', 6);
+}
+
+
 // ----------------------------------------------------------------------
 // CUSTOM MENU \u2014 for manual ops
 // ----------------------------------------------------------------------
@@ -591,6 +667,7 @@ function onOpen() {
     .addItem('Install Telegram intake bot webhook', 'installTelegramWebhook')
     .addItem('Uninstall Telegram intake bot webhook', 'uninstallTelegramWebhook')
     .addSeparator()
+    .addItem('Reorder columns to new layout (keeps data)', 'reorderApplicationsColumns')
     .addItem('Reset email templates only', 'resetTemplatesOnly')
     .addToUi();
 }
