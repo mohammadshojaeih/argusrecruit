@@ -354,11 +354,43 @@ function sendStageEmail_(templateKey, lang, ctx) {
     return;
   }
 
-  GmailApp.sendEmail(ctx.email, fill(subjectTpl), '', {
-    htmlBody: fill(bodyTpl),
-    name: getSetting_('From Name') || 'ArgusRecruit',
-    replyTo: getSetting_('Reply To') || 'headhunter@argusrecruit.com'
+  const subject = fill(subjectTpl);
+  const html = fill(bodyTpl);
+  const fromName = getSetting_('From Name') || 'ArgusRecruit';
+  const replyTo = getSetting_('Reply To') || 'headhunter@argusrecruit.com';
+
+  // Prefer Resend: it sends from the verified argusrecruit.com domain
+  // (SPF/DKIM), so mail is delivered reliably. Gmail's own outbound filter
+  // blocks automated HTML mail from the ATS account (bounce error 69585).
+  // If no Resend key is configured, fall back to Gmail.
+  const resendKey = String(getSetting_('Resend API Key') || '').trim();
+  if (resendKey) {
+    const fromEmail = String(getSetting_('From Email') || 'headhunter@argusrecruit.com').trim();
+    sendViaResend_(resendKey, { fromName, fromEmail, to: ctx.email, subject, html, replyTo });
+  } else {
+    GmailApp.sendEmail(ctx.email, subject, '', { htmlBody: html, name: fromName, replyTo });
+  }
+}
+
+// Send one email via the Resend API (same service the website uses).
+function sendViaResend_(apiKey, m) {
+  const res = UrlFetchApp.fetch('https://api.resend.com/emails', {
+    method: 'post',
+    contentType: 'application/json',
+    headers: { Authorization: 'Bearer ' + apiKey },
+    payload: JSON.stringify({
+      from: `${m.fromName} <${m.fromEmail}>`,
+      to: [m.to],
+      subject: m.subject,
+      html: m.html,
+      reply_to: m.replyTo
+    }),
+    muteHttpExceptions: true
   });
+  const code = res.getResponseCode();
+  if (code < 200 || code >= 300) {
+    throw new Error('Resend send failed (' + code + '): ' + res.getContentText());
+  }
 }
 
 function getSetting_(key) {
@@ -524,14 +556,19 @@ function setup() {
   if (!cfg) cfg = ss.insertSheet(CFG_SHEET);
   if (isNewCfg || !cfg.getRange(1, 1).getValue()) {
     cfg.getRange(1, 1, 1, 2).setValues([['Setting', 'Value']]);
-    cfg.getRange(2, 1, 5, 2).setValues([
+    cfg.getRange(2, 1, 7, 2).setValues([
       ['Send Emails Enabled', 'TRUE'],
       ['From Name',           'ArgusRecruit'],
+      ['From Email',          'headhunter@argusrecruit.com'],
       ['Reply To',            'headhunter@argusrecruit.com'],
+      ['Resend API Key',      ''],   // paste your Resend key for reliable delivery
       ['Root Folder ID',      ''],   // auto-filled below by getRootFolder_()
       ['Trigger Interval',    'every 5 minutes (set via Triggers panel)']
     ]);
   }
+  // Add newer settings to Settings sheets created before they existed.
+  if (getSetting_('From Email') === null) setSetting_('From Email', 'headhunter@argusrecruit.com');
+  if (getSetting_('Resend API Key') === null) setSetting_('Resend API Key', '');
   cfg.getRange('A1:B1').setFontWeight('bold').setBackground('#0E2440').setFontColor('#FFFFFF');
   cfg.setColumnWidth(1, 200);
   cfg.setColumnWidth(2, 400);
