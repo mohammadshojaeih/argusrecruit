@@ -1,5 +1,8 @@
 ---
-const { title = 'ArgusRecruit — Executive Search & Headhunting', description = 'Boutique executive search and headhunting. Many eyes. One purpose.', lang = 'en' } = Astro.props;
+const { title = 'ArgusRecruit — Executive Search & Headhunting', description = 'Boutique executive search and headhunting. Many eyes. One purpose.', lang = 'en', alternates = true } = Astro.props;
+// Astro.site coerces to a string WITH a trailing slash; use .origin so joining
+// with a leading-slash pathname doesn't produce a double slash (//services/).
+const base = Astro.site.origin;
 ---
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,11 +18,15 @@ const { title = 'ArgusRecruit — Executive Search & Headhunting', description =
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
 <link rel="apple-touch-icon" sizes="512x512" href="/favicon-512.png">
 
-<link rel="canonical" href={Astro.site + Astro.url.pathname.replace(/\/+$/, '/')}>
-<link rel="alternate" hreflang="en" href={Astro.site + (Astro.url.pathname.replace(/^\/(ru|hy)\//, '/'))}>
-<link rel="alternate" hreflang="ru" href={Astro.site + '/ru' + (Astro.url.pathname.replace(/^\/(ru|hy)/, '') || '/')}>
-<link rel="alternate" hreflang="hy" href={Astro.site + '/hy' + (Astro.url.pathname.replace(/^\/(ru|hy)/, '') || '/')}>
-<link rel="alternate" hreflang="x-default" href={Astro.site + (Astro.url.pathname.replace(/^\/(ru|hy)\//, '/'))}>
+<link rel="canonical" href={base + Astro.url.pathname.replace(/\/+$/, '/')}>
+{alternates && (
+  <>
+  <link rel="alternate" hreflang="en" href={base + (Astro.url.pathname.replace(/^\/(ru|hy)\//, '/'))}>
+  <link rel="alternate" hreflang="ru" href={base + '/ru' + (Astro.url.pathname.replace(/^\/(ru|hy)/, '') || '/')}>
+  <link rel="alternate" hreflang="hy" href={base + '/hy' + (Astro.url.pathname.replace(/^\/(ru|hy)/, '') || '/')}>
+  <link rel="alternate" hreflang="x-default" href={base + (Astro.url.pathname.replace(/^\/(ru|hy)\//, '/'))}>
+  </>
+)}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
