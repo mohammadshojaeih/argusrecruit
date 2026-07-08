@@ -35,7 +35,20 @@ export async function onRequestPost(context) {
     if (!env.RESEND_API_KEY) return json({ ok: false, error: 'RESEND_API_KEY missing' }, 500);
     if (!env.RESEND_AUDIENCE_ID) return json({ ok: false, error: 'RESEND_AUDIENCE_ID missing' }, 500);
 
-    // 2. Don't email a link to a page that isn't built yet.
+    // 2. Idempotency — broadcast each job to the audience at most once.
+    // The Sanity webhook fires on EVERY publish/edit of a job, and Sanity also
+    // retries the webhook whenever our response is slow (the deploy-poll below
+    // can push us past its timeout). Without a guard, each firing re-broadcasts
+    // to the whole audience. We record a `jobAlertSentAt` marker on the job
+    // document after sending and skip if it is already set. Checked here, before
+    // the poll, so a retry after a successful send returns instantly.
+    const docId = String(doc._id || '').replace(/^drafts\./, '');
+    const alreadySent = await getAlertSent(env, docId);
+    if (alreadySent) {
+      return json({ ok: true, skipped: 'already broadcast', jobId, sentAt: alreadySent });
+    }
+
+    // 3. Don't email a link to a page that isn't built yet.
     // Publishing fires this webhook instantly, but the static rebuild lags
     // ~1-2 min, so an early click would hit the homepage fallback. Poll the
     // live job page first; if it isn't up within ~20s, return 503 so Sanity
@@ -48,7 +61,7 @@ export async function onRequestPost(context) {
 
     const from = env.MAIL_FROM || 'ArgusRecruit <contact@argusrecruit.com>';
 
-    // 3. Create a broadcast
+    // 4. Create a broadcast
     const createRes = await fetch('https://api.resend.com/broadcasts', {
       method: 'POST',
       headers: {
@@ -69,7 +82,7 @@ export async function onRequestPost(context) {
     }
     const broadcastId = createBody.id;
 
-    // 4. Send the broadcast immediately
+    // 5. Send the broadcast immediately
     const sendRes = await fetch(`https://api.resend.com/broadcasts/${broadcastId}/send`, {
       method: 'POST',
       headers: {
@@ -83,6 +96,16 @@ export async function onRequestPost(context) {
       return json({ ok: false, step: 'send', broadcastId, detail: sendBody }, 500);
     }
 
+    // 6. Record the send so future webhook firings (retries / re-publishes)
+    // skip re-broadcasting. The broadcast has already gone out, so a failure
+    // here must NOT return an error status — that would make Sanity retry the
+    // webhook and re-broadcast. Log it and return success instead.
+    try {
+      await markAlertSent(env, docId, broadcastId);
+    } catch (e) {
+      console.error('markAlertSent failed (broadcast already sent, guard not persisted): ' + e);
+    }
+
     return json({ ok: true, broadcastId, jobId });
   } catch (e) {
     return json({ ok: false, error: e.message, stack: e.stack }, 500);
@@ -94,6 +117,67 @@ function json(obj, status = 200) {
     status,
     headers: { 'Content-Type': 'application/json' }
   });
+}
+
+// Sanity project defaults (match sanity-studio/sanity.config.ts). Overridable
+// via env for other datasets/accounts.
+function sanityCfg(env) {
+  return {
+    project: env.SANITY_PROJECT_ID || '832bmk23',
+    dataset: env.SANITY_DATASET || 'production',
+    apiVer: env.SANITY_API_VERSION || '2024-01-01',
+    token: env.SANITY_WRITE_TOKEN || ''
+  };
+}
+
+// Return the ISO timestamp of a prior broadcast for this job, or null if none.
+// Fail-open: on any error (missing token, network) returns null so a genuine
+// new job still gets its alert — over-suppressing is worse than the rare retry.
+async function getAlertSent(env, docId) {
+  if (!docId) return null;
+  const { project, dataset, apiVer, token } = sanityCfg(env);
+  if (!token) {
+    console.warn('SANITY_WRITE_TOKEN not set — broadcast de-duplication is DISABLED');
+    return null;
+  }
+  const query = encodeURIComponent('*[_id == $id][0].jobAlertSentAt');
+  const params = '&%24id=' + encodeURIComponent(JSON.stringify(docId));
+  const url = `https://${project}.api.sanity.io/v${apiVer}/data/query/${dataset}?query=${query}${params}`;
+  try {
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) { console.error('Sanity query failed: ' + res.status); return null; }
+    const body = await res.json();
+    return body.result || null;
+  } catch (e) {
+    console.error('getAlertSent error: ' + e);
+    return null;
+  }
+}
+
+// Persist the broadcast marker on the job document. Throws on failure so the
+// caller can log it (it never converts a failure into a webhook-level error).
+async function markAlertSent(env, docId, broadcastId) {
+  const { project, dataset, apiVer, token } = sanityCfg(env);
+  if (!token || !docId) return;
+  const url = `https://${project}.api.sanity.io/v${apiVer}/data/mutate/${dataset}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      mutations: [{
+        patch: {
+          id: docId,
+          set: {
+            jobAlertSentAt: new Date().toISOString(),
+            jobAlertBroadcastId: broadcastId || ''
+          }
+        }
+      }]
+    })
+  });
+  if (!res.ok) {
+    throw new Error('Sanity mutate failed (' + res.status + '): ' + (await res.text()));
+  }
 }
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
