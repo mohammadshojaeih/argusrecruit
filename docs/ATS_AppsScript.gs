@@ -212,46 +212,67 @@ function processInbox_() {
 // ----------------------------------------------------------------------
 
 function processStageChanges_() {
-  const sheet = SpreadsheetApp.getActive().getSheetByName(APP_SHEET);
-  const root = getRootFolder_();
-  const lastRow = sheet.getLastRow();
-  if (lastRow < 2) return;
-  const data = sheet.getRange(2, 1, lastRow - 1, COL.fileId).getValues();
+  // Serialize runs. Without this, an overlapping trigger (or a second installed
+  // trigger) reads the same pre-update snapshot and sends the stage email twice.
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(30000)) {
+    console.warn('processStageChanges_ skipped: another run holds the lock');
+    return;
+  }
+  try {
+    const sheet = SpreadsheetApp.getActive().getSheetByName(APP_SHEET);
+    const root = getRootFolder_();
+    const lastRow = sheet.getLastRow();
+    if (lastRow < 2) return;
+    const data = sheet.getRange(2, 1, lastRow - 1, COL.fileId).getValues();
 
-  for (let i = 0; i < data.length; i++) {
-    const row = i + 2;
-    const r = data[i];
-    const currentStage = r[COL.stage - 1];
-    const lastStage    = r[COL.lastStage - 1];
-    if (!currentStage || currentStage === lastStage) continue;
+    for (let i = 0; i < data.length; i++) {
+      const row = i + 2;
+      const r = data[i];
+      const currentStage = r[COL.stage - 1];
+      const lastStage    = r[COL.lastStage - 1];
+      if (!currentStage || currentStage === lastStage) continue;
 
-    const jobId    = r[COL.jobId - 1];
-    const jobTitle = r[COL.jobTitle - 1];
-    const fileId   = r[COL.fileId - 1];
-    const email    = r[COL.email - 1];
-    const lang     = r[COL.lang - 1] || 'en';
-    const name     = r[COL.name - 1];
+      const jobId    = r[COL.jobId - 1];
+      const jobTitle = r[COL.jobTitle - 1];
+      const fileId   = r[COL.fileId - 1];
+      const email    = r[COL.email - 1];
+      const lang     = r[COL.lang - 1] || 'en';
+      const name     = r[COL.name - 1];
 
-    try {
-      // Move the CV
-      if (fileId) {
-        const jobFolder = findOrCreateFolder_(root, `${jobId} - ${jobTitle}`);
-        const newStageFolder = findOrCreateFolder_(jobFolder, currentStage);
-        moveFileToFolder_(fileId, newStageFolder);
-      }
-      // Maybe send email
-      const tplKey = STAGE_EMAIL_TEMPLATE[currentStage];
-      if (tplKey && email) {
-        sendStageEmail_(tplKey, lang, {
-          name, jobTitle, jobId, email
-        });
-      }
+      // Advance the idempotency guard FIRST and flush it to the sheet, BEFORE
+      // any side effect. If the email send (or Drive move) later throws, the
+      // guard is already recorded, so the next tick will NOT re-process this
+      // transition and re-email the candidate. Over-sending is worse than a
+      // rare dropped notification (which is logged to History for manual retry).
       sheet.getRange(row, COL.lastStage).setValue(currentStage);
       sheet.getRange(row, COL.lastChange).setValue(new Date());
-      appendHistory_(sheet, row, `${lastStage || '?'} \u2192 ${currentStage}`);
-    } catch (e) {
-      console.error(`Row ${row} stage transition failed: ${e}`);
+      SpreadsheetApp.flush();
+
+      try {
+        // Move the CV
+        if (fileId) {
+          const jobFolder = findOrCreateFolder_(root, `${jobId} - ${jobTitle}`);
+          const newStageFolder = findOrCreateFolder_(jobFolder, currentStage);
+          moveFileToFolder_(fileId, newStageFolder);
+        }
+        // Maybe send email
+        const tplKey = STAGE_EMAIL_TEMPLATE[currentStage];
+        if (tplKey && email) {
+          sendStageEmail_(tplKey, lang, {
+            name, jobTitle, jobId, email
+          });
+        }
+        appendHistory_(sheet, row, `${lastStage || '?'} \u2192 ${currentStage}`);
+      } catch (e) {
+        // Guard is already advanced, so we won't loop. Surface the failure in
+        // History instead of silently retrying (and spamming) every tick.
+        console.error(`Row ${row} stage transition failed: ${e}`);
+        appendHistory_(sheet, row, `${lastStage || '?'} \u2192 ${currentStage} (action FAILED - not retried: ${e})`);
+      }
     }
+  } finally {
+    lock.releaseLock();
   }
 }
 
@@ -373,24 +394,35 @@ function sendStageEmail_(templateKey, lang, ctx) {
 }
 
 // Send one email via the Resend API (same service the website uses).
+// Retries briefly on transient failures (429 rate-limit, 5xx) so a momentary
+// blip doesn't drop a stage notification. Permanent errors (4xx other than 429)
+// throw immediately — retrying them would never succeed.
 function sendViaResend_(apiKey, m) {
-  const res = UrlFetchApp.fetch('https://api.resend.com/emails', {
-    method: 'post',
-    contentType: 'application/json',
-    headers: { Authorization: 'Bearer ' + apiKey },
-    payload: JSON.stringify({
-      from: `${m.fromName} <${m.fromEmail}>`,
-      to: [m.to],
-      subject: m.subject,
-      html: m.html,
-      reply_to: m.replyTo
-    }),
-    muteHttpExceptions: true
+  const payload = JSON.stringify({
+    from: `${m.fromName} <${m.fromEmail}>`,
+    to: [m.to],
+    subject: m.subject,
+    html: m.html,
+    reply_to: m.replyTo
   });
-  const code = res.getResponseCode();
-  if (code < 200 || code >= 300) {
-    throw new Error('Resend send failed (' + code + '): ' + res.getContentText());
+  const maxAttempts = 3;
+  let lastCode = 0, lastBody = '';
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const res = UrlFetchApp.fetch('https://api.resend.com/emails', {
+      method: 'post',
+      contentType: 'application/json',
+      headers: { Authorization: 'Bearer ' + apiKey },
+      payload: payload,
+      muteHttpExceptions: true
+    });
+    const code = res.getResponseCode();
+    if (code >= 200 && code < 300) return;      // delivered
+    lastCode = code; lastBody = res.getContentText();
+    const transient = (code === 429 || code >= 500);
+    if (!transient || attempt === maxAttempts) break;
+    Utilities.sleep(1200 * attempt);            // simple linear backoff
   }
+  throw new Error('Resend send failed (' + lastCode + '): ' + lastBody);
 }
 
 function getSetting_(key) {
