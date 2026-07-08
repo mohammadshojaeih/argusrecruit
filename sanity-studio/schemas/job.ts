@@ -108,7 +108,21 @@ export default defineType({
       ] },
       initialValue: '2m'
     }),
-    defineField({ name: 'expiresAt', title: 'Expires At (custom)', type: 'datetime', description: 'Only used when Expiry is set to "Custom date".' })
+    defineField({ name: 'expiresAt', title: 'Expires At (custom)', type: 'datetime', description: 'Only used when Expiry is set to "Custom date".' }),
+    defineField({
+      name: 'jobAlertSentAt',
+      title: 'Job Alert Sent At',
+      type: 'datetime',
+      readOnly: true,
+      description: 'Set automatically when the job-alert broadcast goes out. Its presence stops the alert from being re-sent on later edits — leave it alone.'
+    }),
+    defineField({
+      name: 'jobAlertBroadcastId',
+      title: 'Job Alert Broadcast ID',
+      type: 'string',
+      readOnly: true,
+      description: 'Resend broadcast ID for the sent job alert. Managed automatically.'
+    })
   ],
   preview: {
     select: { title: 'title', subtitle: 'jobId', status: 'status' },
