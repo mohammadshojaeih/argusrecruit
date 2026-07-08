@@ -32,6 +32,11 @@ const bodyHtml = Array.isArray(post.body) ? toHTML(post.body) : (post.body || ''
     .post-body blockquote { border-left: 3px solid var(--primary-gold); padding: 10px 22px; margin: 26px 0; font-style: italic; background: rgba(212,175,55,0.06); border-radius: 4px; }
     .post-body ul { margin: 16px 0 22px 26px; }
     .post-body li { margin-bottom: 8px; }
+    .post-cta { max-width: 740px; margin: 0 auto; padding: 0 32px 90px; }
+    .post-cta-inner { background: linear-gradient(135deg, rgba(212,175,55,0.08), rgba(30,65,112,0.4)); border: 1px solid rgba(212,175,55,0.25); border-radius: 16px; padding: 34px 32px; }
+    .post-cta h2 { font-family:'Space Grotesk',sans-serif; text-transform:uppercase; font-size:22px; letter-spacing:0.5px; margin:8px 0 14px; }
+    .post-cta p { color: rgba(255,255,255,0.8); font-size:15px; line-height:1.7; margin:0; }
+    .post-cta a { color: var(--primary-gold); font-weight:600; }
     @media (max-width: 720px) { .post-hero, .post-body { padding-left: 22px; padding-right: 22px; } .post-hero { padding-top: 130px; } }
   </style>
 </head>
@@ -43,11 +48,19 @@ const bodyHtml = Array.isArray(post.body) ? toHTML(post.body) : (post.body || ''
       <div class="post-tag">{post.tag}</div>
       <h1>{post.title}</h1>
       <div class="meta">{new Date(post.publishedAt).toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'})}</div>
-      <div class="cover"><img src={post.cover} alt="" /></div>
+      <div class="cover"><img src={post.cover} alt={post.title} /></div>
     </header>
     <div class="post-body" set:html={bodyHtml}></div>
   </article>
 
-  <footer>© 2026 ArgusRecruit · <a href="/">Back to home</a> · <a href="/blog/">All posts</a> · <a href="/privacy/" style="color:var(--primary-gold)">Privacy</a></footer>
+  <section class="post-cta">
+    <div class="post-cta-inner">
+      <div class="post-tag">Work with us</div>
+      <h2>Curated executive search, senior-led.</h2>
+      <p>ArgusRecruit runs discreet <a href="/services/">executive search and headhunting</a> for employers across the UK, UAE, Canada, and Armenia — and can <a href="/engineering-studio/">build and run an engineering team in Yerevan</a> for you. Exploring a move yourself? <a href="/jobs/">Browse open roles</a>.</p>
+    </div>
+  </section>
+
+  <footer>© 2026 ArgusRecruit · <a href="/">Back to home</a> · <a href="/blog/">All posts</a> · <a href="/services/" style="color:var(--primary-gold)">Services</a> · <a href="/privacy/" style="color:var(--primary-gold)">Privacy</a></footer>
 </body>
 </html>
